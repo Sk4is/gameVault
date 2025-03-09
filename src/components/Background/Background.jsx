@@ -1,1 +1,0 @@
-import './Background.css';

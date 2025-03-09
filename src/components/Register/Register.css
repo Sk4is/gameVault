@@ -91,6 +91,12 @@
     font-size: 20px;
 }
 
+.repeat-password-toggle {
+    margin-left: -30px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 .register-link {
     display: block;
     margin-top: 10px;

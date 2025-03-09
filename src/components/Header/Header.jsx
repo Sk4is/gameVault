@@ -20,8 +20,12 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  const handleLoginRedirect = () => {
+  const handleRegisterRedirect = () => {
     navigate('/login');
+  };
+
+  const handleSettingsRedirect = () => {
+    navigate('/settings');
   };
 
   return (
@@ -47,9 +51,9 @@ const Header = () => {
       {isMenuOpen && (
         <nav className={`menu ${!isMenuVisible ? 'hidden' : ''}`}>
           <ul className="menu-list">
-            <li className="menu-item"><a onClick={handleLoginRedirect}>Ver Perfil</a></li>
+            <li className="menu-item"><a onClick={handleRegisterRedirect}>Ver Perfil</a></li>
             <li className="menu-item"><a href="/buscar">Buscar</a></li>
-            <li className="menu-item"><a href="/ajustes">Ajustes</a></li>
+            <li className="menu-item"><a onClick={handleSettingsRedirect}>Ajustes</a></li>
           </ul>
         </nav>
       )}
