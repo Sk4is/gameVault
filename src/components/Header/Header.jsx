@@ -20,7 +20,7 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  const handleRegisterRedirect = () => {
+  const handleLoginRedirect = () => {
     navigate('/login');
   };
 
@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <a href="/">
+        <a href="/landing">
           <img
             src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741288545/GameVault_ltzotm.png"
             alt="Logo"
@@ -51,7 +51,7 @@ const Header = () => {
       {isMenuOpen && (
         <nav className={`menu ${!isMenuVisible ? 'hidden' : ''}`}>
           <ul className="menu-list">
-            <li className="menu-item"><a onClick={handleRegisterRedirect}>Ver Perfil</a></li>
+            <li className="menu-item"><a onClick={handleLoginRedirect}>Ver Perfil</a></li>
             <li className="menu-item"><a href="/buscar">Buscar</a></li>
             <li className="menu-item"><a onClick={handleSettingsRedirect}>Ajustes</a></li>
           </ul>

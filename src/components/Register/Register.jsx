@@ -7,7 +7,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [nombre, setNombre] = useState('');  // Cambié 'username' por 'nombre'
+  const [nombre, setNombre] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -28,7 +28,7 @@ const Register = () => {
   };
 
   const handleNombreChange = (e) => {
-    setNombre(e.target.value);  // Cambié 'username' por 'nombre'
+    setNombre(e.target.value);
   };
 
   const togglePassword = () => {
@@ -59,15 +59,13 @@ const Register = () => {
 
     setErrorMessage('');
     
-    // Crear el objeto con los datos a enviar
     const userData = {
-      nombre: nombre,  // Cambié 'username' por 'nombre'
+      nombre: nombre,
       email: email,
       password: password,
     };
 
     try {
-      // Hacer la solicitud POST para registrar al usuario
       const response = await axios.post('http://localhost:5000/api/register', userData);
 
       if (response.data.message === 'Usuario creado con éxito') {
@@ -119,7 +117,7 @@ const Register = () => {
               <input
                 type="text"
                 placeholder="Ingresa tu nombre de usuario"
-                value={nombre}  // Cambié 'username' por 'nombre'
+                value={nombre}
                 onChange={handleNombreChange}
                 required
               />
