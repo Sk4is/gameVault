@@ -1,3 +1,64 @@
+.popular-title {
+  text-align: center;
+  margin-top: 160px;
+  margin-bottom: 20px;
+  color: #42C98F;
+  animation: glitch 1s infinite alternate;
+}
+
+@keyframes glitch {
+  0% { text-shadow: -2px -2px 0px #ff00ff; }
+  50% { text-shadow: 2px 2px 0px #00ffff; }
+  100% { text-shadow: -2px -2px 0px #ff00ff; }
+}
+
+.glitch-text {
+  animation: glitch 0.5s infinite alternate;
+}
+
+.separator {
+  border: none; 
+  height: 2px;
+  background-color: #2b2b2b;
+  margin-bottom: 20px;
+  margin: 20px 0;
+}
+
+.ciberpunk {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  mask-image: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
+  transition: transform 0.3s ease-out, box-shadow 0.5s ease-out, opacity 1s ease-in-out;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+}
+
+/*
+.ciberpunk.scrolled {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ciberpunk:hover {
+  box-shadow: 0 0 50px rgba(66, 201, 143, 0.7);
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.ciberpunk {
+  animation: fadeIn 1.5s ease-out;
+}
+*/
+
 .carousel-container {
     width: 100%;
     max-width: 1000px;
@@ -74,13 +135,13 @@
   }
   
   .slick-center .game-card {
-    transform: scale(1);
+    transform: scale(0.95);
     box-shadow: 0 0 20px rgba(66, 201, 143, 0.6);
     z-index: 2;
   }
   
   .slick-slide:not(.slick-center) .game-card {
-    transform: scale(0.8);
+    transform: scale(0.75);
     opacity: 0.7;
     z-index: 1;
   }

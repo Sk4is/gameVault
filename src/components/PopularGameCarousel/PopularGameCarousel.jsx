@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import axios from "axios";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./GameCarousel.css";
+import "./PopularGameCarousel.css";
 
 const PrevArrow = (props) => {
   const { className, style, onClick } = props;
@@ -60,6 +60,37 @@ const GameCarousel = () => {
     fetchGames();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const ciberpunkImage = document.querySelector(".ciberpunk");
+      if (!ciberpunkImage) return;
+
+      const rect = ciberpunkImage.getBoundingClientRect();
+      console.log("getBoundingClientRect:", rect);
+
+      const windowHeight = window.innerHeight;
+
+      const visibleHeight = Math.max(0, Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0));
+      const imageHeight = rect.height;
+      const visibilityRatio = visibleHeight / imageHeight;
+
+      console.log(`Visibilidad: ${visibilityRatio * 100}%`);
+
+      if (visibilityRatio >= 0.5) {
+        ciberpunkImage.classList.add("scrolled");
+      } else {
+        ciberpunkImage.classList.remove("scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const shuffleArray = (array) => {
     let shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -98,6 +129,9 @@ const GameCarousel = () => {
   };
 
   return (
+    <>
+    <h1 className="popular-title">Popular Games</h1>
+    <hr class="separator"></hr>
     <div className="carousel-container">
       <Slider {...settings}>
         {games.length === 0 ? (
@@ -146,6 +180,8 @@ const GameCarousel = () => {
         )}
       </Slider>
     </div>
+    <img className="ciberpunk" src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743104194/cyberpunk-night-city-bttwc9wki8cqtvkj_1_q3hjay.jpg" alt="Ciberpunk city" />
+    </>
   );
 };
 
