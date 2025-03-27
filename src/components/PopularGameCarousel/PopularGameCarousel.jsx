@@ -116,7 +116,7 @@ const GameCarousel = () => {
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 5000,
     centerMode: true,
     centerPadding: "0px",
     beforeChange: (current, next) => setActiveIndex(next),
@@ -130,6 +130,7 @@ const GameCarousel = () => {
 
   return (
     <>
+    <img className="ciberpunk" src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743107638/Proyecto_nuevo_1_qjdcih.jpg" alt="Ciberpunk city" />
     <h1 className="popular-title">Popular Games</h1>
     <hr class="separator"></hr>
     <div className="carousel-container">
@@ -180,7 +181,6 @@ const GameCarousel = () => {
         )}
       </Slider>
     </div>
-    <img className="ciberpunk" src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743104194/cyberpunk-night-city-bttwc9wki8cqtvkj_1_q3hjay.jpg" alt="Ciberpunk city" />
     </>
   );
 };
