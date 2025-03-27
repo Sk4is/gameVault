@@ -16,13 +16,16 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
     "mysql2": "^3.13.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
+    "react-slick": "^0.30.3",
     "sequelize": "^6.37.6",
+    "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
