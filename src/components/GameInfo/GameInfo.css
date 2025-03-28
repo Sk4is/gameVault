@@ -1,0 +1,202 @@
+.game-info-page {
+  position: relative;
+  padding: 20px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12%;
+}
+
+.game-details {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding-bottom: 50px;
+}
+
+.game-screenshots {
+  margin-top: 30px;
+  padding-bottom: 50px;
+  overflow: hidden;
+}
+
+.game-trailer iframe {
+  width: 100%;
+  height: 400px;
+}
+
+.game-summary,
+.game-platforms,
+.game-screenshots {
+  margin-top: 20px;
+}
+
+.game-screenshots h3 {
+  margin-bottom: 10px;
+}
+
+.screenshot-item img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.screenshots-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.screenshots-container img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.slick-prev,
+.slick-next {
+  z-index: 2;
+}
+
+.slick-prev {
+  left: 10px;
+  right: auto;
+}
+
+.slick-next {
+  right: 10px;
+  left: auto;
+}
+
+.game-screenshots {
+  margin-top: 30px;
+  padding-bottom: 50px;
+}
+
+.game-screenshots h3 {
+  margin-bottom: 10px;
+}
+
+.screenshot-item img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.game-info-page.zoomed .background-image,
+.game-info-page.zoomed .game-details {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.game-info-page.zoomed .game-screenshots {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.zoomed-image-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.zoomed-image {
+  width: 120%;
+  height: auto;
+  max-width: none;
+  max-height: 90%;
+  object-fit: contain;
+  z-index: 1001;
+  transform: translateX(-10%);
+}
+
+.image-navigation {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 50%;
+  left: 12%;
+  right: 14%;
+  z-index: 1002;
+  transform: translateY(-50%);
+}
+
+.nav-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 40px;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover {
+  background-color: rgba(0, 255, 179, 0.8);
+  transform: scale(1.2);
+}
+
+.close-zoom {
+  position: absolute;
+  top: 130px;
+  right: 360px;
+  color: white;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 1001;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.close-zoom:hover {
+  background: rgba(255, 0, 0, 1);
+  transform: scale(1.1);
+}
+
+.slick-dots li button:before {
+  color: #888;
+  opacity: 1;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #42c98f;
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+}
+
+footer {
+  z-index: 1;
+}

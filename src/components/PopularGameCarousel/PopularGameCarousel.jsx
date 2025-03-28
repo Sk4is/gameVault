@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./PopularGameCarousel.css";
@@ -10,7 +11,7 @@ const PrevArrow = (props) => {
   return (
     <div
       className={`custom-arrow prev ${className}`}
-      style={{ ...style, display: "block", left: "10px" }}
+      style={{ ...style, display: "block", left: "0px" }}
       onClick={onClick}
     >
       &#8249;
@@ -23,12 +24,57 @@ const NextArrow = (props) => {
   return (
     <div
       className={`custom-arrow next ${className}`}
-      style={{ ...style, display: "block", right: "10px" }}
+      style={{ ...style, display: "block", right: "33px" }}
       onClick={onClick}
     >
       &#8250;
     </div>
   );
+};
+
+const translateText = async (text) => {
+  if (!text) return "";
+
+  const MAX_LENGTH = 500;
+
+  const splitText = (text) => {
+    const chunks = [];
+    for (let i = 0; i < text.length; i += MAX_LENGTH) {
+      chunks.push(text.substring(i, i + MAX_LENGTH));
+    }
+    return chunks;
+  };
+
+  try {
+    const textChunks = splitText(text);
+    const translatedChunks = await Promise.all(
+      textChunks.map(async (chunk) => {
+        const response = await axios.get("https://api.mymemory.translated.net/get", {
+          params: {
+            q: chunk,
+            langpair: "en|es",
+          },
+        });
+
+        return response.data.responseData.translatedText;
+      })
+    );
+
+    return translatedChunks.join(" ");
+  } catch (error) {
+    console.error("Error translating text:", error);
+    return text;
+  }
+};
+
+// Función para aleatorizar el arreglo de juegos
+const shuffleArray = (array) => {
+  let shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Intercambia los elementos
+  }
+  return shuffledArray;
 };
 
 const GameCarousel = () => {
@@ -40,7 +86,7 @@ const GameCarousel = () => {
       try {
         const response = await axios.post(
           "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 500;`,
+          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 500;`, // Cambié el límite a 500
           {
             headers: {
               "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
@@ -49,9 +95,20 @@ const GameCarousel = () => {
           }
         );
 
-        const shuffledGames = shuffleArray(response.data);
-        const gamesWithImages = shuffledGames.filter((game) => game.cover?.url);
-        setGames(gamesWithImages.slice(0, 20));
+        // Transladar resúmenes de los juegos
+        const translatedGames = await Promise.all(
+          response.data.map(async (game) => {
+            const translatedSummary = await translateText(game.summary);
+            return {
+              ...game,
+              summary: translatedSummary,
+            };
+          })
+        );
+
+        // Aleatorizar los juegos y obtener solo 20
+        const shuffledGames = shuffleArray(translatedGames).slice(0, 20); // Obtener los primeros 20 juegos aleatorios
+        setGames(shuffledGames);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
@@ -59,46 +116,6 @@ const GameCarousel = () => {
 
     fetchGames();
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const ciberpunkImage = document.querySelector(".ciberpunk");
-      if (!ciberpunkImage) return;
-
-      const rect = ciberpunkImage.getBoundingClientRect();
-      console.log("getBoundingClientRect:", rect);
-
-      const windowHeight = window.innerHeight;
-
-      const visibleHeight = Math.max(0, Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0));
-      const imageHeight = rect.height;
-      const visibilityRatio = visibleHeight / imageHeight;
-
-      console.log(`Visibilidad: ${visibilityRatio * 100}%`);
-
-      if (visibilityRatio >= 0.5) {
-        ciberpunkImage.classList.add("scrolled");
-      } else {
-        ciberpunkImage.classList.remove("scrolled");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const shuffleArray = (array) => {
-    let shuffled = array.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
 
   const getStars = (rating) => {
     if (rating === null || rating === undefined) {
@@ -130,57 +147,59 @@ const GameCarousel = () => {
 
   return (
     <>
-    <img className="ciberpunk" src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743107638/Proyecto_nuevo_1_qjdcih.jpg" alt="Ciberpunk city" />
-    <h1 className="popular-title">Popular Games</h1>
-    <hr class="separator"></hr>
-    <div className="carousel-container">
-      <Slider {...settings}>
-        {games.length === 0 ? (
-          <p>Cargando juegos...</p>
-        ) : (
-          games.map((game, index) => (
-            <div
-              key={game.id}
-              className={`game-card ${index === activeIndex ? "active" : ""}`}
-            >
-              <img
-                src={game.cover?.url.replace("t_thumb", "t_cover_big")}
-                alt={game.name}
-                loading="lazy"
-              />
-              <div className="game-info">
-                <h3>{game.name}</h3>
-                <p className="genre">
-                  Genres:{" "}
-                  {game.genres?.length
-                    ? game.genres.map((genre) => genre.name).join(", ")
-                    : "Sin categoría"}
-                </p>
-                <p className="description">
-                  Summary: {game.summary || "Descripción no disponible"}
-                </p>
-                <p className="platforms">
-                  Platforms:{" "}
-                  {game.platforms?.length
-                    ? game.platforms
-                        .map((platform) => platform.abbreviation)
-                        .join(", ")
-                    : "Plataformas no disponibles"}
-                </p>
-                <div className="rating-developer">
-                  <div className="stars">
-                    {"★".repeat(getStars(game.rating)) || "★".repeat(0)}
-                  </div>
-                  <div className="developer">
-                    {game.developers?.[0]?.name || "Desarrollador desconocido"}
+      <img
+        className="ciberpunk"
+        src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743107638/Proyecto_nuevo_1_qjdcih.jpg"
+        alt="Ciudad Ciberpunk"
+      />
+      <h1 className="popular-title">Juegos Destacados</h1>
+      <hr className="separator"></hr>
+      <div className="carousel-container">
+        <Slider {...settings}>
+          {games.length === 0 ? (
+            <p>Cargando juegos...</p>
+          ) : (
+            games.map((game, index) => (
+              <Link to={`/gameinfo/${game.id}`} key={game.id}>
+              <div
+                key={game.id}
+                className={`game-card ${index === activeIndex ? "active" : ""}`}
+              >
+                <img
+                  src={game.cover?.url.replace("t_thumb", "t_cover_big")}
+                  alt={game.name}
+                  loading="lazy"
+                />
+                <div className="game-info">
+                  <h3>{game.name}</h3>
+                  <p className="description">
+                    Resumen: {game.summary || "Descripción no disponible"}
+                  </p>
+                  <p className="platforms">
+                    Plataformas:{" "}
+                    {game.platforms?.length
+                      ? game.platforms
+                          .map((platform) => platform.abbreviation)
+                          .join(", ")
+                      : "Plataformas no disponibles"}
+                  </p>
+                  <div className="rating-year">
+                    <div className="stars">
+                      {"★".repeat(getStars(game.rating)) || "★".repeat(0)}
+                    </div>
+                    <div className="year">
+                      {game.first_release_date
+                        ? new Date(game.first_release_date * 1000).getFullYear()
+                        : "Desconocido"}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
-        )}
-      </Slider>
-    </div>
+              </Link>
+            ))
+          )}
+        </Slider>
+      </div>
     </>
   );
 };

@@ -38,26 +38,6 @@
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
-/*
-.ciberpunk.scrolled {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.ciberpunk:hover {
-  box-shadow: 0 0 50px rgba(66, 201, 143, 0.7);
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.ciberpunk {
-  animation: fadeIn 1.5s ease-out;
-}
-*/
-
 .carousel-container {
     width: 100%;
     max-width: 1000px;
@@ -115,7 +95,7 @@
     color: #666;
   }
   
-  .rating-developer {
+  .rating-year {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -127,8 +107,8 @@
     color: #ffd700;
   }
   
-  .developer {
-    color: #333;
+  .year {
+    color: #42C98F;
   }
   
   .slick-center .game-card {
@@ -154,16 +134,6 @@
   .slick-center .game-card img {
     transform: scale(1); 
   }
-
-  .slick-prev, .slick-next {
-    left: 920px;
-  }
-  
-  
-  .slick-prev,
-  .slick-next {
-    z-index: 1;
-  }
   
   .slick-dots {
     bottom: -30px;
@@ -177,7 +147,7 @@
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+}
   
   .custom-arrow:hover {
     background-color: rgba(0, 0, 0, 0.8);
