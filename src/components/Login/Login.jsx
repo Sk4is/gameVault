@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './login.css';
 import Swal from 'sweetalert2';
 
@@ -8,20 +9,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const navigate = useNavigate();
+
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const togglePassword = () => setShowPassword(!showPassword);
 
   const validateForm = (e) => {
     e.preventDefault();
@@ -40,12 +35,14 @@ const Login = () => {
     Swal.fire({
       icon: 'success',
       title: '¡Éxito!',
-      text: 'Formulario validado correctamente.',
+      text: 'Inicio de sesión exitoso.',
       confirmButtonText: 'Aceptar',
       confirmButtonColor: '#35b977',
       background: '#1a1a1a',
       color: '#fff',
       iconColor: '#35b977',
+    }).then(() => {
+      navigate('/landing');
     });
   };
 

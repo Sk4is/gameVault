@@ -1,32 +1,30 @@
-require('dotenv').config();
 const express = require('express');
-const axios = require('axios');
 const cors = require('cors');
+const axios = require('axios');
 
 const app = express();
+const PORT = 5000;
+
 app.use(cors());
-app.use(express.json());
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
-
-app.get('/games', async (req, res) => {
+app.post('/api/igdb', async (req, res) => {
   try {
     const response = await axios.post(
       'https://api.igdb.com/v4/games',
-      "fields name,cover.url,first_release_date,genres.name,platforms.name,involved_companies.company.name; limit 20;",
+      req.body,
       {
         headers: {
-          'Client-ID': CLIENT_ID,
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
+          'Client-ID': 'yytjvifii8si3zmeshx8znlox2nuc5',
+          'Authorization': 'Bearer vb8e7cupalh6uc0pafce3eikvd9pfs',
         },
       }
     );
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send('Error fetching data');
   }
 });
 
-app.listen(3001, () => console.log('Server running on port 3001'));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

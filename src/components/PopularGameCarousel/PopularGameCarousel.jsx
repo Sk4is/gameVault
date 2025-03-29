@@ -67,7 +67,6 @@ const translateText = async (text) => {
   }
 };
 
-// Función para aleatorizar el arreglo de juegos
 const shuffleArray = (array) => {
   let shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -86,7 +85,7 @@ const GameCarousel = () => {
       try {
         const response = await axios.post(
           "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 500;`, // Cambié el límite a 500
+          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 500;`,
           {
             headers: {
               "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
@@ -95,7 +94,6 @@ const GameCarousel = () => {
           }
         );
 
-        // Transladar resúmenes de los juegos
         const translatedGames = await Promise.all(
           response.data.map(async (game) => {
             const translatedSummary = await translateText(game.summary);
@@ -106,8 +104,7 @@ const GameCarousel = () => {
           })
         );
 
-        // Aleatorizar los juegos y obtener solo 20
-        const shuffledGames = shuffleArray(translatedGames).slice(0, 20); // Obtener los primeros 20 juegos aleatorios
+        const shuffledGames = shuffleArray(translatedGames).slice(0, 20);
         setGames(shuffledGames);
       } catch (error) {
         console.error("Error fetching games:", error);
@@ -153,7 +150,7 @@ const GameCarousel = () => {
         alt="Ciudad Ciberpunk"
       />
       <h1 className="popular-title">Juegos Destacados</h1>
-      <hr className="separator"></hr>
+      <hr className="separator-popular"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (

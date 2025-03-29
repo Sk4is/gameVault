@@ -134,7 +134,7 @@
   top: 50%;
   left: 12%;
   right: 14%;
-  z-index: 1002;
+  z-index: 1000;
   transform: translateY(-50%);
 }
 
@@ -197,6 +197,30 @@
   font-size: 12px;
 }
 
-footer {
-  z-index: 1;
+.add-game {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    margin-left: 115%;
+    color: black;
+    width: 25%;
+    height: 50px;
+    background-color: #42c98f;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.add-game:hover {
+    background-color: #268a5f;
+}
+
+.separator-info {
+    border: none; 
+    height: 2px;
+    background-color: #2b2b2b;
+    margin-bottom: 20px;
+    margin-bottom: -20%;
 }

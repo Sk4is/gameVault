@@ -55,6 +55,8 @@ const GameInfoPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     const fetchGameDetails = async () => {
       try {
         const response = await axios.post(
@@ -67,9 +69,9 @@ const GameInfoPage = () => {
             },
           }
         );
-
+  
         const translatedSummary = await translateText(response.data[0].summary);
-
+  
         setGame({
           ...response.data[0],
           summary: translatedSummary,
@@ -78,7 +80,7 @@ const GameInfoPage = () => {
         console.error("Error fetching game details:", error);
       }
     };
-
+  
     fetchGameDetails();
   }, [id]);
 
@@ -149,18 +151,6 @@ const GameInfoPage = () => {
       <div className="game-details">
         <h1>{game.name}</h1>
 
-        <div className="game-trailer">
-          {game.trailers?.[0] && (
-            <iframe
-              src={`https://www.youtube.com/embed/${game.trailers[0].video_id}`}
-              frameBorder="0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              title="Game Trailer"
-            ></iframe>
-          )}
-        </div>
-
         <div className="game-summary">
           <h3>Resumen</h3>
           <p>{game.summary || "Resumen no disponible"}</p>
@@ -206,6 +196,8 @@ const GameInfoPage = () => {
             <p>No hay capturas disponibles.</p>
           )}
         </div>
+        <button className="add-game">Agregar a biblioteca</button>
+        <hr className="separator-info"></hr>
       </div>
 
       {zoomedImage && (

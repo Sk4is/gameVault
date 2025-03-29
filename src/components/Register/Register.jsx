@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -12,32 +13,17 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const navigate = useNavigate();
+
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const handleNombreChange = (e) => {
-    setNombre(e.target.value);
-  };
-
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
+  const handleNombreChange = (e) => setNombre(e.target.value);
+  const togglePassword = () => setShowPassword(!showPassword);
+  const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const validateForm = async (e) => {
     e.preventDefault();
@@ -59,11 +45,7 @@ const Register = () => {
 
     setErrorMessage('');
     
-    const userData = {
-      nombre: nombre,
-      email: email,
-      password: password,
-    };
+    const userData = { nombre, email, password };
 
     try {
       const response = await axios.post('http://localhost:5000/api/register', userData);
@@ -78,6 +60,8 @@ const Register = () => {
           background: '#1a1a1a',
           color: '#fff',
           iconColor: '#35b977',
+        }).then(() => {
+          navigate('/landing');
         });
       } else {
         Swal.fire({

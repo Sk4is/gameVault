@@ -16,7 +16,7 @@
   animation: glitch 0.5s infinite alternate;
 }
 
-.separator {
+.separator-popular {
   border: none; 
   height: 2px;
   background-color: #2b2b2b;

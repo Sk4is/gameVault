@@ -1,14 +1,16 @@
 import React from 'react';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
-import GameCarousel from '../components/PopularGameCarousel/PopularGameCarousel';
+import PopularGames from '../components/PopularGameCarousel/PopularGameCarousel';
+import ClassicGames from '../components/ClassicGames/ClassicGames';
 
 const Home = () => {
 
   return (
     <div>
       <Header />
-      <GameCarousel />
+      <PopularGames />
+      <ClassicGames />
       <Footer />
     </div>
   );
