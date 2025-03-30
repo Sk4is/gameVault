@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./ClassicGames.css";
+import "./NewGames.css";
 
 const PrevArrow = (props) => {
   const { className, style, onClick } = props;
@@ -32,9 +32,14 @@ const NextArrow = (props) => {
   );
 };
 
-const getRandomGames = (games, count) => {
-  const shuffled = games.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+const getStars = (rating) => {
+  if (rating === null || rating === undefined || isNaN(rating)) {
+    return 0;
+  }
+
+  const maxRating = 5;
+  const ratingPercentage = (rating / 100) * maxRating;
+  return Math.round(ratingPercentage);
 };
 
 const GameCarousel = () => {
@@ -44,11 +49,19 @@ const GameCarousel = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
+        const now = Math.floor(Date.now() / 1000);
+        
+        const twoYearsAgo = new Date();
+        twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+        twoYearsAgo.setMonth(0);
+        twoYearsAgo.setDate(1); 
+        const twoYearsAgoTimestamp = Math.floor(twoYearsAgo.getTime() / 1000);
+
         const response = await axios.post(
           "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
           `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation;
-           where first_release_date >= 315532800 & first_release_date < 1325376000 & rating >= 85;  
-           sort rating desc;
+           where first_release_date >= ${twoYearsAgoTimestamp} & first_release_date <= ${now}; 
+           sort first_release_date desc;
            limit 500;`,
           {
             headers: {
@@ -58,19 +71,25 @@ const GameCarousel = () => {
           }
         );
 
-        setGames(getRandomGames(response.data, 20));
+        const shuffleArray = (array) => {
+          let shuffledArray = [...array];
+          for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+          }
+          return shuffledArray;
+        };
+
+        const shuffledGames = shuffleArray(response.data).slice(0, 20);
+
+        setGames(shuffledGames);
       } catch (error) {
-        console.error("Error fetching games:", error);
+        console.error("Error fetching new games:", error);
       }
     };
 
     fetchGames();
   }, []);
-
-  const getStars = (rating) => {
-    if (!rating) return 0;
-    return Math.round((rating / 100) * 5);
-  };
 
   const settings = {
     dots: false,
@@ -93,7 +112,7 @@ const GameCarousel = () => {
 
   return (
     <>
-      <h1 className="popular-title">Juegos Clásicos Mejor Valorados</h1>
+      <h1 className="popular-title">Nuevos Lanzamientos</h1>
       <hr className="separator-popular"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
@@ -113,18 +132,23 @@ const GameCarousel = () => {
                   />
                   <div className="game-info">
                     <h3>{game.name}</h3>
+                    <p className="genre">
+                      <strong>Género:</strong>{" "}
+                      {game.genres?.map((genre) => genre.name).join(", ") || "Desconocido"}
+                    </p>
                     <p className="description">
-                      Resumen: {game.summary || "Descripción no disponible"}
+                      <strong>Resumen:</strong>{" "}
+                      {game.summary ? game.summary.substring(0, 150) + "..." : "No disponible"}
                     </p>
                     <p className="platforms">
-                      Plataformas:{" "}
+                      <strong>Plataformas:</strong>{" "}
                       {game.platforms?.length
                         ? game.platforms.map((platform) => platform.abbreviation).join(", ")
                         : "Plataformas no disponibles"}
                     </p>
                     <div className="rating-year">
                       <div className="stars">
-                        {"★".repeat(getStars(game.rating))}
+                        {"★".repeat(getStars(game.rating)) || "★".repeat(0)}
                       </div>
                       <div className="year">
                         {game.first_release_date

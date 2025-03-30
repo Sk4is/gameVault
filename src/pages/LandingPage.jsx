@@ -3,6 +3,8 @@ import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import PopularGames from '../components/PopularGameCarousel/PopularGameCarousel';
 import ClassicGames from '../components/ClassicGames/ClassicGames';
+import NewGames from '../components/NewGames/NewGames';
+import GameTrailer from '../components/GameTrailer/GameTrailer';
 
 const Home = () => {
 
@@ -11,6 +13,8 @@ const Home = () => {
       <Header />
       <PopularGames />
       <ClassicGames />
+      <NewGames />
+      <GameTrailer />
       <Footer />
     </div>
   );
