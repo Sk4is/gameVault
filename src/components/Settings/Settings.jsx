@@ -1,49 +1,81 @@
-import React, { useState, useEffect } from "react";
-import "./Settings.css";
+// src/pages/SettingsPage.jsx
+import React, { useContext, useState } from 'react';
+import { ThemeContext } from '../Contexts/ThemeContext'; // Importamos el ThemeContext
+import './Settings.css';
 
 const Settings = () => {
-  const [username, setUsername] = useState(localStorage.getItem("username") || "Usuario123");
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === "true");
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext); // Accedemos a darkMode y toggleDarkMode
+  const [username, setUsername] = useState("Nombre Usuario");
+  const [email, setEmail] = useState("usuario@gmail.com");
+  const [profileImage, setProfileImage] = useState(null);
 
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);  
-
-  useEffect(() => {
-    localStorage.setItem("username", username);
-  }, [username]);
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
   };
 
   return (
-    <div className="settings-container">
-      <h2>Ajustes</h2>
+    <div className={`settings-container ${darkMode ? "dark" : "light"}`}>
+      <h2 className="title">CONFIGURACIÓN</h2>
+      <div className="settings-content">
+        <div className="left-panel">
+          <label className="profile-label">FOTO DE PERFIL:</label>
+          <div className="profile-pic-container">
+            <div className="profile-pic">
+              <img
+                src={profileImage || "https://www.w3schools.com/howto/img_avatar.png"}
+                alt="Profile"
+              />
+            </div>
+            <button
+              className="change-photo-button"
+              onClick={() => document.getElementById("fileInput").click()}
+            >
+              Cambiar foto de perfil
+            </button>
+          </div>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleImageUpload}
+            style={{ display: "none" }}
+          />
 
-      <div className="settings-item">
-        <label>Nombre de usuario:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-      </div>
+          <label className="field-label">NOMBRE DE USUARIO:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="input-field"
+          />
 
-      <div className="settings-item">
-        <label>Modo oscuro:</label>
-        <button onClick={toggleDarkMode} className="toggle-btn">
-          {darkMode ? "🌙" : "☀️"}
-        </button>
+          <label className="field-label">CORREO ELECTRÓNICO:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input-field"
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          />
+        </div>
+
+        <div className="separator-popular"></div>
+
+        <div className="right-panel">
+          <label className="mode-label">MODO CLARO / OSCURO</label>
+          <div className="toggle-container" onClick={toggleDarkMode}>
+            <span className="sun">☀️</span>
+            <div className={`toggle-switch ${darkMode ? "" : "active"}`}></div>
+            <span className="moon">🌙</span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -196,7 +196,7 @@ const GameInfoPage = () => {
             <p>No hay capturas disponibles.</p>
           )}
         </div>
-        <button className="add-game">Agregar a biblioteca</button>
+        <button className="add-game" onClick={() => alert(`${game.name} ha sido añadido a tu biblioteca!`)}>Agregar a biblioteca</button>
         <hr className="separator-info"></hr>
       </div>
 

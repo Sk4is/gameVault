@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 import "./Reviews.css";
 
 const Review = () => {
@@ -13,7 +14,6 @@ const Review = () => {
     rating: 1,
   });
 
-  // Obtener reseñas desde la base de datos
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -27,12 +27,10 @@ const Review = () => {
     fetchReviews();
   }, [id]);
 
-  // Manejar cambios en los inputs
   const handleChange = (e) => {
     setNewReview({ ...newReview, [e.target.name]: e.target.value });
   };
 
-  // Enviar nueva reseña al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -40,8 +38,8 @@ const Review = () => {
         game_id: id,
         ...newReview,
       });
-      setReviews([...reviews, response.data]); // Agregar la nueva reseña a la lista
-      setNewReview({ username: "", title: "", content: "", rating: 1 }); // Resetear el formulario
+      setReviews([...reviews, response.data]);
+      setNewReview({ username: "", title: "", content: "", rating: 1 });
     } catch (error) {
       console.error("Error enviando la reseña:", error);
     }
@@ -49,6 +47,22 @@ const Review = () => {
 
   return (
     <div className="game-info-page">
+      <motion.img
+  src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743343109/image_7_1_rf9fzn.png"
+  alt="Arrow"
+  className="arrow"
+  animate={{
+    rotate: [0, 15, -15, 15, 0],
+    y: [0, -10, 0, -5, 0],
+  }}
+  transition={{
+    repeat: Infinity,
+    duration: 1,
+    ease: "easeInOut",
+  }}
+/>
+
+
       <h1>Reseñas de los usuarios</h1>
 
       {reviews.length > 0 ? (

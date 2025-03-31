@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import "./GameTrailer.css";
 
 const getRandomGameWithTrailer = (games) => {
@@ -62,11 +63,42 @@ const RandomGameCard = () => {
   const trailerUrl = trailerId ? `https://www.youtube.com/embed/${trailerId}` : null;
 
   return (
-    <div className="random-game-card">
+    <>
+    <h1 className="popular-title">Trailers Juegos Populares</h1>
+    <div className="arrow-container">
+    <motion.img
+  src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743342428/image_4_1_eutjge.png"
+  alt="Arrow"
+  className="arrow-left"
+  animate={{ y: [0, -10, 0, -5, 0] }} 
+  transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
+/>
+
+<motion.img
+  src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743342644/image_4_2_uiwrkb.png"
+  alt="Arrow"
+  className="arrow-right"
+  animate={{ y: [0, -10, 0, -5, 0] }} 
+  transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
+/>
+
+
+</div>
+      <motion.div 
+      className="random-game-card"
+      initial={{ opacity: 0, scale: 0.8 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <h2>{game.name}</h2>
       <div className="game-body">
         {trailerUrl ? (
-          <div className="iframe-container">
+          <motion.div 
+            className="iframe-container"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+          >
             <iframe
               width="100%"
               height="100%"
@@ -75,21 +107,27 @@ const RandomGameCard = () => {
               allowFullScreen
               title={game.name}
             ></iframe>
-          </div>
+          </motion.div>
         ) : (
           <p>Trailer no disponible</p>
         )}
         <hr className="separator-popular"></hr>
         <p><strong>Género:</strong> {game.genres?.map(genre => genre.name).join(", ") || "No disponible"}</p>
         <p><strong>Resumen:</strong> {game.summary || "Descripción no disponible"}</p>
-        <p><strong>Rating:</strong> {renderStars(getStars(game.rating))}</p>
+        <p><strong>Rating:</strong> <span className="stars">{renderStars(getStars(game.rating))}</span></p>
         <p><strong>Año de lanzamiento:</strong> {game.first_release_date ? new Date(game.first_release_date * 1000).getFullYear() : "Desconocido"}</p>
       </div>
-      <div className="game-actions">
+      <motion.div 
+        className="game-actions"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
         <Link to={`/gameinfo/${game.id}`} className="btn">Más Información</Link>
         <button className="btn" onClick={() => alert(`${game.name} ha sido añadido a tu biblioteca!`)}>Añadir a la biblioteca</button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
+    </>
   );
 };
 

@@ -13,6 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode {
+  background-color: #ffffff;
+  color: #222;
+}
+
+body.dark-mode {
+  background-color: #222;
+  color: #f4f4f4;
+}
+
 a {
   font-weight: 500;
   color: #26cf16;

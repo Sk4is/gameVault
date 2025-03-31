@@ -93,8 +93,8 @@ const GameCarousel = () => {
 
   return (
     <>
-      <h1 className="popular-title">Juegos Clásicos Mejor Valorados</h1>
-      <hr className="separator-popular"></hr>
+      <h1 className="popular-title">Juegos Clásicos</h1>
+      <hr className="separator"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (

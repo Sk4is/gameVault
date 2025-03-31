@@ -37,7 +37,6 @@
   .lettering img {
     width: 250px;
     height: auto;
-    margin-right: 50px;
   }
   
   .menu-btn {
@@ -83,7 +82,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #444;
+    background-color: rgba(68, 68, 68, 0.9);
     padding: 10px 0;
     display: flex;
     justify-content: center;
@@ -121,3 +120,28 @@
   .menu-item a:hover {
     color: #35b977;
   }
+
+  .settings-icon {
+    position: absolute;
+    right: 20px;
+    top: 56%;
+    left: 95%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .settings-icon img {
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .settings-icon img:hover {
+    transform: rotate(30deg);
+  }
+  

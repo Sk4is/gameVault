@@ -6,6 +6,7 @@
   width: 80%;
   padding: 80px;
   margin: 20px auto;
+  margin-bottom: 15%;
 }
 
 .review-form h2 {
@@ -117,4 +118,13 @@
     max-height: 150px;
     overflow-y: auto;
   }
+
+  .arrow {
+    margin-bottom: -10%;
+    width: 20%;
+    position: relative;
+    left: 100%;
+    transform: translateX(-50%) rotate(15deg);
+  }
+  
   

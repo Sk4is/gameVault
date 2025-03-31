@@ -150,7 +150,7 @@ const GameCarousel = () => {
         alt="Ciudad Ciberpunk"
       />
       <h1 className="popular-title">Juegos Destacados</h1>
-      <hr className="separator-popular"></hr>
+      <hr className="separator"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (

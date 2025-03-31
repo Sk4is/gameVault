@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import './Header.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "./Header.css";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,12 +20,20 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  const handleLoginRedirect = () => {
-    navigate('/login');
+  const handleLandingRedirect = () => {
+    navigate("/landing");
+  };
+
+  const handleLibraryRedirect = () => {
+    navigate("/library");
+  };
+
+  const handleProfileRedirect = () => {
+    navigate("/profile");
   };
 
   const handleSettingsRedirect = () => {
-    navigate('/settings');
+    navigate("/settings");
   };
 
   return (
@@ -40,8 +48,11 @@ const Header = () => {
         </a>
       </div>
 
-      <div className='lettering'>
-        <img src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741300424/GameVault1_flwfca.png" alt="GameVault lettering" />
+      <div className="lettering">
+        <img
+          src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741300424/GameVault1_flwfca.png"
+          alt="GameVault lettering"
+        />
       </div>
 
       <button onClick={toggleMenu} className="menu-btn">
@@ -49,11 +60,23 @@ const Header = () => {
       </button>
 
       {isMenuOpen && (
-        <nav className={`menu ${!isMenuVisible ? 'hidden' : ''}`}>
+        <nav className={`menu ${!isMenuVisible ? "hidden" : ""}`}>
           <ul className="menu-list">
-            <li className="menu-item"><a onClick={handleLoginRedirect}>Ver Perfil</a></li>
-            <li className="menu-item"><a href="/buscar">Buscar</a></li>
-            <li className="menu-item"><a onClick={handleSettingsRedirect}>Ajustes</a></li>
+            <li className="menu-item">
+              <a onClick={handleLandingRedirect}>Inicio</a>
+            </li>
+            <li className="menu-item">
+              <a onClick={handleLibraryRedirect}>Biblioteca</a>
+            </li>
+            <li className="menu-item">
+              <a onClick={handleProfileRedirect}>Perfil</a>
+            </li>
+            <button onClick={handleSettingsRedirect} className="settings-icon">
+              <img
+                src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743416847/image_8_kbjqbo.png"
+                alt="Settings"
+              />
+            </button>
           </ul>
         </nav>
       )}
