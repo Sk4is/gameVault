@@ -27,65 +27,56 @@ const Register = () => {
 
   const validateForm = async (e) => {
     e.preventDefault();
-
+  
     if (!emailRegex.test(email)) {
-      setErrorMessage('Por favor, ingresa un correo electrónico válido.');
+      setErrorMessage("Por favor, ingresa un correo electrónico válido.");
       return;
     }
-
+  
     if (!passwordRegex.test(password)) {
-      setErrorMessage('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.');
+      setErrorMessage("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
-      setErrorMessage('Las contraseñas no coinciden.');
+      setErrorMessage("Las contraseñas no coinciden.");
       return;
     }
-
-    setErrorMessage('');
-    
-    const userData = { nombre, email, password };
-
+  
+    setErrorMessage("");
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/register', userData);
-
-      if (response.data.message === 'Usuario creado con éxito') {
-        Swal.fire({
-          icon: 'success',
-          title: '¡Éxito!',
-          text: 'Usuario registrado correctamente.',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#35b977',
-          background: '#1a1a1a',
-          color: '#fff',
-          iconColor: '#35b977',
-        }).then(() => {
-          navigate('/landing');
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo registrar el usuario. Intenta nuevamente.',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#e74c3c',
-          background: '#1a1a1a',
-          color: '#fff',
-          iconColor: '#e74c3c',
-        });
-      }
-    } catch (error) {
-      console.error('Error al registrar el usuario:', error);
+      // Hacemos la solicitud POST para registrar al usuario con el prefijo '/api'
+      const response = await axios.post('/api/register', {
+        nombre,
+        email,
+        password,
+      });
+      
+      // Si el registro es exitoso
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ocurrió un error al registrar el usuario. Por favor, intenta nuevamente.',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#e74c3c',
-        background: '#1a1a1a',
-        color: '#fff',
-        iconColor: '#e74c3c',
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Usuario registrado correctamente.",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#35b977",
+        background: "#1a1a1a",
+        color: "#fff",
+        iconColor: "#35b977",
+      }).then(() => {
+        navigate("/login"); // Redirigir al login
+      });
+    } catch (error) {
+      // Manejo de errores
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "No se pudo registrar el usuario.",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#e74c3c",
+        background: "#1a1a1a",
+        color: "#fff",
+        iconColor: "#e74c3c",
       });
     }
   };

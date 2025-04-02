@@ -1,10 +1,14 @@
-import { Sequelize } from 'sequelize';
+const mysql = require('mysql2');
 
-// Configura tu base de datos MySQL aquí
-const sequelize = new Sequelize('game_vault', 'usuario', 'contraseña', {
-  host: 'localhost',
-  dialect: 'mysql',
-  logging: false,  // Puedes habilitar el logging para ver las consultas SQL
+// Crea la conexión a la base de datos MySQL
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',  // Cambia estos valores según tu configuración
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'nombre_de_tu_base_de_datos'
 });
 
-export default sequelize;
+// Promise para facilitar el manejo de consultas asincrónicas
+const promisePool = pool.promise();
+
+module.exports = promisePool;

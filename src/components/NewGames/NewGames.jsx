@@ -112,7 +112,7 @@ const GameCarousel = () => {
 
   return (
     <>
-      <h1 className="popular-title">Nuevos Lanzamientos</h1>
+      <h1 className="newgame-title">Nuevos Lanzamientos</h1>
       <hr className="separator-popular"></hr>
       <div className="carousel-container">
         <Slider {...settings}>

@@ -4,7 +4,7 @@ import Footer from '../components/Footer/Footer';
 import Info from '../components/GameInfo/GameInfo';
 import Review from '../components/Reviews/Reviews';
 
-const Home = () => {
+const GameInfo = () => {
 
   return (
     <div>
@@ -16,4 +16,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default GameInfo;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ const Login = () => {
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const togglePassword = () => setShowPassword(!showPassword);
 
-  const validateForm = (e) => {
+  const validateForm = async (e) => {
     e.preventDefault();
 
     if (!emailRegex.test(email)) {
@@ -32,18 +33,45 @@ const Login = () => {
     }
 
     setErrorMessage('');
-    Swal.fire({
-      icon: 'success',
-      title: '¡Éxito!',
-      text: 'Inicio de sesión exitoso.',
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: '#35b977',
-      background: '#1a1a1a',
-      color: '#fff',
-      iconColor: '#35b977',
-    }).then(() => {
-      navigate('/landing');
-    });
+
+    try {
+      // Solicitar el inicio de sesión al backend con el prefijo '/api'
+      const response = await axios.post('/api/login', {
+        email,
+        password,
+      });
+
+      // Al recibir el token
+      const { token } = response.data;
+
+      // Guardar el token en el localStorage
+      localStorage.setItem('token', token);
+
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Inicio de sesión exitoso.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#35b977',
+        background: '#1a1a1a',
+        color: '#fff',
+        iconColor: '#35b977',
+      }).then(() => {
+        navigate('/landing'); // Redirigir a una página segura
+      });
+    } catch (error) {
+      // Mostrar errores
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.message || 'Correo o contraseña incorrectos.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#e74c3c',
+        background: '#1a1a1a',
+        color: '#fff',
+        iconColor: '#e74c3c',
+      });
+    }
   };
 
   return (

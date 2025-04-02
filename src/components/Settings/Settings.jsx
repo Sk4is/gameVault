@@ -1,13 +1,33 @@
-// src/pages/SettingsPage.jsx
-import React, { useContext, useState } from 'react';
-import { ThemeContext } from '../Contexts/ThemeContext'; // Importamos el ThemeContext
+import React, { useContext, useState, useEffect } from 'react';
+import { ThemeContext } from '../Contexts/ThemeContext'; 
 import './Settings.css';
+import axios from 'axios';
 
 const Settings = () => {
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext); // Accedemos a darkMode y toggleDarkMode
-  const [username, setUsername] = useState("Nombre Usuario");
-  const [email, setEmail] = useState("usuario@gmail.com");
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    // Suponiendo que tienes un token JWT guardado en localStorage
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      axios.get('http://localhost:5000/api/profile', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        const { nombre, email, foto_perfil } = response.data;
+        setUsername(nombre);
+        setEmail(email);
+        setProfileImage(foto_perfil);
+      })
+      .catch(error => {
+        console.error("Error al obtener los datos del perfil:", error);
+      });
+    }
+  }, []);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -19,6 +39,32 @@ const Settings = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleSaveProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwt.decode(token);  // Decodifica el token para obtener el ID
+        const userId = decodedToken.id;
+  
+        const response = await axios.put(
+          'http://localhost:5000/api/update-profile',
+          {
+            id: userId,  // Usamos el ID del token
+            nombre: username,
+            email,
+            foto_perfil: profileImage,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        alert(response.data.message);
+      } catch (error) {
+        console.error("Error al guardar el perfil:", error);
+      }
+    }
+  };  
 
   return (
     <div className={`settings-container ${darkMode ? "dark" : "light"}`}>
@@ -77,6 +123,7 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      <button className="save-button" onClick={handleSaveProfile}>Guardar Cambios</button>
     </div>
   );
 };

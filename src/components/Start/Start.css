@@ -10,11 +10,13 @@ body {
 
 .options p {
     font-size: 25px;
+    margin-top: -15%;
     margin-bottom: 10%;
 }
 
 .title h1 {
-    margin-top: -10%;
+    font-size: 50px;
+    margin-top: -15%;
     margin-bottom: 10%;
 }
 
@@ -40,7 +42,7 @@ body {
 
 .logoStart img {
     margin-top: -10%;
-    max-width: 100%;
+    max-width: 150%;
     height: auto;
 }
 

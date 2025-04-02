@@ -7,7 +7,9 @@ import Info from './pages/GameInfoPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Settings from './pages/SettingsPage';
-import { ThemeProvider } from './components/Contexts/ThemeContext'; // Importamos el ThemeProvider
+import Library from './pages/LibraryPage';
+import ProfilePage from './pages/ProfilePage';
+import { ThemeProvider } from './components/Contexts/ThemeContext';
 import './index.css';
 
 const App = () => {
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/library" element={<Library />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </ThemeProvider>
   );

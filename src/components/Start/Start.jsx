@@ -32,7 +32,7 @@ const Start = () => {
           <button className="register" onClick={handleRegisterRedirect}>
             Registrate
           </button>
-          <div class="divider">
+          <div className="divider">
             <span>O</span>
           </div>
           <button className="login" onClick={handleLoginRedirect}>
