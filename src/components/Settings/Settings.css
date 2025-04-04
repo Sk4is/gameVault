@@ -112,3 +112,20 @@
 .sun, .moon {
   font-size: 20px;
 }
+
+.save-button {
+  width: 42%;
+  padding: 10px 0;
+  background-color: #00ff99;
+  color: #222;
+  font-size: 14px;
+  font-weight: bolder;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #00cc7a;
+}

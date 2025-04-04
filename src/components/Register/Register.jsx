@@ -15,7 +15,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
 
   const handleEmailChange = (e) => setEmail(e.target.value);
@@ -46,14 +46,12 @@ const Register = () => {
     setErrorMessage("");
   
     try {
-      // Hacemos la solicitud POST para registrar al usuario con el prefijo '/api'
       const response = await axios.post('/api/register', {
         nombre,
         email,
         password,
       });
       
-      // Si el registro es exitoso
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
@@ -64,10 +62,13 @@ const Register = () => {
         color: "#fff",
         iconColor: "#35b977",
       }).then(() => {
-        navigate("/login"); // Redirigir al login
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("nombreUsuario", nombre);
+        localStorage.setItem("emailUsuario", email);
+  
+        navigate("/login");
       });
     } catch (error) {
-      // Manejo de errores
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -79,7 +80,7 @@ const Register = () => {
         iconColor: "#e74c3c",
       });
     }
-  };
+  };  
 
   return (
     <div className="login-page">
