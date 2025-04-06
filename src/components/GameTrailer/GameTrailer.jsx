@@ -57,6 +57,24 @@ const RandomGameCard = () => {
     return starArray.join("");
   };
 
+  const handleAddToLibrary = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return Swal.fire("Error", "Debes iniciar sesión", "error");
+  
+    try {
+      await axios.post(
+        "http://localhost:5000/api/add-to-library",
+        { gameId: game.id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      Swal.fire("¡Añadido!", "Juego guardado en tu biblioteca", "success");
+    } catch (error) {
+      console.error("❌ Error al añadir a biblioteca:", error);
+      Swal.fire("Error", error.response?.data?.message || "Algo salió mal", "error");
+    }
+  };  
+
   if (!game) return <div>Cargando...</div>;
 
   const trailerId = game.videos?.length > 0 ? game.videos[0].video_id : null;
@@ -124,7 +142,7 @@ const RandomGameCard = () => {
         transition={{ duration: 0.5, delay: 0.5 }}
       >
         <Link to={`/gameinfo/${game.id}`} className="btn">Más Información</Link>
-        <button className="btn" onClick={() => alert(`${game.name} ha sido añadido a tu biblioteca!`)}>Añadir a la biblioteca</button>
+        <button className="btn" onClick={handleAddToLibrary}>Añadir a la biblioteca</button>
       </motion.div>
     </motion.div>
     </>

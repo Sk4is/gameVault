@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Slider from "react-slick";
+import Swal from "sweetalert2";
 import "./GameInfo.css";
 
 const translateText = async (text) => {
@@ -31,12 +32,7 @@ const translateText = async (text) => {
           }
         );
 
-        if (response.data.responseData.translatedText) {
-          return response.data.responseData.translatedText;
-        } else {
-          console.error("Error en la traducción:", response);
-          return chunk;
-        }
+        return response.data.responseData.translatedText || chunk;
       })
     );
 
@@ -56,7 +52,7 @@ const GameInfoPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     const fetchGameDetails = async () => {
       try {
         const response = await axios.post(
@@ -69,9 +65,9 @@ const GameInfoPage = () => {
             },
           }
         );
-  
+
         const translatedSummary = await translateText(response.data[0].summary);
-  
+
         setGame({
           ...response.data[0],
           summary: translatedSummary,
@@ -80,7 +76,7 @@ const GameInfoPage = () => {
         console.error("Error fetching game details:", error);
       }
     };
-  
+
     fetchGameDetails();
   }, [id]);
 
@@ -97,29 +93,17 @@ const GameInfoPage = () => {
   };
 
   const goToPreviousImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? game.screenshots.length - 1 : prevIndex - 1
-    );
-    setZoomedImage(
-      game.screenshots[
-        currentImageIndex === 0
-          ? game.screenshots.length - 1
-          : currentImageIndex - 1
-      ].url.replace("t_thumb", "t_screenshot_big")
-    );
+    const prevIndex =
+      currentImageIndex === 0 ? game.screenshots.length - 1 : currentImageIndex - 1;
+    setCurrentImageIndex(prevIndex);
+    setZoomedImage(game.screenshots[prevIndex].url.replace("t_thumb", "t_screenshot_big"));
   };
 
   const goToNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === game.screenshots.length - 1 ? 0 : prevIndex + 1
-    );
-    setZoomedImage(
-      game.screenshots[
-        currentImageIndex === game.screenshots.length - 1
-          ? 0
-          : currentImageIndex + 1
-      ].url.replace("t_thumb", "t_screenshot_big")
-    );
+    const nextIndex =
+      currentImageIndex === game.screenshots.length - 1 ? 0 : currentImageIndex + 1;
+    setCurrentImageIndex(nextIndex);
+    setZoomedImage(game.screenshots[nextIndex].url.replace("t_thumb", "t_screenshot_big"));
   };
 
   const closeZoomOnClickOutside = (e) => {
@@ -127,6 +111,36 @@ const GameInfoPage = () => {
       closeZoom();
     }
   };
+
+  const handleAddToLibrary = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return Swal.fire("Error", "Debes iniciar sesión", "error");
+  
+    try {
+      await axios.post(
+        "http://localhost:5000/api/add-to-library",
+        {
+          gameId: game.id,
+          name: game.name,
+          description: game.summary || null,
+          genre: game.genres?.map(g => g.name).join(", ") || null,
+          platform: game.platforms?.map(p => p.abbreviation).join(", ") || null,
+          image: game.cover?.url?.replace("t_thumb", "t_cover_big") || null,
+          releaseDate: game.first_release_date
+            ? new Date(game.first_release_date * 1000).toISOString().split("T")[0]
+            : null,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+  
+      Swal.fire("¡Añadido!", "Juego guardado en tu biblioteca", "success");
+    } catch (error) {
+      console.error("❌ Error al añadir a biblioteca:", error);
+      Swal.fire("Error", error.response?.data?.message || "Algo salió mal", "error");
+    }
+  };   
 
   const settings = {
     dots: true,
@@ -160,9 +174,7 @@ const GameInfoPage = () => {
           <h3>Plataformas</h3>
           <p>
             {game.platforms?.length
-              ? game.platforms
-                  .map((platform) => platform.abbreviation)
-                  .join(", ")
+              ? game.platforms.map((platform) => platform.abbreviation).join(", ")
               : "Plataformas no disponibles"}
           </p>
         </div>
@@ -196,15 +208,16 @@ const GameInfoPage = () => {
             <p>No hay capturas disponibles.</p>
           )}
         </div>
-        <button className="add-game" onClick={() => alert(`${game.name} ha sido añadido a tu biblioteca!`)}>Agregar a biblioteca</button>
-        <hr className="separator-info"></hr>
+
+        <button className="add-game" onClick={handleAddToLibrary}>
+          Agregar a biblioteca
+        </button>
+
+        <hr className="separator-info" />
       </div>
 
       {zoomedImage && (
-        <div
-          className="zoomed-image-container"
-          onClick={closeZoomOnClickOutside}
-        >
+        <div className="zoomed-image-container" onClick={closeZoomOnClickOutside}>
           <span className="close-zoom" onClick={closeZoom}>
             X
           </span>

@@ -1,13 +1,21 @@
-const express = require('express');
-const mysql = require('mysql2');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const mysql = require("mysql2");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-app.use(express.json());
-app.use(cors());
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -18,116 +26,299 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error('Error al conectar con la base de datos:', err);
+    console.error("❌ Error al conectar con la base de datos:", err);
     process.exit(1);
   }
-  console.log('Conexión exitosa a la base de datos');
+  console.log("✅ Conexión exitosa a la base de datos");
 });
 
-app.post('/api/register', async (req, res) => {
-  const { nombre, email, password } = req.body;
+app.post("/api/register", async (req, res) => {
+  const { name, email, password } = req.body;
 
-  if (!nombre || !email || !password) {
-    return res.status(400).json({ message: 'Todos los campos son requeridos' });
+  if (!name || !email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Todos los campos son requeridos" });
   }
 
-  db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, result) => {
-    if (err) return res.status(500).json({ message: 'Error al verificar usuario' });
-    if (result.length > 0) return res.status(400).json({ message: 'El usuario ya existe' });
+  db.query("SELECT * FROM usuarios WHERE email = ?", [email], async (err, result) => {
+    if (err)
+      return res.status(500).json({ message: "Error al verificar usuario" });
+
+    if (result.length > 0)
+      return res.status(400).json({ message: "El usuario ya existe" });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    db.query('INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)', [nombre, email, hashedPassword], (err, result) => {
-      if (err) return res.status(500).json({ message: 'Error al registrar usuario' });
-      res.status(201).json({ message: 'Usuario registrado correctamente' });
-    });
+    db.query(
+      "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)",
+      [name, email, hashedPassword],
+      (err) => {
+        if (err)
+          return res
+            .status(500)
+            .json({ message: "Error al registrar usuario" });
+
+        res.status(201).json({ message: "Usuario registrado correctamente" });
+      }
+    );
   });
 });
 
-app.post('/api/login', (req, res) => {
+app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Todos los campos son requeridos' });
+    return res
+      .status(400)
+      .json({ message: "Todos los campos son requeridos" });
   }
 
-  db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, result) => {
-    if (err) return res.status(500).json({ message: 'Error al verificar usuario' });
-    if (result.length === 0) return res.status(400).json({ message: 'Usuario no encontrado' });
+  db.query("SELECT * FROM usuarios WHERE email = ?", [email], async (err, result) => {
+    if (err)
+      return res.status(500).json({ message: "Error al verificar usuario" });
 
-    const usuario = result[0];
+    if (result.length === 0)
+      return res.status(400).json({ message: "Usuario no encontrado" });
 
-    const isMatch = await bcrypt.compare(password, usuario.password);
-    if (!isMatch) return res.status(400).json({ message: 'Contraseña incorrecta' });
+    const user = result[0];
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    const token = jwt.sign({ id: usuario.id, email: usuario.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    if (!isMatch)
+      return res.status(400).json({ message: "Contraseña incorrecta" });
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.json({
-      message: 'Inicio de sesión exitoso',
+      message: "Inicio de sesión exitoso",
       token,
-      nombre: usuario.nombre,
+      name: user.nombre,
     });
   });
-}); 
+});
 
-app.get('/api/user-profile', (req, res) => {
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'No se ha proporcionado un token de autenticación' });
+app.get("/api/user-profile", (req, res) => {
+  const authHeader = req.headers.authorization;
+  console.log("📥 Header recibido:", authHeader);
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.error("❌ Encabezado de autorización inválido:", authHeader);
+    return res.status(401).json({ message: "Token no válido o ausente" });
   }
+
+  const token = authHeader.split(" ")[1];
+  console.log("🔐 Token recibido:", token);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Token no válido' });
+      console.error("❌ Error al verificar token:", err);
+      return res.status(401).json({ message: "Token inválido" });
     }
 
     const userId = decoded.id;
-    db.query('SELECT id, nombre, email, foto_perfil FROM usuarios WHERE id = ?', [userId], (err, result) => {
+    console.log("🧠 ID decodificado:", userId);
+
+    if (!userId) {
+      console.error("❌ ID no encontrado en token");
+      return res.status(400).json({ message: "Token sin ID válido" });
+    }
+
+    const query = "SELECT nombre, email, avatar FROM usuarios WHERE id = ?";
+    console.log("📄 Ejecutando query:", query, "con id:", userId);
+
+    db.query(query, [userId], (err, result) => {
       if (err) {
-        return res.status(500).json({ message: 'Error al obtener los datos del usuario' });
+        console.error("❌ Error SQL:", err);
+        return res.status(500).json({ message: "Error de base de datos" });
       }
+
       if (result.length === 0) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        console.warn("⚠️ Usuario no encontrado en la base de datos");
+        return res.status(404).json({ message: "Usuario no encontrado" });
       }
-      res.json(result[0]);
+
+      console.log("✅ Datos de usuario recuperados:", result[0]);
+      res.status(200).json(result[0]);
     });
   });
 });
 
-app.put('/api/update-profile', (req, res) => {
-  const { id, nombre, email, foto_perfil } = req.body;
+app.put("/api/update-profile", (req, res) => {
+  const { name, email, avatar } = req.body;
 
-  if (!nombre || !email) {
-    return res.status(400).json({ message: 'Nombre y email son requeridos.' });
-  }
-
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ message: 'No se ha proporcionado un token de autenticación' });
+    return res
+      .status(401)
+      .json({ message: "No se ha proporcionado un token de autenticación" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Token no válido' });
+      console.error("❌ Token inválido:", err);
+      return res.status(401).json({ message: "Token no válido" });
     }
 
-    if (decoded.id !== id) {
-      return res.status(403).json({ message: 'No tienes permiso para actualizar este perfil' });
-    }
+    const userId = decoded.id;
 
-    let query = 'UPDATE usuarios SET nombre = ?, email = ?, foto_perfil = ? WHERE id = ?';
-
-    db.query(query, [nombre, email, foto_perfil, id], (err, result) => {
+    const query =
+      "UPDATE usuarios SET nombre = ?, email = ?, avatar = ? WHERE id = ?";
+    db.query(query, [name, email, avatar, userId], (err) => {
       if (err) {
-        return res.status(500).json({ message: 'Error al actualizar los datos del perfil.' });
+        console.error("❌ Error al actualizar el perfil:", err);
+        return res
+          .status(500)
+          .json({ message: "Error al actualizar los datos del perfil." });
       }
-      res.status(200).json({ message: 'Perfil actualizado correctamente' });
+
+      res.status(200).json({ message: "Perfil actualizado correctamente" });
     });
   });
 });
 
-// Iniciar el servidor
+app.post("/api/add-to-library", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const {
+    gameId, // IGDB ID (usaremos como "juegos.id")
+    name,
+    description,
+    genre,
+    platform,
+    image,
+    releaseDate,
+  } = req.body;
+
+  if (!token) return res.status(401).json({ message: "Token no proporcionado" });
+  if (!gameId || !name) return res.status(400).json({ message: "Datos del juego incompletos" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ message: "Token inválido" });
+
+    const userId = decoded.id;
+
+    // 1. Verificar si el juego ya está insertado
+    const checkGameQuery = "SELECT id FROM juegos WHERE id = ?";
+    db.query(checkGameQuery, [gameId], (err, gameRes) => {
+      if (err) return res.status(500).json({ message: "Error al verificar juego" });
+
+      const insertGameIfNeeded = (callback) => {
+        if (gameRes.length === 0) {
+          const insertGameQuery = `
+            INSERT INTO juegos (id, nombre, descripcion, genero, plataforma, imagen, fecha_lanzamiento)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+          `;
+          db.query(
+            insertGameQuery,
+            [
+              gameId,
+              name,
+              description || null,
+              genre || null,
+              platform || null,
+              image || null,
+              releaseDate || null,
+            ],
+            (err) => {
+              if (err) {
+                console.error("❌ Error al insertar juego:", err);
+                return res.status(500).json({ message: "Error al insertar juego" });
+              }
+              callback();
+            }
+          );
+        } else {
+          callback();
+        }
+      };
+
+      // 2. Insertar en biblioteca
+      insertGameIfNeeded(() => {
+        const checkLibraryQuery =
+          "SELECT * FROM biblioteca_usuario WHERE usuario_id = ? AND juego_id = ?";
+        db.query(checkLibraryQuery, [userId, gameId], (err, libRes) => {
+          if (err) return res.status(500).json({ message: "Error al verificar biblioteca" });
+          if (libRes.length > 0)
+            return res.status(400).json({ message: "Juego ya en la biblioteca" });
+
+          const insertLibQuery = `
+            INSERT INTO biblioteca_usuario (usuario_id, juego_id)
+            VALUES (?, ?)
+          `;
+          db.query(insertLibQuery, [userId, gameId], (err) => {
+            if (err) {
+              console.error("❌ Error al insertar en biblioteca:", err);
+              return res.status(500).json({ message: "Error al añadir a la biblioteca" });
+            }
+
+            res.status(201).json({ message: "Juego añadido correctamente a la biblioteca" });
+          });
+        });
+      });
+    });
+  });
+});
+
+app.get("/api/user-library", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Token no proporcionado" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    const userId = decoded.id;
+
+    const query = `
+      SELECT j.id, j.nombre AS title, j.imagen AS image,
+             b.ultima_conexion, b.horas_jugadas
+      FROM biblioteca_usuario b
+      JOIN juegos j ON j.id = b.juego_id
+      WHERE b.usuario_id = ?
+      ORDER BY b.ultima_conexion DESC
+    `;
+
+    db.query(query, [userId], (err, result) => {
+      if (err) return res.status(500).json({ message: "Error de base de datos" });
+      res.status(200).json(result);
+    });
+  });
+});
+
+app.post("/api/update-playtime", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const { gameId, duration } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token no proporcionado" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ message: "Token inválido" });
+
+    const userId = decoded.id;
+
+    const updateQuery = `
+      UPDATE biblioteca_usuario
+      SET horas_jugadas = horas_jugadas + ?, ultima_conexion = NOW()
+      WHERE usuario_id = ? AND juego_id = ?
+    `;
+
+    db.query(updateQuery, [duration, userId, gameId], (err) => {
+      if (err) return res.status(500).json({ message: "Error al actualizar horas" });
+      res.status(200).json({ message: "Horas actualizadas correctamente" });
+    });
+  });
+});
+
 app.listen(process.env.PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
+  console.log(`🚀 Servidor corriendo en el puerto ${process.env.PORT}`);
 });

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -37,7 +38,6 @@ const Login = () => {
     }
 
     setErrorMessage("");
-
     setLoading(true);
 
     try {
@@ -46,29 +46,37 @@ const Login = () => {
 
       localStorage.setItem("token", token);
 
+      const decoded = jwtDecode(token);
+      console.log("🔐 Token decodificado:", decoded);
+      console.log("📦 Token que se enviará a /user-profile:", token);
+
+      const perfil = await axios.get("http://localhost:5000/api/user-profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const { nombre, email: correo } = perfil.data;
+
+      localStorage.setItem("nombreUsuario", nombre);
+      localStorage.setItem("emailUsuario", correo);
+
       Swal.fire({
         icon: "success",
-        title: "¡Éxito!",
-        text: "Inicio de sesión exitoso.",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#35b977",
-        background: "#1a1a1a",
-        color: "#fff",
-        iconColor: "#35b977",
-      }).then(() => {
-        navigate("/landing");
+        title: "Inicio de sesión exitoso",
+        showConfirmButton: false,
+        timer: 1500,
       });
+
+      navigate("/landing");
     } catch (error) {
+      console.error("🔥 Error al iniciar sesión o cargar perfil:", error);
+
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "Correo o contraseña incorrectos.",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#e74c3c",
-        background: "#1a1a1a",
-        color: "#fff",
-        iconColor: "#e74c3c",
+        text: "Correo, contraseña o usuario inválido.",
       });
+
+      localStorage.removeItem("token");
     } finally {
       setLoading(false);
     }

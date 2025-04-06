@@ -1,0 +1,53 @@
+.library-game-card {
+    background-color: #1c1c1c;
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 220px;
+    margin: 0.5rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  
+  .library-game-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  
+  .library-game-title {
+    margin: 0.5rem 0;
+  }
+  
+  .library-play-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  
+  .library-play-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .game-overlay-content {
+    color: white;
+    text-align: center;
+  }
+  
