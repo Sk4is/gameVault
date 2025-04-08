@@ -3,12 +3,12 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    margin-top: -40%;
+    margin-top: 15%;
 }
 
 .profile-img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 150px;
@@ -22,6 +22,11 @@
 }
 
 .profile-info h1 {
-    font-size: 40px;
+    font-size: 50px;
     color: #ffffff;
+    margin-left: -30%;
+}
+
+.recent-games-section {
+    margin-bottom: 15%;
 }

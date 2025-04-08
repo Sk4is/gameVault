@@ -33,11 +33,6 @@
     will-change: filter;
     transition: filter 300ms;
   }
-
-  .lettering img {
-    width: 250px;
-    height: auto;
-  }
   
   .menu-btn {
     background-color: transparent;
@@ -108,7 +103,6 @@
   
   .menu-item {
     margin: 0 20px;
-    cursor: pointer;
   }
   
   .menu-item a {
@@ -145,4 +139,46 @@
   .settings-icon img:hover {
     transform: rotate(30deg);
   }
+  
+  .search-bar-container {
+    position: relative;
+    width: 500px;
+  }
+  
+  .search-input {
+    background-color: rgba(27, 27, 27, 0.5);
+    font-size: 15px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #35b977;
+  }
+  
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(68, 68, 68, 0.9);
+    border: 1px solid #ccc;
+    z-index: 99;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .search-result-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .search-result-item:hover {
+    background-color: rgba(54, 54, 54, 0.9);
+  }  
   

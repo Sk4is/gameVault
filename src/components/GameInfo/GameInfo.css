@@ -18,6 +18,14 @@
   padding-bottom: 50px;
 }
 
+.game-details h1 {
+  font-size: 50px;
+}
+
+.game-details h3 {
+  font-size: 30px;
+}
+
 .game-screenshots {
   margin-top: 30px;
   padding-bottom: 50px;
@@ -202,7 +210,6 @@
     font-weight: 700;
     margin-top: 10%;
     margin-bottom: 10%;
-    margin-left: 115%;
     color: black;
     width: 25%;
     height: 50px;

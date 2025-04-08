@@ -21,6 +21,7 @@ const Library = () => {
   return (
     <div className="library-container">
       <h2>Mi Biblioteca</h2>
+      <hr className="separator"></hr>
       <div className="library-grid">
         {games.map(game => (
           <LibraryGameCard key={game.id} game={game} />

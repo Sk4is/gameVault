@@ -135,7 +135,13 @@ const GameInfoPage = () => {
         }
       );
   
-      Swal.fire("¡Añadido!", "Juego guardado en tu biblioteca", "success");
+      Swal.fire({
+              icon: "success",
+              title: "Juego guardado en tu biblioteca",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
     } catch (error) {
       console.error("❌ Error al añadir a biblioteca:", error);
       Swal.fire("Error", error.response?.data?.message || "Algo salió mal", "error");

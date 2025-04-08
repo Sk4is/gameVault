@@ -72,7 +72,7 @@ const Settings = () => {
       const response = await axios.put(
         "http://localhost:5000/api/update-profile",
         {
-          nombre: username,
+          name: username,
           email,
           avatar: avatar || "",
         },

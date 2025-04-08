@@ -1,0 +1,15 @@
+.search-results-page {
+    padding: 2rem;
+  }
+  
+  .search-results-page h2 {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .games-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  

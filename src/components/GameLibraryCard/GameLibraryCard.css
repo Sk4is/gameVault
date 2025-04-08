@@ -11,26 +11,63 @@
   
   .library-game-img {
     width: 100%;
-    height: 120px;
+    height: auto;
     object-fit: cover;
     border-radius: 6px;
   }
-  
+
   .library-game-title {
-    margin: 0.5rem 0;
+    font-size: 18px;
   }
   
   .library-play-btn {
     background-color: #4caf50;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 6px 18px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px;
   }
   
   .library-play-btn:hover {
     background-color: #45a049;
+  }
+
+  .library-remove-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .library-remove-btn:hover {
+    background-color: #c0392b;
+  }  
+
+  .library-info-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    margin-top: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
+    width: 50%;
+    font-weight: bold;
+  }
+  
+  .library-info-btn:hover {
+    background-color: #2980b9;
+  }  
+
+  .library-game-btns {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
   }
   
   .game-overlay {
@@ -51,3 +88,19 @@
     text-align: center;
   }
   
+  .close-game-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 4%;
+  }
+
+  .close-game-btn:hover {
+    background-color: #c0392b;
+  }

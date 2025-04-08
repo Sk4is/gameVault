@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 import "./GameTrailer.css";
 
 const getRandomGameWithTrailer = (games) => {
@@ -64,8 +65,20 @@ const RandomGameCard = () => {
     try {
       await axios.post(
         "http://localhost:5000/api/add-to-library",
-        { gameId: game.id },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          gameId: game.id,
+          name: game.name,
+          description: game.summary || null,
+          genre: game.genres?.map(g => g.name).join(", ") || null,
+          platform: game.platforms?.map(p => p.abbreviation).join(", ") || null,
+          image: game.cover?.url?.replace("t_thumb", "t_cover_big") || null,
+          releaseDate: game.first_release_date
+            ? new Date(game.first_release_date * 1000).toISOString().split("T")[0]
+            : null,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
   
       Swal.fire("¡Añadido!", "Juego guardado en tu biblioteca", "success");
@@ -73,7 +86,7 @@ const RandomGameCard = () => {
       console.error("❌ Error al añadir a biblioteca:", error);
       Swal.fire("Error", error.response?.data?.message || "Algo salió mal", "error");
     }
-  };  
+  }; 
 
   if (!game) return <div>Cargando...</div>;
 

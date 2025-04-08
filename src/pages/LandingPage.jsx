@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/Header/Header';
+import Header from '../components/HeaderSearch/HeaderSearch';
 import Footer from '../components/Footer/Footer';
 import PopularGames from '../components/PopularGameCarousel/PopularGameCarousel';
 import ClassicGames from '../components/ClassicGames/ClassicGames';
