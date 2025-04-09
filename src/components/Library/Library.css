@@ -1,0 +1,15 @@
+.library-container {
+    padding: 2rem;
+  }
+
+  .library-container h2 {
+    margin-top: 10%;
+    font-size: 40px;
+  }
+  
+  .library-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px;
+    margin-bottom: 10%;
+  }
