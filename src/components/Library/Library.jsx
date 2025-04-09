@@ -10,7 +10,7 @@ const Library = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get("https://gamevault-dwxh.onrender.com/api/user-library", {
+    .get(`${API_URL}/api/user-library`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

@@ -46,7 +46,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/login", { email, password });
+      const response = await axios.post(`${API_URL}/api/login`, { email, password });
       const { token } = response.data;
 
       localStorage.setItem("token", token);
@@ -55,7 +55,7 @@ const Login = () => {
       console.log("🔐 Token decodificado:", decoded);
       console.log("📦 Token que se enviará a /user-profile:", token);
 
-      const perfil = await axios.get("https://gamevault-dwxh.onrender.com/api/user-profile", {
+      const perfil = await axios.get(`${API_URL}/api/user-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

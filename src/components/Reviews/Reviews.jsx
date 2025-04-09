@@ -16,7 +16,7 @@ const Review = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`https://gamevault-dwxh.onrender.com/api/reviews/${id}`);
+      const response = await axios.get(`/api/reviews/${id}`);
       setReviews(response.data);
     } catch (error) {
       console.error("Error obteniendo las reseñas:", error);
@@ -59,8 +59,7 @@ const Review = () => {
     const token = localStorage.getItem("token");
 
     try {
-      await axios.post(
-        "https://gamevault-dwxh.onrender.com/api/reviews",
+      await axios.post(`${API_URL}/api/reviews`,
         {
           game_id: id,
           game_name: gameName,

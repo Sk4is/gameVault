@@ -118,7 +118,7 @@ const GameInfoPage = () => {
   
     try {
       await axios.post(
-        "https://gamevault-dwxh.onrender.com/api/add-to-library",
+        "/api/add-to-library",
         {
           gameId: game.id,
           name: game.name,

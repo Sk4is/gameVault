@@ -17,7 +17,7 @@ const Profile = () => {
     if (!token) return;
 
     axios
-      .get("https://gamevault-dwxh.onrender.com/api/user-profile", {
+    .get(`${API_URL}/api/user-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -30,7 +30,7 @@ const Profile = () => {
       );
 
     axios
-      .get("https://gamevault-dwxh.onrender.com/api/user-library", {
+    .get(`${API_URL}/api/user-library`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

@@ -63,8 +63,7 @@ const RandomGameCard = () => {
     if (!token) return Swal.fire("Error", "Debes iniciar sesión", "error");
   
     try {
-      await axios.post(
-        "https://gamevault-dwxh.onrender.com/api/add-to-library",
+      await axios.post(`${API_URL}/api/add-to-library`,
         {
           gameId: game.id,
           name: game.name,
