@@ -27,7 +27,7 @@ const LibraryGameCard = ({ game }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5000/api/update-playtime",
+        "https://gamevault-dwxh.onrender.com/api/update-playtime",
         {
           gameId: game.id,
           duration: durationHours,
@@ -61,7 +61,7 @@ const LibraryGameCard = ({ game }) => {
 
       if (confirm.isConfirmed) {
         await axios.delete(
-          `http://localhost:5000/api/remove-from-library/${game.id}`,
+          `https://gamevault-dwxh.onrender.com/api/remove-from-library/${game.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -25,7 +25,7 @@ const Settings = () => {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("http://localhost:5000/api/user-profile", {
+        .get("https://gamevault-dwxh.onrender.com/api/user-profile", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -71,7 +71,7 @@ const Settings = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/update-profile",
+        "https://gamevault-dwxh.onrender.com/api/update-profile",
         {
           name: username,
           email,

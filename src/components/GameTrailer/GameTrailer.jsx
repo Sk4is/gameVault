@@ -64,7 +64,7 @@ const RandomGameCard = () => {
   
     try {
       await axios.post(
-        "http://localhost:5000/api/add-to-library",
+        "https://gamevault-dwxh.onrender.com/api/add-to-library",
         {
           gameId: game.id,
           name: game.name,
