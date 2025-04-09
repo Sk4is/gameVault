@@ -129,3 +129,21 @@
 .save-button:hover {
   background-color: #00cc7a;
 }
+
+.logout-button {
+  position: absolute;
+  top: 140px;
+  right: 20px;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c62828;
+}

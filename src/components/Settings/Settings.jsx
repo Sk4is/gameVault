@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../Contexts/ThemeContext";
 import "./Settings.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const DEFAULT_AVATAR = "https://www.w3schools.com/howto/img_avatar.png";
@@ -103,6 +104,13 @@ const Settings = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className={`settings-container ${darkMode ? "dark" : "light"}`}>
       <h2 className="title">CONFIGURACIÓN</h2>
@@ -160,6 +168,10 @@ const Settings = () => {
       </div>
       <button className="save-button" onClick={handleSaveChanges}>
         Guardar Cambios
+      </button>
+
+      <button className="logout-button" onClick={handleLogout}>
+        Cerrar sesión
       </button>
     </div>
   );

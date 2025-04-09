@@ -32,46 +32,11 @@ const NextArrow = (props) => {
   );
 };
 
-const translateText = async (text) => {
-  if (!text) return "";
-
-  const MAX_LENGTH = 500;
-
-  const splitText = (text) => {
-    const chunks = [];
-    for (let i = 0; i < text.length; i += MAX_LENGTH) {
-      chunks.push(text.substring(i, i + MAX_LENGTH));
-    }
-    return chunks;
-  };
-
-  try {
-    const textChunks = splitText(text);
-    const translatedChunks = await Promise.all(
-      textChunks.map(async (chunk) => {
-        const response = await axios.get("https://api.mymemory.translated.net/get", {
-          params: {
-            q: chunk,
-            langpair: "en|es",
-          },
-        });
-
-        return response.data.responseData.translatedText;
-      })
-    );
-
-    return translatedChunks.join(" ");
-  } catch (error) {
-    console.error("Error translating text:", error);
-    return text;
-  }
-};
-
 const shuffleArray = (array) => {
   let shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Intercambia los elementos
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
   return shuffledArray;
 };
@@ -94,18 +59,8 @@ const GameCarousel = () => {
           }
         );
 
-        const translatedGames = await Promise.all(
-          response.data.map(async (game) => {
-            const translatedSummary = await translateText(game.summary);
-            return {
-              ...game,
-              summary: translatedSummary,
-            };
-          })
-        );
-
-        const shuffledGames = shuffleArray(translatedGames).slice(0, 20);
-        setGames(shuffledGames);
+        const random20Games = shuffleArray(response.data).slice(0, 20);
+        setGames(random20Games);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
@@ -158,40 +113,50 @@ const GameCarousel = () => {
           ) : (
             games.map((game, index) => (
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
-              <div
-                key={game.id}
-                className={`game-card ${index === activeIndex ? "active" : ""}`}
-              >
-                <img
-                  src={game.cover?.url.replace("t_thumb", "t_cover_big")}
-                  alt={game.name}
-                  loading="lazy"
-                />
-                <div className="game-info">
-                  <h3>{game.name}</h3>
-                  <p className="description">
-                    Resumen: {game.summary || "Descripción no disponible"}
-                  </p>
-                  <p className="platforms">
-                    Plataformas:{" "}
-                    {game.platforms?.length
-                      ? game.platforms
-                          .map((platform) => platform.abbreviation)
-                          .join(", ")
-                      : "Plataformas no disponibles"}
-                  </p>
-                  <div className="rating-year">
-                    <div className="stars">
-                      {"★".repeat(getStars(game.rating)) || "★".repeat(0)}
-                    </div>
-                    <div className="year">
-                      {game.first_release_date
-                        ? new Date(game.first_release_date * 1000).getFullYear()
-                        : "Desconocido"}
+                <div
+                  key={game.id}
+                  className={`game-card ${
+                    index === activeIndex ? "active" : ""
+                  }`}
+                >
+                  <img
+                    src={game.cover?.url.replace("t_thumb", "t_cover_big")}
+                    alt={game.name}
+                    loading="lazy"
+                  />
+                  <div className="game-info">
+                    <h3>{game.name}</h3>
+                    <p className="genres">
+                      Géneros:{" "}
+                      {game.genres?.length
+                        ? game.genres.map((genre) => genre.name).join(", ")
+                        : "No disponibles"}
+                    </p>
+                    <p className="description">
+                      Resumen: {game.summary || "Descripción no disponible"}
+                    </p>
+                    <p className="platforms">
+                      Plataformas:{" "}
+                      {game.platforms?.length
+                        ? game.platforms
+                            .map((platform) => platform.abbreviation)
+                            .join(", ")
+                        : "Plataformas no disponibles"}
+                    </p>
+                    <div className="rating-year">
+                      <div className="stars">
+                        {"★".repeat(getStars(game.rating)) || "★".repeat(0)}
+                      </div>
+                      <div className="year">
+                        {game.first_release_date
+                          ? new Date(
+                              game.first_release_date * 1000
+                            ).getFullYear()
+                          : "Desconocido"}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </Link>
             ))
           )}

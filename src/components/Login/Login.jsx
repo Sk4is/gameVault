@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import Swal from "sweetalert2";
@@ -17,6 +17,11 @@ const Login = () => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
+
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, []);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -87,12 +92,13 @@ const Login = () => {
       <div className="login-container">
         <div className="login-box">
           <h2>Iniciar Sesión</h2>
-          <form onSubmit={validateForm}>
+          <form onSubmit={validateForm} autoComplete="off">
             <div className="input-group">
               <label>Email</label>
               <input
                 type="email"
                 placeholder="Ingresa tu correo"
+                autoComplete="off"
                 value={email}
                 onChange={handleEmailChange}
                 required
@@ -104,6 +110,7 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Ingresa tu contraseña"
+                  autoComplete="off"
                   value={password}
                   onChange={handlePasswordChange}
                   required
