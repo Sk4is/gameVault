@@ -13,7 +13,10 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      "https://game-vault-omega.vercel.app",
+      "https://game-vault-git-main-adrianperezagredano-ceies-projects.vercel.app"
+    ],
     credentials: true,
   })
 );
