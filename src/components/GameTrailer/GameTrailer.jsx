@@ -60,6 +60,8 @@ const RandomGameCard = () => {
 
   const handleAddToLibrary = async () => {
     const token = localStorage.getItem("token");
+    const API_URL = import.meta.env.VITE_API_URL;
+    
     if (!token) return Swal.fire("Error", "Debes iniciar sesión", "error");
   
     try {

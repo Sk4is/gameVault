@@ -12,6 +12,7 @@ const Settings = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");

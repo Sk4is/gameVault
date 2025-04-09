@@ -6,6 +6,7 @@ import axios from "axios";
 const LibraryGameCard = ({ game }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [startTime, setStartTime] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handlePlay = () => {
     setIsPlaying(true);

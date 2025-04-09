@@ -6,6 +6,7 @@ import "./Library.css";
 
 const Library = () => {
   const [games, setGames] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");

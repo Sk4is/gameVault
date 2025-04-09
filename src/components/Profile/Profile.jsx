@@ -11,6 +11,7 @@ const Profile = () => {
   const [username, setUsername] = useState("Usuario");
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const [recentGames, setRecentGames] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");

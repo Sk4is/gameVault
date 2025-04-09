@@ -13,6 +13,7 @@ const Review = () => {
     rating: 1,
   });
   const [gameName, setGameName] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchReviews = async () => {
     try {
