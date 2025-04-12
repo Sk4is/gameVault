@@ -8,20 +8,30 @@ import "./Reviews.css";
 const Review = () => {
   const { id } = useParams();
   const [reviews, setReviews] = useState([]);
-  const [newReview, setNewReview] = useState({
-    content: "",
-    rating: 1,
-  });
+  const [newReview, setNewReview] = useState({ content: "", rating: 1 });
   const [gameName, setGameName] = useState("");
+  const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/reviews/${id}`);
+      const response = await axios.get(`${API_URL}/api/reviews/${id}`);
       setReviews(response.data);
     } catch (error) {
       console.error("Error obteniendo las reseñas:", error);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      setUserId(decoded.id);
+      setUserRole(decoded.rol);
+    }
+  }, []);
 
   useEffect(() => {
     fetchReviews();
@@ -40,9 +50,7 @@ const Review = () => {
             },
           }
         );
-        if (response.data.length > 0) {
-          setGameName(response.data[0].name);
-        }
+        if (response.data.length > 0) setGameName(response.data[0].name);
       } catch (error) {
         console.error("Error al obtener nombre del juego:", error);
       }
@@ -60,7 +68,7 @@ const Review = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/reviews",
+        `${API_URL}/api/reviews`,
         {
           game_id: id,
           game_name: gameName,
@@ -71,14 +79,26 @@ const Review = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       await fetchReviews();
       setNewReview({ content: "", rating: 1 });
-
       Swal.fire("¡Gracias!", "Tu reseña ha sido publicada", "success");
     } catch (error) {
       console.error("Error enviando la reseña:", error);
       Swal.fire("Error", "No se pudo publicar tu reseña", "error");
+    }
+  };
+
+  const handleDeleteReview = async (reviewUserId) => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete(`${API_URL}/api/reviews/${id}/${reviewUserId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      Swal.fire("Eliminada", "Tu reseña ha sido eliminada", "success");
+      fetchReviews();
+    } catch (error) {
+      console.error("Error eliminando reseña:", error);
+      Swal.fire("Error", "No se pudo eliminar la reseña", "error");
     }
   };
 
@@ -95,7 +115,6 @@ const Review = () => {
 
   return (
     <div className="game-info-page">
-
       <h1>Reseñas de los usuarios</h1>
 
       {reviews.length > 0 ? (
@@ -104,7 +123,7 @@ const Review = () => {
             <div key={index} className="review-card">
               <div className="review-header">
                 <h3 className="review-username">
-                  {review.username || "Usuario desconocido"}
+                  {review.username || "Usuario"}
                 </h3>
                 <div className="review-rating">
                   {Array.from({ length: review.rating }).map((_, i) => (
@@ -118,6 +137,14 @@ const Review = () => {
                   <em>Publicado: {formatDate(review.fecha_publicacion)}</em>
                 </p>
               )}
+              {(userRole === "admin" || review.usuario_id === userId) && (
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteReview(review.usuario_id)}
+                >
+                  Eliminar reseña
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -125,20 +152,12 @@ const Review = () => {
         <p>No hay reseñas disponibles.</p>
       )}
 
-      
-<motion.img
+      <motion.img
         src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743343109/image_7_1_rf9fzn.png"
         alt="Arrow"
         className="arrow"
-        animate={{
-          rotate: [0, 15, -15, 15, 0],
-          y: [0, -10, 0, -5, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1,
-          ease: "easeInOut",
-        }}
+        animate={{ rotate: [0, 15, -15, 15, 0], y: [0, -10, 0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
       />
 
       <div className="review-form">
@@ -152,7 +171,11 @@ const Review = () => {
             required
           />
           <label>Calificación:</label>
-          <select name="rating" value={newReview.rating} onChange={handleChange}>
+          <select
+            name="rating"
+            value={newReview.rating}
+            onChange={handleChange}
+          >
             {[1, 2, 3, 4, 5].map((num) => (
               <option key={num} value={num}>
                 {num} ⭐

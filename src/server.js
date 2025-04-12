@@ -92,7 +92,7 @@ app.post("/api/login", (req, res) => {
         return res.status(400).json({ message: "Contraseña incorrecta" });
 
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, rol: user.rol },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -187,15 +187,8 @@ app.put("/api/update-profile", (req, res) => {
 
 app.post("/api/add-to-library", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
-  const {
-    gameId,
-    name,
-    description,
-    genre,
-    platform,
-    image,
-    releaseDate,
-  } = req.body;
+  const { gameId, name, description, genre, platform, image, releaseDate } =
+    req.body;
 
   if (!token)
     return res.status(401).json({ message: "Token no proporcionado" });
@@ -376,7 +369,9 @@ app.post("/api/reviews", (req, res) => {
 
   if (!token) return res.status(401).json({ message: "Token requerido" });
   if (!game_id || !game_name || !content || !rating)
-    return res.status(400).json({ message: "Datos incompletos para la reseña" });
+    return res
+      .status(400)
+      .json({ message: "Datos incompletos para la reseña" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Token inválido" });
@@ -385,7 +380,8 @@ app.post("/api/reviews", (req, res) => {
 
     const checkGameQuery = "SELECT id FROM juegos WHERE id = ?";
     db.query(checkGameQuery, [game_id], (err, gameRes) => {
-      if (err) return res.status(500).json({ message: "Error al verificar juego" });
+      if (err)
+        return res.status(500).json({ message: "Error al verificar juego" });
 
       const insertGameIfNeeded = (callback) => {
         if (gameRes.length === 0) {
@@ -396,7 +392,9 @@ app.post("/api/reviews", (req, res) => {
           db.query(insertGameQuery, [game_id, game_name], (err) => {
             if (err) {
               console.error("❌ Error al insertar juego:", err);
-              return res.status(500).json({ message: "Error al insertar juego" });
+              return res
+                .status(500)
+                .json({ message: "Error al insertar juego" });
             }
             callback();
           });
@@ -410,59 +408,87 @@ app.post("/api/reviews", (req, res) => {
           SELECT id FROM reseñas WHERE usuario_id = ? AND juego_id = ?
         `;
         db.query(checkReviewQuery, [userId, game_id], (err, reviewRes) => {
-          if (err) return res.status(500).json({ message: "Error al verificar reseña previa" });
+          if (err)
+            return res
+              .status(500)
+              .json({ message: "Error al verificar reseña previa" });
 
           if (reviewRes.length > 0) {
-            return res.status(400).json({ message: "Ya has dejado una reseña para este juego" });
+            return res
+              .status(400)
+              .json({ message: "Ya has dejado una reseña para este juego" });
           }
 
           const insertReviewQuery = `
             INSERT INTO reseñas (usuario_id, juego_id, calificacion, comentario)
             VALUES (?, ?, ?, ?)
           `;
-          db.query(insertReviewQuery, [userId, game_id, rating, content], (err) => {
-            if (err) {
-              console.error("❌ Error al guardar reseña:", err);
-              return res.status(500).json({ message: "Error al guardar reseña" });
+          db.query(
+            insertReviewQuery,
+            [userId, game_id, rating, content],
+            (err) => {
+              if (err) {
+                console.error("❌ Error al guardar reseña:", err);
+                return res
+                  .status(500)
+                  .json({ message: "Error al guardar reseña" });
+              }
+
+              db.query(
+                "SELECT nombre FROM usuarios WHERE id = ?",
+                [userId],
+                (err, userRes) => {
+                  if (err)
+                    return res
+                      .status(500)
+                      .json({ message: "Error al obtener usuario" });
+
+                  const username = userRes[0]?.nombre || "Usuario";
+
+                  res.status(201).json({
+                    username,
+                    content,
+                    rating,
+                    fecha_publicacion: new Date(),
+                  });
+                }
+              );
             }
-
-            db.query("SELECT nombre FROM usuarios WHERE id = ?", [userId], (err, userRes) => {
-              if (err) return res.status(500).json({ message: "Error al obtener usuario" });
-
-              const username = userRes[0]?.nombre || "Usuario";
-
-              res.status(201).json({
-                username,
-                content,
-                rating,
-                fecha_publicacion: new Date(),
-              });
-            });
-          });
+          );
         });
       });
     });
   });
 });
 
-app.delete("/api/reviews/:gameId", (req, res) => {
+app.delete("/api/reviews/:gameId/:userId", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
-  const { gameId } = req.params;
+  const { gameId, userId: targetUserId } = req.params;
 
   if (!token) return res.status(401).json({ message: "Token requerido" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Token inválido" });
 
-    const userId = decoded.id;
+    const requesterId = decoded.id;
+    const requesterRole = decoded.rol;
+
+    if (requesterRole !== "admin" && requesterId !== parseInt(targetUserId)) {
+      return res.status(403).json({ message: "No autorizado para eliminar esta reseña" });
+    }
 
     const deleteQuery = `
       DELETE FROM reseñas WHERE usuario_id = ? AND juego_id = ?
     `;
-    db.query(deleteQuery, [userId, gameId], (err) => {
+
+    db.query(deleteQuery, [targetUserId, gameId], (err, result) => {
       if (err) {
         console.error("❌ Error eliminando reseña:", err);
         return res.status(500).json({ message: "Error al eliminar reseña" });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Reseña no encontrada" });
       }
 
       res.status(200).json({ message: "Reseña eliminada correctamente" });
@@ -474,13 +500,13 @@ app.get("/api/reviews/:gameId", (req, res) => {
   const gameId = req.params.gameId;
 
   const query = `
-    SELECT r.calificacion AS rating, r.comentario AS content, r.fecha_publicacion,
-           u.nombre AS username
-    FROM reseñas r
-    JOIN usuarios u ON u.id = r.usuario_id
-    WHERE r.juego_id = ?
-    ORDER BY r.fecha_publicacion DESC
-  `;
+  SELECT r.usuario_id, r.calificacion AS rating, r.comentario AS content, r.fecha_publicacion,
+         u.nombre AS username
+  FROM reseñas r
+  JOIN usuarios u ON u.id = r.usuario_id
+  WHERE r.juego_id = ?
+  ORDER BY r.fecha_publicacion DESC
+`;
 
   db.query(query, [gameId], (err, results) => {
     if (err) {
