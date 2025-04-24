@@ -26,7 +26,7 @@ const SearchResults = () => {
         );
         setGames(response.data);
       } catch (err) {
-        console.error("❌ Error buscando juegos:", err);
+        console.error("❌ Error searching for games:", err);
       }
     };
 
@@ -35,14 +35,14 @@ const SearchResults = () => {
 
   return (
     <div className="search-results-page">
-      <h2>Resultados de: "{query}"</h2>
+      <h2>Results for: "{query}"</h2>
       <div className="games-grid">
         {games.length > 0 ? (
           games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))
         ) : (
-          <p>No se encontraron resultados.</p>
+          <p>No results found.</p>
         )}
       </div>
     </div>

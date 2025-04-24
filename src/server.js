@@ -26,45 +26,46 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error("❌ Error al conectar con la base de datos:", err);
+    console.error("❌ Error connecting to the database:", err);
     process.exit(1);
   }
-  console.log("✅ Conexión exitosa a la base de datos");
+  console.log("✅ Successfully connected to the database");
 });
 
 app.post("/api/register", async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.status(400).json({ message: "Todos los campos son requeridos" });
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   db.query(
-    "SELECT * FROM usuarios WHERE email = ?",
+    "SELECT * FROM users WHERE email = ?",
     [email],
     async (err, result) => {
       if (err)
-        return res.status(500).json({ message: "Error al verificar usuario" });
+        return res.status(500).json({ message: "Error checking user" });
 
       if (result.length > 0)
-        return res.status(400).json({ message: "El usuario ya existe" });
-
+        return res.status(400).json({ message: "User already exists" });
+    
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-
+    
       db.query(
-        "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)",
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
         [name, email, hashedPassword],
         (err) => {
           if (err)
             return res
               .status(500)
-              .json({ message: "Error al registrar usuario" });
-
-          res.status(201).json({ message: "Usuario registrado correctamente" });
+              .json({ message: "Error registering user" });
+    
+          res.status(201).json({ message: "User registered successfully" });
         }
       );
     }
+
   );
 });
 
@@ -72,47 +73,48 @@ app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Todos los campos son requeridos" });
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   db.query(
-    "SELECT * FROM usuarios WHERE email = ?",
+    "SELECT * FROM users WHERE email = ?",
     [email],
     async (err, result) => {
       if (err)
-        return res.status(500).json({ message: "Error al verificar usuario" });
+        return res.status(500).json({ message: "Error checking user" });
 
       if (result.length === 0)
-        return res.status(400).json({ message: "Usuario no encontrado" });
-
+        return res.status(400).json({ message: "User not found" });
+    
       const user = result[0];
       const isMatch = await bcrypt.compare(password, user.password);
-
+    
       if (!isMatch)
-        return res.status(400).json({ message: "Contraseña incorrecta" });
-
+        return res.status(400).json({ message: "Incorrect password" });
+    
       const token = jwt.sign(
-        { id: user.id, email: user.email, rol: user.rol },
+        { id: user.id, email: user.email, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-
+    
       res.json({
-        message: "Inicio de sesión exitoso",
+        message: "Login successful",
         token,
-        name: user.nombre,
+        name: user.name,
       });
     }
+
   );
 });
 
 app.get("/api/user-profile", (req, res) => {
   const authHeader = req.headers.authorization;
-  console.log("📥 Header recibido:", authHeader);
+  console.log("📥 Header recieved:", authHeader);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    console.error("❌ Encabezado de autorización inválido:", authHeader);
-    return res.status(401).json({ message: "Token no válido o ausente" });
+    console.error("❌ Invalid authorization header:", authHeader);
+    return res.status(401).json({ message: "Invalid or missing token" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -121,34 +123,33 @@ app.get("/api/user-profile", (req, res) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.error("❌ Error al verificar token:", err);
-      return res.status(401).json({ message: "Token inválido" });
+      return res.status(401).json({ message: "Invalid token" });
     }
 
     const userId = decoded.id;
     console.log("🧠 ID decodificado:", userId);
-
+    
     if (!userId) {
-      console.error("❌ ID no encontrado en token");
-      return res.status(400).json({ message: "Token sin ID válido" });
+      console.error("❌ ID not found in token");
+      return res.status(400).json({ message: "Token without valid ID" });
     }
-
-    const query = "SELECT nombre, email, avatar FROM usuarios WHERE id = ?";
-    console.log("📄 Ejecutando query:", query, "con id:", userId);
-
+    
+    const query = "SELECT name, email, avatar FROM users WHERE id = ?";
+    
     db.query(query, [userId], (err, result) => {
       if (err) {
-        console.error("❌ Error SQL:", err);
-        return res.status(500).json({ message: "Error de base de datos" });
+        console.error("❌ SQL error:", err);
+        return res.status(500).json({ message: "Database error" });
       }
-
+    
       if (result.length === 0) {
-        console.warn("⚠️ Usuario no encontrado en la base de datos");
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        console.warn("⚠️ User not found in the data base");
+        return res.status(404).json({ message: "User not found" });
       }
-
-      console.log("✅ Datos de usuario recuperados:", result[0]);
+    
       res.status(200).json(result[0]);
     });
+
   });
 });
 
@@ -159,29 +160,30 @@ app.put("/api/update-profile", (req, res) => {
   if (!token) {
     return res
       .status(401)
-      .json({ message: "No se ha proporcionado un token de autenticación" });
+      .json({ message: "No token provided" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      console.error("❌ Token inválido:", err);
-      return res.status(401).json({ message: "Token no válido" });
+      console.error("❌ Invalid token:", err);
+      return res.status(401).json({ message: "Invalid token" });
     }
 
     const userId = decoded.id;
-
+    
     const query =
-      "UPDATE usuarios SET nombre = ?, email = ?, avatar = ? WHERE id = ?";
+      "UPDATE users SET name = ?, email = ?, avatar = ? WHERE id = ?";
     db.query(query, [name, email, avatar, userId], (err) => {
       if (err) {
-        console.error("❌ Error al actualizar el perfil:", err);
+        console.error("❌ Error updating profile:", err);
         return res
           .status(500)
-          .json({ message: "Error al actualizar los datos del perfil." });
+          .json({ message: "Error updating profile." });
       }
-
-      res.status(200).json({ message: "Perfil actualizado correctamente" });
+    
+      res.status(200).json({ message: "Profile updated" });
     });
+
   });
 });
 
@@ -191,24 +193,24 @@ app.post("/api/add-to-library", (req, res) => {
     req.body;
 
   if (!token)
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(401).json({ message: "Token not provided" });
   if (!gameId || !name)
-    return res.status(400).json({ message: "Datos del juego incompletos" });
+    return res.status(400).json({ message: "Incomplete game data" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(401).json({ message: "Token inválido" });
+    if (err) return res.status(401).json({ message: "Invalid token" });
 
     const userId = decoded.id;
-
-    const checkGameQuery = "SELECT id FROM juegos WHERE id = ?";
+    
+    const checkGameQuery = "SELECT id FROM games WHERE id = ?";
     db.query(checkGameQuery, [gameId], (err, gameRes) => {
       if (err)
-        return res.status(500).json({ message: "Error al verificar juego" });
-
+        return res.status(500).json({ message: "Error checking game" });
+    
       const insertGameIfNeeded = (callback) => {
         if (gameRes.length === 0) {
           const insertGameQuery = `
-            INSERT INTO juegos (id, nombre, descripcion, genero, plataforma, imagen, fecha_lanzamiento)
+            INSERT INTO games (id, name, description, genre, platform, image, release_date)
             VALUES (?, ?, ?, ?, ?, ?, ?)
           `;
           db.query(
@@ -224,10 +226,10 @@ app.post("/api/add-to-library", (req, res) => {
             ],
             (err) => {
               if (err) {
-                console.error("❌ Error al insertar juego:", err);
+                console.error("❌ Error inserting game:", err);
                 return res
                   .status(500)
-                  .json({ message: "Error al insertar juego" });
+                  .json({ message: "Error inserting game" });
               }
               callback();
             }
@@ -236,39 +238,40 @@ app.post("/api/add-to-library", (req, res) => {
           callback();
         }
       };
-
+    
       insertGameIfNeeded(() => {
         const checkLibraryQuery =
-          "SELECT * FROM biblioteca_usuario WHERE usuario_id = ? AND juego_id = ?";
+          "SELECT * FROM user_library WHERE user_id = ? AND game_id = ?";
         db.query(checkLibraryQuery, [userId, gameId], (err, libRes) => {
           if (err)
             return res
               .status(500)
-              .json({ message: "Error al verificar biblioteca" });
+              .json({ message: "Error checking library" });
           if (libRes.length > 0)
             return res
               .status(400)
-              .json({ message: "Juego ya en la biblioteca" });
-
+              .json({ message: "Game already in library" });
+    
           const insertLibQuery = `
-            INSERT INTO biblioteca_usuario (usuario_id, juego_id)
+            INSERT INTO user_library (user_id, game_id)
             VALUES (?, ?)
           `;
           db.query(insertLibQuery, [userId, gameId], (err) => {
             if (err) {
-              console.error("❌ Error al insertar en biblioteca:", err);
+              console.error("❌ Error inserting into library:", err);
               return res
                 .status(500)
-                .json({ message: "Error al añadir a la biblioteca" });
+                .json({ message: "Error adding to library" });
             }
-
+    
             res
               .status(201)
-              .json({ message: "Juego añadido correctamente a la biblioteca" });
+              .json({ message: "Game successfully added to library" });
           });
         });
       });
     });
+
   });
 });
 
@@ -276,30 +279,31 @@ app.get("/api/user-library", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(401).json({ message: "Token not provided" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Token inválido" });
+      return res.status(401).json({ message: "Invalid token" });
     }
 
     const userId = decoded.id;
-
+    
     const query = `
-      SELECT j.id, j.nombre AS title, j.imagen AS image,
-             b.ultima_conexion, b.horas_jugadas
-      FROM biblioteca_usuario b
-      JOIN juegos j ON j.id = b.juego_id
-      WHERE b.usuario_id = ?
-      ORDER BY b.ultima_conexion DESC
+      SELECT j.id, j.name AS title, j.image AS image,
+             b.last_connection, b.hours_played
+      FROM user_library b
+      JOIN games j ON j.id = b.game_id
+      WHERE b.user_id = ?
+      ORDER BY b.last_connection DESC
     `;
-
+    
     db.query(query, [userId], (err, result) => {
       if (err)
-        return res.status(500).json({ message: "Error de base de datos" });
+        return res.status(500).json({ message: "Database error" });
       res.status(200).json(result);
     });
+
   });
 });
 
@@ -308,25 +312,26 @@ app.post("/api/update-playtime", (req, res) => {
   const { gameId, duration } = req.body;
 
   if (!token) {
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(401).json({ message: "Token not provided" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(401).json({ message: "Token inválido" });
+    if (err) return res.status(401).json({ message: "Invalid token" });
 
     const userId = decoded.id;
-
+    
     const updateQuery = `
-      UPDATE biblioteca_usuario
-      SET horas_jugadas = horas_jugadas + ?, ultima_conexion = NOW()
-      WHERE usuario_id = ? AND juego_id = ?
+      UPDATE user_library
+      SET hours_played = hours_played + ?, last_connection = NOW()
+      WHERE user_id = ? AND game_id = ?
     `;
-
+    
     db.query(updateQuery, [duration, userId, gameId], (err) => {
       if (err)
-        return res.status(500).json({ message: "Error al actualizar horas" });
-      res.status(200).json({ message: "Horas actualizadas correctamente" });
+        return res.status(500).json({ message: "Error updating playtime" });
+      res.status(200).json({ message: "Playtime successfully updated" });
     });
+
   });
 });
 
@@ -335,31 +340,32 @@ app.delete("/api/remove-from-library/:gameId", (req, res) => {
   const { gameId } = req.params;
 
   if (!token) {
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(401).json({ message: "Token not provided" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Token inválido" });
+      return res.status(401).json({ message: "Invalid token" });
     }
 
     const userId = decoded.id;
-
+    
     const deleteQuery = `
-      DELETE FROM biblioteca_usuario
-      WHERE usuario_id = ? AND juego_id = ?
+      DELETE FROM user_library
+      WHERE user_id = ? AND game_id = ?
     `;
-
+    
     db.query(deleteQuery, [userId, gameId], (err, result) => {
       if (err) {
-        console.error("❌ Error al eliminar juego:", err);
+        console.error("❌ Error removing game:", err);
         return res
           .status(500)
-          .json({ message: "Error al eliminar el juego de la biblioteca" });
+          .json({ message: "Error deleting game from library" });
       }
-
-      res.status(200).json({ message: "Juego eliminado de la biblioteca" });
+    
+      res.status(200).json({ message: "Game removed from library" });
     });
+
   });
 });
 
@@ -367,34 +373,34 @@ app.post("/api/reviews", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const { game_id, game_name, content, rating } = req.body;
 
-  if (!token) return res.status(401).json({ message: "Token requerido" });
+  if (!token) return res.status(401).json({ message: "Token required" });
   if (!game_id || !game_name || !content || !rating)
     return res
       .status(400)
-      .json({ message: "Datos incompletos para la reseña" });
+      .json({ message: "Incomplete review data" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Token inválido" });
+    if (err) return res.status(403).json({ message: "Invalid token" });
 
     const userId = decoded.id;
-
-    const checkGameQuery = "SELECT id FROM juegos WHERE id = ?";
+    
+    const checkGameQuery = "SELECT id FROM games WHERE id = ?";
     db.query(checkGameQuery, [game_id], (err, gameRes) => {
       if (err)
-        return res.status(500).json({ message: "Error al verificar juego" });
-
+        return res.status(500).json({ message: "Error checking game" });
+    
       const insertGameIfNeeded = (callback) => {
         if (gameRes.length === 0) {
           const insertGameQuery = `
-            INSERT INTO juegos (id, nombre)
+            INSERT INTO games (id, name)
             VALUES (?, ?)
           `;
           db.query(insertGameQuery, [game_id, game_name], (err) => {
             if (err) {
-              console.error("❌ Error al insertar juego:", err);
+              console.error("❌ Error inserting game:", err);
               return res
                 .status(500)
-                .json({ message: "Error al insertar juego" });
+                .json({ message: "Error inserting game" });
             }
             callback();
           });
@@ -402,25 +408,25 @@ app.post("/api/reviews", (req, res) => {
           callback();
         }
       };
-
+    
       insertGameIfNeeded(() => {
         const checkReviewQuery = `
-          SELECT id FROM reseñas WHERE usuario_id = ? AND juego_id = ?
+          SELECT id FROM reviews WHERE user_id = ? AND game_id = ?
         `;
         db.query(checkReviewQuery, [userId, game_id], (err, reviewRes) => {
           if (err)
             return res
               .status(500)
-              .json({ message: "Error al verificar reseña previa" });
-
+              .json({ message: "Error checking previous review" });
+    
           if (reviewRes.length > 0) {
             return res
               .status(400)
-              .json({ message: "Ya has dejado una reseña para este juego" });
+              .json({ message: "You have already reviewed this game" });
           }
-
+    
           const insertReviewQuery = `
-            INSERT INTO reseñas (usuario_id, juego_id, calificacion, comentario)
+            INSERT INTO reviews (user_id, game_id, rating, comment)
             VALUES (?, ?, ?, ?)
           `;
           db.query(
@@ -428,28 +434,28 @@ app.post("/api/reviews", (req, res) => {
             [userId, game_id, rating, content],
             (err) => {
               if (err) {
-                console.error("❌ Error al guardar reseña:", err);
+                console.error("❌ Error saving review:", err);
                 return res
                   .status(500)
-                  .json({ message: "Error al guardar reseña" });
+                  .json({ message: "Error saving review" });
               }
-
+    
               db.query(
-                "SELECT nombre FROM usuarios WHERE id = ?",
+                "SELECT name FROM users WHERE id = ?",
                 [userId],
                 (err, userRes) => {
                   if (err)
                     return res
                       .status(500)
-                      .json({ message: "Error al obtener usuario" });
-
-                  const username = userRes[0]?.nombre || "Usuario";
-
+                      .json({ message: "Error retrieving user" });
+    
+                  const username = userRes[0]?.name || "Usuario";
+    
                   res.status(201).json({
                     username,
                     content,
                     rating,
-                    fecha_publicacion: new Date(),
+                    published_date: new Date(),
                   });
                 }
               );
@@ -458,6 +464,7 @@ app.post("/api/reviews", (req, res) => {
         });
       });
     });
+
   });
 });
 
@@ -465,34 +472,35 @@ app.delete("/api/reviews/:gameId/:userId", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const { gameId, userId: targetUserId } = req.params;
 
-  if (!token) return res.status(401).json({ message: "Token requerido" });
+  if (!token) return res.status(401).json({ message: "Token required" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Token inválido" });
+    if (err) return res.status(403).json({ message: "Invalid token" });
 
     const requesterId = decoded.id;
-    const requesterRole = decoded.rol;
-
+    const requesterRole = decoded.role;
+    
     if (requesterRole !== "admin" && requesterId !== parseInt(targetUserId)) {
-      return res.status(403).json({ message: "No autorizado para eliminar esta reseña" });
+      return res.status(403).json({ message: "Not authorized to delete this review" });
     }
-
+    
     const deleteQuery = `
-      DELETE FROM reseñas WHERE usuario_id = ? AND juego_id = ?
+      DELETE FROM reviews WHERE user_id = ? AND game_id = ?
     `;
-
+    
     db.query(deleteQuery, [targetUserId, gameId], (err, result) => {
       if (err) {
         console.error("❌ Error eliminando reseña:", err);
-        return res.status(500).json({ message: "Error al eliminar reseña" });
+        return res.status(500).json({ message: "Error deleting review" });
       }
-
+    
       if (result.affectedRows === 0) {
-        return res.status(404).json({ message: "Reseña no encontrada" });
+        return res.status(404).json({ message: "Review not found" });
       }
-
-      res.status(200).json({ message: "Reseña eliminada correctamente" });
+    
+      res.status(200).json({ message: "Review successfully deleted" });
     });
+
   });
 });
 
@@ -500,24 +508,61 @@ app.get("/api/reviews/:gameId", (req, res) => {
   const gameId = req.params.gameId;
 
   const query = `
-  SELECT r.usuario_id, r.calificacion AS rating, r.comentario AS content, r.fecha_publicacion,
-         u.nombre AS username
-  FROM reseñas r
-  JOIN usuarios u ON u.id = r.usuario_id
-  WHERE r.juego_id = ?
-  ORDER BY r.fecha_publicacion DESC
+  SELECT r.user_id, r.rating AS rating, r.comment AS content, r.published_date,
+         u.name AS username
+  FROM reviews r
+  JOIN users u ON u.id = r.user_id
+  WHERE r.game_id = ?
+  ORDER BY r.published_date DESC
 `;
 
   db.query(query, [gameId], (err, results) => {
     if (err) {
-      console.error("❌ Error al obtener reseñas:", err);
-      return res.status(500).json({ message: "Error de base de datos" });
+      console.error("❌ Error al obtener reviews:", err);
+      return res.status(500).json({ message: "Database error" });
     }
 
     res.status(200).json(results);
+
+  });
+});
+
+app.get("/api/user-achievements", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) return res.status(401).json({ message: "Token required" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+
+    const userId = decoded.id;
+    
+    const query = `
+      SELECT 
+        l.id, 
+        l.name, 
+        l.description, 
+        l.type, 
+        l.points, 
+        lu.unlocked_date
+      FROM achievements_usuario lu
+      JOIN achievements l ON lu.logro_id = l.id
+      WHERE lu.user_id = ?
+      ORDER BY lu.unlocked_date DESC
+    `;
+    
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error("❌ Error whith achievements query:", err);
+        return res.status(500).json({ message: "Error loading achievements" });
+      }
+    
+      res.status(200).json(results);
+    });
+
   });
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`🚀 Servidor corriendo en el puerto ${process.env.PORT}`);
+  console.log(`🚀 Server running on port ${process.env.PORT}`);
 });

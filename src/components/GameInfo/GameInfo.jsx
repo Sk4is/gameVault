@@ -5,44 +5,6 @@ import Slider from "react-slick";
 import Swal from "sweetalert2";
 import "./GameInfo.css";
 
-const translateText = async (text) => {
-  if (!text) return "";
-
-  const MAX_LENGTH = 500;
-
-  const splitText = (text) => {
-    const chunks = [];
-    for (let i = 0; i < text.length; i += MAX_LENGTH) {
-      chunks.push(text.substring(i, i + MAX_LENGTH));
-    }
-    return chunks;
-  };
-
-  try {
-    const textChunks = splitText(text);
-    const translatedChunks = await Promise.all(
-      textChunks.map(async (chunk) => {
-        const response = await axios.get(
-          "https://api.mymemory.translated.net/get",
-          {
-            params: {
-              q: chunk,
-              langpair: "en|es",
-            },
-          }
-        );
-
-        return response.data.responseData.translatedText || chunk;
-      })
-    );
-
-    return translatedChunks.join(" ");
-  } catch (error) {
-    console.error("Error traduciendo el texto:", error);
-    return text;
-  }
-};
-
 const GameInfoPage = () => {
   const { id } = useParams();
   const [game, setGame] = useState(null);
@@ -66,11 +28,8 @@ const GameInfoPage = () => {
           }
         );
 
-        const translatedSummary = await translateText(response.data[0].summary);
-
         setGame({
           ...response.data[0],
-          summary: translatedSummary,
         });
       } catch (error) {
         console.error("Error fetching game details:", error);
@@ -114,8 +73,8 @@ const GameInfoPage = () => {
 
   const handleAddToLibrary = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return Swal.fire("Error", "Debes iniciar sesión", "error");
-  
+    if (!token) return Swal.fire("Error", "You must be logged in", "error");
+
     try {
       await axios.post(
         "http://localhost:5000/api/add-to-library",
@@ -134,19 +93,19 @@ const GameInfoPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       Swal.fire({
-              icon: "success",
-              title: "Juego guardado en tu biblioteca",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+        icon: "success",
+        title: "Game added to your library",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
     } catch (error) {
-      console.error("❌ Error al añadir a biblioteca:", error);
-      Swal.fire("Error", error.response?.data?.message || "Algo salió mal", "error");
+      console.error("❌ Error adding to library:", error);
+      Swal.fire("Error", error.response?.data?.message || "Something went wrong", "error");
     }
-  };   
+  };
 
   const settings = {
     dots: true,
@@ -159,12 +118,12 @@ const GameInfoPage = () => {
   };
 
   if (!game) {
-    return <p>Cargando detalles...</p>;
+    return <p>Loading game details...</p>;
   }
 
   const releaseYear = game.first_release_date
     ? new Date(game.first_release_date * 1000).getFullYear()
-    : "Año no disponible";
+    : "Year not available";
 
   return (
     <div className={`game-info-page ${isZoomed ? "zoomed" : ""}`}>
@@ -172,26 +131,26 @@ const GameInfoPage = () => {
         <h1>{game.name}</h1>
 
         <div className="game-summary">
-          <h3>Resumen</h3>
-          <p>{game.summary || "Resumen no disponible"}</p>
+          <h3>Summary</h3>
+          <p>{game.summary || "Summary not available"}</p>
         </div>
 
         <div className="game-platforms">
-          <h3>Plataformas</h3>
+          <h3>Platforms</h3>
           <p>
             {game.platforms?.length
               ? game.platforms.map((platform) => platform.abbreviation).join(", ")
-              : "Plataformas no disponibles"}
+              : "Platforms not available"}
           </p>
         </div>
 
         <div className="game-release-year">
-          <h3>Año de lanzamiento</h3>
+          <h3>Release Year</h3>
           <p>{releaseYear}</p>
         </div>
 
         <div className="game-screenshots">
-          <h3>Capturas del juego</h3>
+          <h3>Screenshots</h3>
           {game.screenshots?.length > 0 ? (
             <Slider {...settings}>
               {game.screenshots.map((screenshot, index) => (
@@ -211,12 +170,12 @@ const GameInfoPage = () => {
               ))}
             </Slider>
           ) : (
-            <p>No hay capturas disponibles.</p>
+            <p>No screenshots available.</p>
           )}
         </div>
 
         <button className="add-game" onClick={handleAddToLibrary}>
-          Agregar a biblioteca
+          Add to Library
         </button>
 
         <hr className="separator-info" />
@@ -228,7 +187,7 @@ const GameInfoPage = () => {
             X
           </span>
           <div className="image-container">
-            <img src={zoomedImage} alt="Ampliada" className="zoomed-image" />
+            <img src={zoomedImage} alt="Zoomed" className="zoomed-image" />
           </div>
         </div>
       )}

@@ -20,7 +20,7 @@ const Review = () => {
       const response = await axios.get(`${API_URL}/api/reviews/${id}`);
       setReviews(response.data);
     } catch (error) {
-      console.error("Error obteniendo las reseñas:", error);
+      console.error("Error fetching reviews:", error);
     }
   };
 
@@ -29,7 +29,7 @@ const Review = () => {
     if (token) {
       const decoded = JSON.parse(atob(token.split(".")[1]));
       setUserId(decoded.id);
-      setUserRole(decoded.rol);
+      setUserRole(decoded.role);
     }
   }, []);
 
@@ -52,7 +52,7 @@ const Review = () => {
         );
         if (response.data.length > 0) setGameName(response.data[0].name);
       } catch (error) {
-        console.error("Error al obtener nombre del juego:", error);
+        console.error("Error fetching game name:", error);
       }
     };
     fetchGameName();
@@ -81,10 +81,10 @@ const Review = () => {
       );
       await fetchReviews();
       setNewReview({ content: "", rating: 1 });
-      Swal.fire("¡Gracias!", "Tu reseña ha sido publicada", "success");
+      Swal.fire("Thank you!", "Your review has been posted", "success");
     } catch (error) {
-      console.error("Error enviando la reseña:", error);
-      Swal.fire("Error", "No se pudo publicar tu reseña", "error");
+      console.error("Error posting review:", error);
+      Swal.fire("Error", "Failed to post your review", "error");
     }
   };
 
@@ -94,17 +94,17 @@ const Review = () => {
       await axios.delete(`${API_URL}/api/reviews/${id}/${reviewUserId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      Swal.fire("Eliminada", "Tu reseña ha sido eliminada", "success");
+      Swal.fire("Deleted", "Your review has been deleted", "success");
       fetchReviews();
     } catch (error) {
-      console.error("Error eliminando reseña:", error);
-      Swal.fire("Error", "No se pudo eliminar la reseña", "error");
+      console.error("Error deleting review:", error);
+      Swal.fire("Error", "Failed to delete the review", "error");
     }
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString("es-ES", {
+    return date.toLocaleString("en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -115,7 +115,7 @@ const Review = () => {
 
   return (
     <div className="game-info-page">
-      <h1>Reseñas de los usuarios</h1>
+      <h1>User Reviews</h1>
 
       {reviews.length > 0 ? (
         <div className="reviews-container">
@@ -123,7 +123,7 @@ const Review = () => {
             <div key={index} className="review-card">
               <div className="review-header">
                 <h3 className="review-username">
-                  {review.username || "Usuario"}
+                  {review.username || "User"}
                 </h3>
                 <div className="review-rating">
                   {Array.from({ length: review.rating }).map((_, i) => (
@@ -132,24 +132,24 @@ const Review = () => {
                 </div>
               </div>
               <p className="review-content">{review.content}</p>
-              {review.fecha_publicacion && (
+              {review.published_date && (
                 <p className="review-date">
-                  <em>Publicado: {formatDate(review.fecha_publicacion)}</em>
+                  <em>Posted: {formatDate(review.published_date)}</em>
                 </p>
               )}
-              {(userRole === "admin" || review.usuario_id === userId) && (
+              {(userRole === "admin" || review.user_id === userId) && (
                 <button
                   className="delete-button"
-                  onClick={() => handleDeleteReview(review.usuario_id)}
+                  onClick={() => handleDeleteReview(review.user_id)}
                 >
-                  Eliminar reseña
+                  Delete review
                 </button>
               )}
             </div>
           ))}
         </div>
       ) : (
-        <p>No hay reseñas disponibles.</p>
+        <p>No reviews available.</p>
       )}
 
       <motion.img
@@ -161,16 +161,16 @@ const Review = () => {
       />
 
       <div className="review-form">
-        <h2>Escribe tu reseña</h2>
+        <h2>Write your review</h2>
         <form onSubmit={handleSubmit}>
           <textarea
             name="content"
-            placeholder="Escribe tu reseña..."
+            placeholder="Write your review..."
             value={newReview.content}
             onChange={handleChange}
             required
           />
-          <label>Calificación:</label>
+          <label>Rating:</label>
           <select
             name="rating"
             value={newReview.rating}
@@ -182,7 +182,7 @@ const Review = () => {
               </option>
             ))}
           </select>
-          <button type="submit">Enviar reseña</button>
+          <button type="submit">Submit review</button>
         </form>
       </div>
     </div>

@@ -31,13 +31,13 @@ const Login = () => {
     e.preventDefault();
 
     if (!emailRegex.test(email)) {
-      setErrorMessage("Por favor, ingresa un correo electrónico válido.");
+      setErrorMessage("Please enter a valid email address.");
       return;
     }
 
     if (!passwordRegex.test(password)) {
       setErrorMessage(
-        "La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo."
+        "Password must be at least 8 characters long, with a capital letter, a number, and a symbol."
       );
       return;
     }
@@ -52,33 +52,33 @@ const Login = () => {
       localStorage.setItem("token", token);
 
       const decoded = jwtDecode(token);
-      console.log("🔐 Token decodificado:", decoded);
-      console.log("📦 Token que se enviará a /user-profile:", token);
+      console.log("🔐 Decoded token:", decoded);
+      console.log("📦 Token sent to /user-profile:", token);
 
-      const perfil = await axios.get("http://localhost:5000/api/user-profile", {
+      const profile = await axios.get("http://localhost:5000/api/user-profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const { nombre, email: correo } = perfil.data;
+      const { name, email: userEmail } = profile.data;
 
-      localStorage.setItem("nombreUsuario", nombre);
-      localStorage.setItem("emailUsuario", correo);
+      localStorage.setItem("userName", name);
+      localStorage.setItem("userEmail", userEmail);
 
       Swal.fire({
         icon: "success",
-        title: "Inicio de sesión exitoso",
+        title: "Login successful",
         showConfirmButton: false,
         timer: 1500,
       });
 
       navigate("/landing");
     } catch (error) {
-      console.error("🔥 Error al iniciar sesión o cargar perfil:", error);
+      console.error("🔥 Error logging in or fetching profile:", error);
 
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Correo, contraseña o usuario inválido.",
+        text: "Invalid email, password, or user.",
       });
 
       localStorage.removeItem("token");
@@ -91,13 +91,13 @@ const Login = () => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-box">
-          <h2>Iniciar Sesión</h2>
+          <h2>Login</h2>
           <form onSubmit={validateForm} autoComplete="off">
             <div className="input-group">
               <label>Email</label>
               <input
                 type="email"
-                placeholder="Ingresa tu correo"
+                placeholder="Enter your email"
                 autoComplete="off"
                 value={email}
                 onChange={handleEmailChange}
@@ -105,11 +105,11 @@ const Login = () => {
               />
             </div>
             <div className="input-group password-group">
-              <label>Contraseña</label>
+              <label>Password</label>
               <div className="password-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Ingresa tu contraseña"
+                  placeholder="Enter your password"
                   autoComplete="off"
                   value={password}
                   onChange={handlePasswordChange}
@@ -122,10 +122,10 @@ const Login = () => {
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <button className="login-btn" disabled={loading}>
-              {loading ? "Cargando..." : "Acceder"}
+              {loading ? "Loading..." : "Login"}
             </button>
             <a href="/register" className="register-link">
-              ¿No tienes cuenta? Regístrate
+              Don't have an account? Sign up
             </a>
           </form>
         </div>

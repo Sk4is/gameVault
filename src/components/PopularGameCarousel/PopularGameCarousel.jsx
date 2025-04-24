@@ -102,22 +102,20 @@ const GameCarousel = () => {
       <img
         className="ciberpunk"
         src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743107638/Proyecto_nuevo_1_qjdcih.jpg"
-        alt="Ciudad Ciberpunk"
+        alt="Cyberpunk City"
       />
-      <h1 className="popular-title">Juegos Destacados</h1>
+      <h1 className="popular-title">Featured Games</h1>
       <hr className="separator"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (
-            <p>Cargando juegos...</p>
+            <p>Loading games...</p>
           ) : (
             games.map((game, index) => (
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
                 <div
                   key={game.id}
-                  className={`game-card ${
-                    index === activeIndex ? "active" : ""
-                  }`}
+                  className={`game-card ${index === activeIndex ? "active" : ""}`}
                 >
                   <img
                     src={game.cover?.url.replace("t_thumb", "t_cover_big")}
@@ -127,21 +125,19 @@ const GameCarousel = () => {
                   <div className="game-info">
                     <h3>{game.name}</h3>
                     <p className="genres">
-                      Géneros:{" "}
+                      Genres:{" "}
                       {game.genres?.length
                         ? game.genres.map((genre) => genre.name).join(", ")
-                        : "No disponibles"}
+                        : "Not available"}
                     </p>
                     <p className="description">
-                      Resumen: {game.summary || "Descripción no disponible"}
+                      Summary: {game.summary || "No description available"}
                     </p>
                     <p className="platforms">
-                      Plataformas:{" "}
+                      Platforms:{" "}
                       {game.platforms?.length
-                        ? game.platforms
-                            .map((platform) => platform.abbreviation)
-                            .join(", ")
-                        : "Plataformas no disponibles"}
+                        ? game.platforms.map((platform) => platform.abbreviation).join(", ")
+                        : "Not available"}
                     </p>
                     <div className="rating-year">
                       <div className="stars">
@@ -149,10 +145,8 @@ const GameCarousel = () => {
                       </div>
                       <div className="year">
                         {game.first_release_date
-                          ? new Date(
-                              game.first_release_date * 1000
-                            ).getFullYear()
-                          : "Desconocido"}
+                          ? new Date(game.first_release_date * 1000).getFullYear()
+                          : "Unknown"}
                       </div>
                     </div>
                   </div>

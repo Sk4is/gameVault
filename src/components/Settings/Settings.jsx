@@ -29,26 +29,26 @@ const Settings = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          const { nombre, email, avatar } = response.data;
+          const { name, email, avatar } = response.data;
 
-          setUsername(nombre);
+          setUsername(name);
           setEmail(email);
 
           if (avatar && avatar.trim() !== "") {
-            console.log("✅ Avatar cargado desde la base de datos");
+            console.log("✅ Avatar loaded from the database");
             setAvatar(avatar);
             localStorage.setItem("userAvatar", avatar);
           } else {
-            console.log("ℹ️ Avatar no encontrado, usando el predeterminado");
+            console.log("ℹ️ Avatar not found, using default");
             setAvatar(DEFAULT_AVATAR);
             localStorage.setItem("userAvatar", DEFAULT_AVATAR);
           }
 
-          localStorage.setItem("username", nombre);
+          localStorage.setItem("username", name);
           localStorage.setItem("userEmail", email);
         })
         .catch((error) => {
-          console.error("❌ Error al obtener los datos del perfil:", error);
+          console.error("❌ Error fetching profile data:", error);
         });
     }
   }, []);
@@ -58,7 +58,7 @@ const Settings = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log("📸 Imagen cargada desde el input");
+        console.log("📸 Image loaded from input");
         setAvatar(reader.result);
       };
       reader.readAsDataURL(file);
@@ -84,7 +84,7 @@ const Settings = () => {
 
       Swal.fire({
         icon: "success",
-        title: "¡Perfil actualizado!",
+        title: "Profile updated!",
         text: response.data.message,
         confirmButtonText: "OK",
       });
@@ -93,12 +93,12 @@ const Settings = () => {
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userAvatar", avatar || DEFAULT_AVATAR);
     } catch (error) {
-      console.error("❌ Error al guardar el perfil:", error);
+      console.error("❌ Error saving profile:", error);
 
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un problema al guardar los cambios.",
+        text: "There was a problem saving the changes.",
         confirmButtonText: "OK",
       });
     }
@@ -113,19 +113,19 @@ const Settings = () => {
 
   return (
     <div className={`settings-container ${darkMode ? "dark" : "light"}`}>
-      <h2 className="title">CONFIGURACIÓN</h2>
+      <h2 className="title">SETTINGS</h2>
       <div className="settings-content">
         <div className="left-panel">
-          <label className="profile-label">FOTO DE PERFIL:</label>
+          <label className="profile-label">PROFILE PICTURE</label>
           <div className="profile-pic-container">
             <div className="profile-pic">
-              <img src={avatar} alt="Avatar de usuario" />
+              <img src={avatar} alt="User avatar" />
             </div>
             <button
               className="change-photo-button"
               onClick={() => document.getElementById("fileInput").click()}
             >
-              Cambiar foto de perfil
+              Change profile picture
             </button>
           </div>
           <input
@@ -136,7 +136,7 @@ const Settings = () => {
             style={{ display: "none" }}
           />
 
-          <label className="field-label">NOMBRE DE USUARIO:</label>
+          <label className="field-label">USERNAME</label>
           <input
             type="text"
             value={username}
@@ -144,7 +144,7 @@ const Settings = () => {
             className="input-field"
           />
 
-          <label className="field-label">CORREO ELECTRÓNICO:</label>
+          <label className="field-label">EMAIL</label>
           <input
             type="email"
             value={email}
@@ -158,7 +158,7 @@ const Settings = () => {
         <div className="separator-popular"></div>
 
         <div className="right-panel">
-          <label className="mode-label">MODO CLARO / OSCURO</label>
+          <label className="mode-label">LIGHT / DARK MODE</label>
           <div className="toggle-container" onClick={toggleDarkMode}>
             <span className="sun">☀️</span>
             <div className={`toggle-switch ${darkMode ? "" : "active"}`}></div>
@@ -167,11 +167,11 @@ const Settings = () => {
         </div>
       </div>
       <button className="save-button" onClick={handleSaveChanges}>
-        Guardar Cambios
+        Save Changes
       </button>
 
       <button className="logout-button" onClick={handleLogout}>
-        Cerrar sesión
+        Log Out
       </button>
     </div>
   );

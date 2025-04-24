@@ -39,11 +39,11 @@ const LibraryGameCard = ({ game }) => {
 
       Swal.fire({
         icon: "success",
-        title: "Juego cerrado",
-        text: `Has jugado ${hours}h ${minutes}min.`,
+        title: "Game closed",
+        text: `You played for ${hours}h ${minutes}min.`,
       });
     } catch (err) {
-      console.error("Error al guardar las horas jugadas:", err);
+      console.error("Error saving playtime:", err);
     }
   };
 
@@ -51,12 +51,12 @@ const LibraryGameCard = ({ game }) => {
     const token = localStorage.getItem("token");
     try {
       const confirm = await Swal.fire({
-        title: "¿Eliminar juego?",
-        text: `¿Seguro que deseas quitar "${game.title}" de tu biblioteca?`,
+        title: "Remove game?",
+        text: `Are you sure you want to remove "${game.title}" from your library?`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar",
+        confirmButtonText: "Yes, remove it",
+        cancelButtonText: "Cancel",
       });
 
       if (confirm.isConfirmed) {
@@ -67,12 +67,12 @@ const LibraryGameCard = ({ game }) => {
           }
         );
 
-        Swal.fire("Eliminado", "Juego eliminado de tu biblioteca", "success");
+        Swal.fire("Removed", "Game removed from your library", "success");
         window.location.reload();
       }
     } catch (err) {
-      console.error("Error al eliminar juego:", err);
-      Swal.fire("Error", "No se pudo eliminar el juego", "error");
+      console.error("Error removing game:", err);
+      Swal.fire("Error", "Failed to remove the game", "error");
     }
   };
 
@@ -81,29 +81,29 @@ const LibraryGameCard = ({ game }) => {
       <div className="library-game-card">
         <img src={game.image} alt={game.title} className="library-game-img" />
         <h3 className="library-game-title">{game.title}</h3>
-        <hr className="separator"></hr>
+        <hr className="separator" />
         <div className="library-game-btns">
           <button className="library-play-btn" onClick={handlePlay}>
-            Jugar
+            Play
           </button>
           <button className="library-remove-btn" onClick={handleRemove}>
-            Eliminar
+            Remove
           </button>
         </div>
         <button
           className="library-info-btn"
           onClick={() => (window.location.href = `/gameinfo/${game.id}`)}
         >
-          Info juego
+          Game Info
         </button>
       </div>
 
       {isPlaying && (
         <div className="game-overlay">
           <div className="game-overlay-content">
-            <h2>Simulando juego: {game.title}</h2>
+            <h2>Simulating game: {game.title}</h2>
             <button className="close-game-btn" onClick={handleCloseGame}>
-              Cerrar juego
+              Close Game
             </button>
           </div>
         </div>

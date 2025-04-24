@@ -1,4 +1,3 @@
-// src/pages/Library.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LibraryGameCard from "../GameLibraryCard/GameLibraryCard";
@@ -14,17 +13,16 @@ const Library = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log("✅ Datos recibidos:", res.data);
+        console.log("✅ Data received:", res.data);
         setGames(res.data);
       })
-      .catch((err) => console.error("Error al cargar biblioteca:", err));
+      .catch((err) => console.error("Error loading library:", err));
   }, []);
 
   return (
     <div className="library-container">
       <div className="library-header">
-        <h2>Mi Biblioteca</h2>
-
+        <h2>My Library</h2>
         <hr className="separator" />
       </div>
 

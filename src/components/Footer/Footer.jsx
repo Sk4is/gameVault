@@ -11,10 +11,11 @@ const Footer = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="github-link"
+          aria-label="View source code on GitHub"
         >
           <img
             src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741476495/image_mvpbwg.png"
-            alt="Github Logo"
+            alt="GitHub Logo"
             className="github-img"
           />
         </a>

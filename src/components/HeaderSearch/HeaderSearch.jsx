@@ -55,15 +55,15 @@ const Header = () => {
         `search "${value}"; fields id, name; limit 10;`,
         {
           headers: {
-            "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5", // tu Client ID
-            Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs", // tu token válido
+            "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
+            Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
           },
         }
       );
 
       setSearchResults(response.data);
     } catch (error) {
-      console.error("❌ Error al buscar juegos:", error);
+      console.error("❌ Error searching games:", error);
     }
   };
 
@@ -71,7 +71,7 @@ const Header = () => {
     setSearch("");
     setSearchResults([]);
     navigate(`/gameinfo/${gameId}`);
-  };  
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ const Header = () => {
       <form onSubmit={handleSearchSubmit} className="search-bar-container">
         <input
           type="text"
-          placeholder="Buscar juegos..."
+          placeholder="Search games..."
           className="search-input"
           value={search}
           onChange={handleSearchChange}
@@ -118,20 +118,20 @@ const Header = () => {
       </form>
 
       <button onClick={toggleMenu} className="menu-btn">
-        Menú
+        Menu
       </button>
 
       {isMenuOpen && (
         <nav className={`menu ${!isMenuVisible ? "hidden" : ""}`}>
           <ul className="menu-list">
             <li className="menu-item">
-              <a onClick={handleLandingRedirect}>Inicio</a>
+              <a onClick={handleLandingRedirect}>Home</a>
             </li>
             <li className="menu-item">
-              <a onClick={handleLibraryRedirect}>Biblioteca</a>
+              <a onClick={handleLibraryRedirect}>Library</a>
             </li>
             <li className="menu-item">
-              <a onClick={handleProfileRedirect}>Perfil</a>
+              <a onClick={handleProfileRedirect}>Profile</a>
             </li>
             <button onClick={handleSettingsRedirect} className="settings-icon">
               <img

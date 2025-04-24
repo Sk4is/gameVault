@@ -8,7 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [nombre, setNombre] = useState('');
+  const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -21,80 +21,80 @@ const Register = () => {
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
-  const handleNombreChange = (e) => setNombre(e.target.value);
+  const handleNameChange = (e) => setName(e.target.value);
   const togglePassword = () => setShowPassword(!showPassword);
   const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const validateForm = async (e) => {
     e.preventDefault();
-  
+
     if (!emailRegex.test(email)) {
-      setErrorMessage("Por favor, ingresa un correo electrónico válido.");
+      setErrorMessage("Please enter a valid email address.");
       return;
     }
-  
+
     if (!passwordRegex.test(password)) {
-      setErrorMessage("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.");
+      setErrorMessage("Password must be at least 8 characters, include a capital letter, a number and a symbol.");
       return;
     }
-  
+
     if (password !== confirmPassword) {
-      setErrorMessage("Las contraseñas no coinciden.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
-  
+
     setErrorMessage("");
-  
+
     try {
       const response = await axios.post('/api/register', {
-        nombre,
+        name,
         email,
         password,
       });
-      
+
       Swal.fire({
         icon: "success",
-        title: "¡Éxito!",
-        text: "Usuario registrado correctamente.",
-        confirmButtonText: "Aceptar",
+        title: "Success!",
+        text: "User registered successfully.",
+        confirmButtonText: "OK",
         confirmButtonColor: "#35b977",
         background: "#1a1a1a",
         color: "#fff",
         iconColor: "#35b977",
       }).then(() => {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("nombreUsuario", nombre);
-        localStorage.setItem("emailUsuario", email);
-  
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userEmail", email);
+
         navigate("/login");
       });
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "No se pudo registrar el usuario.",
-        confirmButtonText: "Aceptar",
+        text: error.response?.data?.message || "User registration failed.",
+        confirmButtonText: "OK",
         confirmButtonColor: "#e74c3c",
         background: "#1a1a1a",
         color: "#fff",
         iconColor: "#e74c3c",
       });
     }
-  };  
+  };
 
   return (
     <div className="login-page">
       <div className="login-container">
         <div className="login-box">
-          <h2>Regístrate</h2>
+          <h2>Sign Up</h2>
           <form onSubmit={validateForm}>
             <div className="input-group">
-              <label>Nombre de Usuario</label>
+              <label>Username</label>
               <input
                 type="text"
-                placeholder="Ingresa tu nombre de usuario"
-                value={nombre}
-                onChange={handleNombreChange}
+                placeholder="Enter your username"
+                value={name}
+                onChange={handleNameChange}
                 required
               />
             </div>
@@ -102,18 +102,18 @@ const Register = () => {
               <label>Email</label>
               <input
                 type="email"
-                placeholder="Ingresa tu correo"
+                placeholder="Enter your email"
                 value={email}
                 onChange={handleEmailChange}
                 required
               />
             </div>
             <div className="input-group password-group">
-              <label>Contraseña</label>
+              <label>Password</label>
               <div className="password-wrapper">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Ingresa tu contraseña"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={handlePasswordChange}
                   required
@@ -124,11 +124,11 @@ const Register = () => {
               </div>
             </div>
             <div className="input-group password-group">
-              <label>Repetir Contraseña</label>
+              <label>Confirm Password</label>
               <div className="password-wrapper">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Repite tu contraseña"
+                  placeholder="Repeat your password"
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   required
@@ -139,9 +139,9 @@ const Register = () => {
               </div>
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <button className="login-btn">Registrarme</button>
+            <button className="login-btn">Register</button>
             <a href="/login" className="register-link">
-              ¿Ya tienes cuenta? Inicia sesión
+              Already have an account? Log in
             </a>
           </form>
         </div>

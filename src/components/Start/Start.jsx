@@ -24,19 +24,19 @@ const Start = () => {
         </div>
         <div className="options">
           <div className="title">
-            <h1>Tu biblioteca</h1>
-            <h1>Tu mundo</h1>
-            <h1>Tu juego.</h1>
+            <h1>Your Library</h1>
+            <h1>Your World</h1>
+            <h1>Your Game.</h1>
           </div>
-          <p>Únete ya.</p>
+          <p>Join now.</p>
           <button className="register" onClick={handleRegisterRedirect}>
-            Registrate
+            Sign Up
           </button>
           <div className="divider">
-            <span>O</span>
+            <span>OR</span>
           </div>
           <button className="login" onClick={handleLoginRedirect}>
-            Inicia Sesión
+            Log In
           </button>
         </div>
       </div>

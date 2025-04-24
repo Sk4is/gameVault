@@ -50,11 +50,11 @@ const GameCarousel = () => {
     const fetchGames = async () => {
       try {
         const now = Math.floor(Date.now() / 1000);
-        
+
         const twoYearsAgo = new Date();
         twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
         twoYearsAgo.setMonth(0);
-        twoYearsAgo.setDate(1); 
+        twoYearsAgo.setDate(1);
         const twoYearsAgoTimestamp = Math.floor(twoYearsAgo.getTime() / 1000);
 
         const response = await axios.post(
@@ -112,12 +112,12 @@ const GameCarousel = () => {
 
   return (
     <>
-      <h1 className="newgame-title">Nuevos Lanzamientos</h1>
+      <h1 className="newgame-title">New Releases</h1>
       <hr className="separator-popular"></hr>
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (
-            <p>Cargando juegos...</p>
+            <p>Loading games...</p>
           ) : (
             games.map((game, index) => (
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
@@ -133,18 +133,18 @@ const GameCarousel = () => {
                   <div className="game-info">
                     <h3>{game.name}</h3>
                     <p className="genre">
-                      <strong>Género:</strong>{" "}
-                      {game.genres?.map((genre) => genre.name).join(", ") || "Desconocido"}
+                      <strong>Genre:</strong>{" "}
+                      {game.genres?.map((genre) => genre.name).join(", ") || "Unknown"}
                     </p>
                     <p className="description">
-                      <strong>Resumen:</strong>{" "}
-                      {game.summary ? game.summary.substring(0, 150) + "..." : "No disponible"}
+                      <strong>Summary:</strong>{" "}
+                      {game.summary ? game.summary.substring(0, 150) + "..." : "Not available"}
                     </p>
                     <p className="platforms">
-                      <strong>Plataformas:</strong>{" "}
+                      <strong>Platforms:</strong>{" "}
                       {game.platforms?.length
                         ? game.platforms.map((platform) => platform.abbreviation).join(", ")
-                        : "Plataformas no disponibles"}
+                        : "Not available"}
                     </p>
                     <div className="rating-year">
                       <div className="stars">
@@ -153,7 +153,7 @@ const GameCarousel = () => {
                       <div className="year">
                         {game.first_release_date
                           ? new Date(game.first_release_date * 1000).getFullYear()
-                          : "Desconocido"}
+                          : "Unknown"}
                       </div>
                     </div>
                   </div>

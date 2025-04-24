@@ -93,12 +93,12 @@ const GameCarousel = () => {
 
   return (
     <>
-      <h1 className="classic-title">Juegos Clásicos</h1>
-      <hr className="separator"></hr>
+      <h1 className="classic-title">Classic Games</h1>
+      <hr className="separator" />
       <div className="carousel-container">
         <Slider {...settings}>
           {games.length === 0 ? (
-            <p>Cargando juegos...</p>
+            <p>Loading games...</p>
           ) : (
             games.map((game, index) => (
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
@@ -114,13 +114,13 @@ const GameCarousel = () => {
                   <div className="game-info">
                     <h3>{game.name}</h3>
                     <p className="description">
-                      Resumen: {game.summary || "Descripción no disponible"}
+                      Summary: {game.summary || "No description available"}
                     </p>
                     <p className="platforms">
-                      Plataformas:{" "}
+                      Platforms:{" "}
                       {game.platforms?.length
                         ? game.platforms.map((platform) => platform.abbreviation).join(", ")
-                        : "Plataformas no disponibles"}
+                        : "Platforms not available"}
                     </p>
                     <div className="rating-year">
                       <div className="stars">
@@ -129,7 +129,7 @@ const GameCarousel = () => {
                       <div className="year">
                         {game.first_release_date
                           ? new Date(game.first_release_date * 1000).getFullYear()
-                          : "Desconocido"}
+                          : "Unknown"}
                       </div>
                     </div>
                   </div>

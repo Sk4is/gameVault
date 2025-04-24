@@ -8,9 +8,10 @@ const DEFAULT_AVATAR = "https://www.w3schools.com/howto/img_avatar.png";
 
 const Profile = () => {
   const { darkMode } = useContext(ThemeContext);
-  const [username, setUsername] = useState("Usuario");
+  const [username, setUsername] = useState("User");
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const [recentGames, setRecentGames] = useState([]);
+  const [achievements, setAchievements] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,24 +22,39 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const { nombre, avatar } = response.data;
-        if (nombre) setUsername(nombre);
+        const { name, avatar } = response.data;
+        if (name) setUsername(name);
         setAvatar(avatar?.trim() ? avatar : DEFAULT_AVATAR);
       })
       .catch((error) =>
-        console.error("❌ Error al obtener los datos del perfil:", error)
+        console.error("❌ Error fetching profile data:", error)
       );
 
-    axios
+      axios
       .get("http://localhost:5000/api/user-library", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        const top3 = res.data.slice(0, 3);
+        const playedGames = res.data.filter(
+          (game) => game.hours_played > 0 || game.last_connection !== null
+        );
+        const top3 = playedGames.slice(0, 3);
         setRecentGames(top3);
       })
       .catch((err) => {
-        console.error("❌ Error al cargar juegos recientes:", err);
+        console.error("❌ Error loading recent games:", err);
+      });    
+
+    axios
+      .get("http://localhost:5000/api/user-achievements", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const latest = res.data.slice(0, 3);
+        setAchievements(latest);
+      })
+      .catch((err) => {
+        console.error("❌ Error loading achievements:", err);
       });
   }, []);
 
@@ -46,7 +62,7 @@ const Profile = () => {
     <>
       <div className={`profile-container ${darkMode ? "dark" : "light"}`}>
         <div className="profile-img">
-          <img src={avatar} alt="Foto de perfil" />
+          <img src={avatar} alt="Profile picture" />
         </div>
         <div className="profile-info">
           <h1>{username}</h1>
@@ -57,10 +73,31 @@ const Profile = () => {
 
       {recentGames.length > 0 && (
         <div className="recent-games-section">
-          <h2>Últimos juegos jugados</h2>
+          <h2>Recently Played Games</h2>
           {recentGames.map((game) => (
             <ProfileGameCard key={game.id} game={game} />
           ))}
+        </div>
+      )}
+
+      {achievements.length > 0 && (
+        <div className="achievements-section">
+          <h2>Latest Unlocked Achievements</h2>
+          <div className="achievements-grid">
+            {achievements.map((ach, index) => (
+              <div className="achievement-card" key={index}>
+                <img
+                  src={`https://res.cloudinary.com/dimlqpphf/image/upload/v1712345678/achievements/${ach.id}.png`}
+                  alt={ach.name}
+                />
+                <div className="achievement-info">
+                  <h4>{ach.name}</h4>
+                  <p>{ach.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="view-all-btn">View All Achievements</button>
         </div>
       )}
     </>

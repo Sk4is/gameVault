@@ -1,5 +1,8 @@
 .settings-container {
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
   height: auto;
 }
 
@@ -11,19 +14,29 @@
 .title {
   font-size: 40px;
   font-weight: bold;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
   margin-top: 20px;
 }
 
 .settings-content {
   display: flex;
   justify-content: space-between;
+  gap: 60px;
+  flex-wrap: wrap;
   width: 100%;
-  align-items: center;
 }
 
-.left-panel {
+.left-panel, .right-panel {
   flex: 1;
+  min-width: 300px;
+}
+
+.right-panel {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
 }
 
 .profile-label, .field-label, .mode-label {
@@ -53,7 +66,7 @@
 }
 
 .change-photo-button {
-  width: 80%;
+  width: 57%;
   padding: 10px 0;
   background-color: #00ff99;
   color: #222;
@@ -114,7 +127,9 @@
 }
 
 .save-button {
-  width: 42%;
+  width: 20%;
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 0;
   background-color: #00ff99;
   color: #222;
@@ -146,4 +161,26 @@
 
 .logout-button:hover {
   background-color: #c62828;
+}
+
+.achievements-section {
+  margin-top: 30px;
+  text-align: center;
+}
+.achievement-preview {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.achievement-item {
+  text-align: center;
+}
+.achievement-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+.view-all-button {
+  margin-top: 10px;
+  padding: 8px 16px;
 }

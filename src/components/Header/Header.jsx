@@ -56,20 +56,20 @@ const Header = () => {
       </div>
 
       <button onClick={toggleMenu} className="menu-btn">
-        Menú
+        Menu
       </button>
 
       {isMenuOpen && (
         <nav className={`menu ${!isMenuVisible ? "hidden" : ""}`}>
           <ul className="menu-list">
             <li className="menu-item">
-              <a onClick={handleLandingRedirect}>Inicio</a>
+              <a onClick={handleLandingRedirect}>Home</a>
             </li>
             <li className="menu-item">
-              <a onClick={handleLibraryRedirect}>Biblioteca</a>
+              <a onClick={handleLibraryRedirect}>Library</a>
             </li>
             <li className="menu-item">
-              <a onClick={handleProfileRedirect}>Perfil</a>
+              <a onClick={handleProfileRedirect}>Profile</a>
             </li>
             <button onClick={handleSettingsRedirect} className="settings-icon">
               <img
