@@ -110,7 +110,6 @@ app.post("/api/login", (req, res) => {
 
 app.get("/api/user-profile", (req, res) => {
   const authHeader = req.headers.authorization;
-  console.log("📥 Header recieved:", authHeader);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     console.error("❌ Invalid authorization header:", authHeader);
@@ -127,7 +126,6 @@ app.get("/api/user-profile", (req, res) => {
     }
 
     const userId = decoded.id;
-    console.log("🧠 ID decodificado:", userId);
     
     if (!userId) {
       console.error("❌ ID not found in token");

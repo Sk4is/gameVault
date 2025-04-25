@@ -36,12 +36,6 @@ const LibraryGameCard = ({ game }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      Swal.fire({
-        icon: "success",
-        title: "Game closed",
-        text: `You played for ${hours}h ${minutes}min.`,
-      });
     } catch (err) {
       console.error("Error saving playtime:", err);
     }
