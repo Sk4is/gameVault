@@ -1,47 +1,56 @@
 .profile-card {
-    display: flex;
-    align-items: center;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: 1rem 0;
-    background-color: #1c1c1c;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  }
-  
-  .profile-card-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 20px;
-  }
-  
-  .profile-card-info {
-    flex-grow: 1;
-  }
-  
-  .game-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .last-connection {
-    margin: 10px 0;
-    font-size: 14px;
-    color: #666;
-  }
-  
-  .playtime {
-    font-weight: bold;
-    font-size: 16px;
-    white-space: nowrap;
-  }
-  
-  .separator-vertical {
-    width: 2px;
-    height: 100px;
-    background-color: #2b2b2b;
-    margin: 0 20px;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  background-color: #1c1c1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-card-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.profile-card-info {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.game-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.last-connection {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.playtime {
+  font-weight: bold;
+  font-size: 15px;
+  color: #42c98f;
+  margin-top: 4px;
+}
+
+.separator-vertical {
+  width: 2px;
+  height: 100px;
+  background-color: #2b2b2b;
+  margin: 0 20px;
+}

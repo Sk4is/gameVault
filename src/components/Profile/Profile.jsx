@@ -3,6 +3,7 @@ import { ThemeContext } from "../Contexts/ThemeContext";
 import axios from "axios";
 import ProfileGameCard from "../ProfileGameCard/ProfileGameCard";
 import "./Profile.css";
+import AchievementIcon from "../AchievementIcon/AchievementIcon";
 
 const DEFAULT_AVATAR = "https://www.w3schools.com/howto/img_avatar.png";
 
@@ -30,7 +31,7 @@ const Profile = () => {
         console.error("❌ Error fetching profile data:", error)
       );
 
-      axios
+    axios
       .get("http://localhost:5000/api/user-library", {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -43,15 +44,14 @@ const Profile = () => {
       })
       .catch((err) => {
         console.error("❌ Error loading recent games:", err);
-      });    
+      });
 
     axios
       .get("http://localhost:5000/api/user-achievements", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        const latest = res.data.slice(0, 3);
-        setAchievements(latest);
+        setAchievements(res.data);
       })
       .catch((err) => {
         console.error("❌ Error loading achievements:", err);
@@ -86,9 +86,10 @@ const Profile = () => {
           <div className="achievements-grid">
             {achievements.map((ach, index) => (
               <div className="achievement-card" key={index}>
-                <img
-                  src={`https://res.cloudinary.com/dimlqpphf/image/upload/v1712345678/achievements/${ach.id}.png`}
+                <AchievementIcon
+                  id={ach.id}
                   alt={ach.name}
+                  className="achievement-icon"
                 />
                 <div className="achievement-info">
                   <h4>{ach.name}</h4>

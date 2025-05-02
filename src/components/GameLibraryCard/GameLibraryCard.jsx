@@ -16,16 +16,17 @@ const LibraryGameCard = ({ game }) => {
     const endTime = Date.now();
     const durationMs = endTime - startTime;
     const durationHours = durationMs / (1000 * 60 * 60);
-
+  
     const totalMinutes = Math.floor(durationMs / (1000 * 60));
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-
+  
     setIsPlaying(false);
     setStartTime(null);
-
+  
     try {
       const token = localStorage.getItem("token");
+  
       await axios.post(
         "http://localhost:5000/api/update-playtime",
         {
@@ -36,10 +37,29 @@ const LibraryGameCard = ({ game }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+  
+      const response = await axios.post(
+        "http://localhost:5000/api/check-played-games",
+        { gameId: game.id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      
+      if (response.data.unlocked) {
+        Swal.fire({
+          icon: "success",
+          title: "Achievement unlocked!",
+          text: "You unlocked: Active Explorer 🧭",
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+      
     } catch (err) {
-      console.error("Error saving playtime:", err);
+      console.error("Error saving playtime or unlocking achievement:", err);
     }
-  };
+  };  
 
   const handleRemove = async () => {
     const token = localStorage.getItem("token");

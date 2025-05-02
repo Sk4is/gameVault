@@ -64,13 +64,6 @@ const Login = () => {
       localStorage.setItem("userName", name);
       localStorage.setItem("userEmail", userEmail);
 
-      Swal.fire({
-        icon: "success",
-        title: "Login successful",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
       navigate("/landing");
     } catch (error) {
       console.error("🔥 Error logging in or fetching profile:", error);

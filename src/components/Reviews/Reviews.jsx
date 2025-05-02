@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "./Reviews.css";
 
 const Review = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // ID del juego desde la URL
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({ content: "", rating: 1 });
   const [gameName, setGameName] = useState("");
@@ -66,6 +66,8 @@ const Review = () => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
+    console.log("🆔 Game ID:", id);
+
     try {
       await axios.post(
         `${API_URL}/api/reviews`,
@@ -79,9 +81,86 @@ const Review = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+
       await fetchReviews();
       setNewReview({ content: "", rating: 1 });
+
       Swal.fire("Thank you!", "Your review has been posted", "success");
+
+      const { data: allReviews } = await axios.get(
+        `${API_URL}/api/reviews/${id}`
+      );
+      const { data: allUserReviews } = await axios.get(
+        `${API_URL}/api/user-reviews`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const userReviews = allReviews.filter((r) => r.user_id === userId);
+
+      const { data: unlocked } = await axios.get(
+        `${API_URL}/api/user-achievements`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const unlockedIds = unlocked.map((ach) => ach.id);
+
+      if (userReviews.length === 1 && !unlockedIds.includes(1)) {
+        await axios.post(
+          `${API_URL}/api/unlock-achievement`,
+          {
+            achievement_id: 1,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Achievement unlocked!",
+          text: "You unlocked: First Comment",
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+
+      const hasFiveStar = userReviews.some((r) => r.rating === 5);
+      if (hasFiveStar && !unlockedIds.includes(2)) {
+        await axios.post(
+          `${API_URL}/api/unlock-achievement`,
+          {
+            achievement_id: 2,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Achievement unlocked!",
+          text: "You unlocked: Brilliant Critic",
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+
+      const highRated = allUserReviews.filter((r) => r.rating >= 4).length;
+      if (highRated >= 5 && !unlockedIds.includes(6)) {
+        await axios.post(
+          `${API_URL}/api/unlock-achievement`,
+          {
+            achievement_id: 6,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Achievement unlocked!",
+          text: "You unlocked: Expert Critic",
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
     } catch (error) {
       console.error("Error posting review:", error);
       Swal.fire("Error", "Failed to post your review", "error");
@@ -122,9 +201,7 @@ const Review = () => {
           {reviews.map((review, index) => (
             <div key={index} className="review-card">
               <div className="review-header">
-                <h3 className="review-username">
-                  {review.username || "User"}
-                </h3>
+                <h3 className="review-username">{review.username || "User"}</h3>
                 <div className="review-rating">
                   {Array.from({ length: review.rating }).map((_, i) => (
                     <span key={i}>⭐</span>

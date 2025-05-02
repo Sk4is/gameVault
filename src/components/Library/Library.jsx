@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LibraryGameCard from "../GameLibraryCard/GameLibraryCard";
+import Swal from "sweetalert2"; // 🔔
 import "./Library.css";
 
 const Library = () => {
@@ -8,13 +9,48 @@ const Library = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     axios
       .get("http://localhost:5000/api/user-library", {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
-        console.log("✅ Data received:", res.data);
+      .then(async (res) => {
         setGames(res.data);
+
+        if (res.data.length >= 10) {
+          try {
+            const achievementsRes = await axios.get(
+              "http://localhost:5000/api/user-achievements",
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            const alreadyUnlocked = achievementsRes.data.some(
+              (ach) => ach.id === 3
+            );
+
+            if (!alreadyUnlocked) {
+              await axios.post(
+                "http://localhost:5000/api/unlock-achievement",
+                {
+                  achievement_id: 3,
+                  type: "library",
+                },
+                {
+                  headers: { Authorization: `Bearer ${token}` },
+                }
+              );
+
+              Swal.fire({
+                icon: "success",
+                title: "Achievement unlocked!",
+                text: "You unlocked: Collector 🎮",
+                timer: 3000,
+                showConfirmButton: false,
+              });
+            }
+          } catch (err) {
+            console.error("❌ Error checking/unlocking achievement:", err);
+          }
+        }
       })
       .catch((err) => console.error("Error loading library:", err));
   }, []);

@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  margin-top: 15%;
+  margin-top: 12%;
 }
 
 .profile-img {
@@ -28,7 +28,13 @@
 }
 
 .recent-games-section {
-  margin-bottom: 15%;
+  margin-bottom: 5%;
+}
+
+.recent-games-section h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.dark-mode .profile-info h1 {
@@ -55,10 +61,12 @@ body.light-mode .profile-info h1 {
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  margin-bottom: 5%;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .achievement-card {
-  background-color: #f0f0f0;
+  background-color: #353535;
   border-radius: 12px;
   padding: 15px;
   width: 200px;
@@ -82,11 +90,12 @@ body.light-mode .profile-info h1 {
   margin: 5px 0;
   font-size: 1.1rem;
   font-weight: bold;
+  color: #42c98f;
 }
 
 .achievement-info p {
   font-size: 0.9rem;
-  color: #333;
+  color: white;
 }
 
 .view-all-btn {

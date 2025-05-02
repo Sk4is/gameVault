@@ -68,7 +68,7 @@ const Settings = () => {
   const handleSaveChanges = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
+  
     try {
       const response = await axios.put(
         "http://localhost:5000/api/update-profile",
@@ -81,20 +81,42 @@ const Settings = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
+  
       Swal.fire({
         icon: "success",
         title: "Profile updated!",
         text: response.data.message,
         confirmButtonText: "OK",
       });
-
+  
       localStorage.setItem("username", username);
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userAvatar", avatar || DEFAULT_AVATAR);
+  
+      const { data: unlocked } = await axios.get("http://localhost:5000/api/user-achievements", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const alreadyUnlocked = unlocked.some((ach) => ach.id === 4);
+      if (!alreadyUnlocked) {
+        await axios.post(
+          "http://localhost:5000/api/unlock-achievement",
+          { achievement_id: 4 },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+  
+        Swal.fire({
+          icon: "success",
+          title: "Achievement unlocked!",
+          text: "You unlocked: Personal Renewal 🎯",
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+  
     } catch (error) {
       console.error("❌ Error saving profile:", error);
-
+  
       Swal.fire({
         icon: "error",
         title: "Error",
