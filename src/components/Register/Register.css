@@ -126,3 +126,9 @@
 .login-btn:hover {
     background-color: #2a9e62;
 }
+
+@media (max-width: 768px) {
+    .login-box {
+        margin-top: 8%;
+    }
+  }

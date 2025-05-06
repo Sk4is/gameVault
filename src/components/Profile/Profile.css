@@ -112,3 +112,96 @@ body.light-mode .profile-info h1 {
 .view-all-btn:hover {
   background-color: #0056b3;
 }
+
+@media (max-width: 1024px) {
+  .profile-container {
+    margin-top: 16%;
+  }
+
+  .profile-info h1 {
+    font-size: 42px;
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .profile-img {
+    margin-right: 60px;
+  }
+
+  .achievement-card {
+    width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    margin-top: 18%;
+    padding: 20px 10px;
+    gap: 30px;
+  }
+
+  .profile-img {
+    margin: 0 0 20px 0;
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-info h1 {
+    font-size: 36px;
+    margin-left: 0;
+  }
+
+  .achievements-grid {
+    gap: 16px;
+  }
+
+  .achievement-card {
+    width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    margin-top: 28%;
+    padding: 20px 10px;
+    gap: 30px;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-info h1 {
+    font-size: 28px;
+  }
+
+  .achievement-card {
+    width: 140px;
+    padding: 12px;
+  }
+
+  .achievement-card img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .achievement-info h4 {
+    font-size: 1rem;
+  }
+
+  .achievement-info p {
+    font-size: 0.8rem;
+  }
+
+  .view-all-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+}

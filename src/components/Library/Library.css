@@ -13,3 +13,45 @@
     gap: 50px;
     margin-bottom: 10%;
   }
+
+  @media (max-width: 1024px) {
+    .library-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+  
+    .library-container h2 {
+      font-size: 32px;
+      margin-top: 14%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .library-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  
+    .library-container h2 {
+      font-size: 28px;
+      margin-top: 22%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .library-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  
+    .library-container {
+      padding: 1rem;
+    }
+  
+    .library-container h2 {
+      font-size: 24px;
+      margin-top: 55%;
+      text-align: center;
+    }
+  }
+  

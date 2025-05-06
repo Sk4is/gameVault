@@ -111,7 +111,6 @@ app.get("/api/user-profile", (req, res) => {
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("🔐 Token recibido:", token);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {

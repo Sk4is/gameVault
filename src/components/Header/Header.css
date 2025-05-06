@@ -11,6 +11,15 @@
     width: 100%;
     z-index: 10;
   }
+
+  body {
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  
+  * {
+    box-sizing: inherit;
+  }
   
   .logo {
     display: flex;
@@ -144,5 +153,91 @@
   
   .settings-icon img:hover {
     transform: rotate(30deg);
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      padding: 8px 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  
+    .logo-img {
+      width: 80px;
+    }
+  
+    .lettering img {
+      width: 180px;
+    }
+  
+    .menu-btn {
+      font-size: 14px;
+      padding: 8px;
+      margin-right: 0;
+    }
+  
+    .menu-list {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex: 1;
+    }
+    
+    .menu-item a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    
+    .menu-item a:hover {
+      color: #35b977;
+    }
+    
+    .settings-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 15px;
+    }
+    
+    .settings-icon img {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.3s ease;
+    }
+    
+    .settings-icon img:hover {
+      transform: rotate(30deg);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo-img {
+      width: 60px;
+    }
+  
+    .lettering img {
+      width: 150px;
+    }
+  
+    .menu-btn {
+      font-size: 13px;
+      padding: 6px;
+    }
+  
+    .menu-item a {
+      font-size: 13px;
+    }
+  
+    .settings-icon img {
+      width: 20px;
+      height: 20px;
+    }
   }
   

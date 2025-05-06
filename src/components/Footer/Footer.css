@@ -43,3 +43,20 @@
     margin-right: 40px;
   }
   
+  @media (max-width: 600px) {
+    .footer-content {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      font-size: 14px;
+    }
+  
+    .github-img {
+      width: 26px;
+      height: 26px;
+    }
+  }

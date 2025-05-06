@@ -13,3 +13,32 @@
     gap: 20px;
   }
   
+  @media (max-width: 768px) {
+  .search-results-page {
+    padding: 1.5rem;
+  }
+
+  .search-results-page h2 {
+    font-size: 20px;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-results-page {
+    padding: 1rem;
+  }
+
+  .search-results-page h2 {
+    font-size: 18px;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
