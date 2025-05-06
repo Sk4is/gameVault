@@ -103,3 +103,77 @@
     width: 8%;
   }
   
+  @media (max-width: 1024px) {
+    .random-game-card {
+      width: 80%;
+      padding: 16px;
+      margin-bottom: 10%;
+    }
+  
+    .random-game-card h2 {
+      font-size: 32px;
+    }
+  
+    .random-game-card p {
+      font-size: 18px;
+      padding: 0 15px;
+    }
+  
+    .btn {
+      font-size: 15px;
+      padding: 10px 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .random-game-card {
+      width: 90%;
+      padding: 14px;
+      margin-bottom: 10%;
+    }
+  
+    .random-game-card h2 {
+      font-size: 28px;
+    }
+  
+    .random-game-card p {
+      font-size: 16px;
+    }
+  
+    .btn {
+      font-size: 14px;
+      padding: 8px 14px;
+    }
+  
+    .arrow-left, .arrow-right {
+      width: 10%;
+      top: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .random-game-card {
+      width: 95%;
+      padding: 12px;
+      margin-bottom: 10%;
+    }
+  
+    .random-game-card h2 {
+      font-size: 24px;
+    }
+  
+    .random-game-card p {
+      font-size: 15px;
+    }
+  
+    .btn {
+      font-size: 13px;
+      padding: 6px 12px;
+    }
+  
+    .arrow-left, .arrow-right {
+      width: 12%;
+      top: 20px;
+    }
+  }
+  
