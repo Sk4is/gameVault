@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./HeaderSearch.css";
 import { useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 import axios from "axios";
 
 const Header = () => {
@@ -75,12 +76,19 @@ const Header = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (search.trim()) {
-      navigate(`/search?q=${encodeURIComponent(search.trim())}`);
+    const trimmedSearch = search.trim();
+  
+    if (trimmedSearch.length === 0) return;
+  
+    if (searchResults.length > 0) {
+      const firstMatch = searchResults[0];
       setSearch("");
       setSearchResults([]);
+      navigate(`/gameinfo/${firstMatch.id}`);
+    } else {
+      console.log("🔍 No results found — no navigation triggered.");
     }
-  };
+  };  
 
   return (
     <header className="header">
@@ -102,6 +110,9 @@ const Header = () => {
           value={search}
           onChange={handleSearchChange}
         />
+        <button type="submit" className="search-button" aria-label="Search">
+          <Search size={18} />
+        </button>
         {searchResults.length > 0 && (
           <ul className="search-results">
             {searchResults.map((game) => (

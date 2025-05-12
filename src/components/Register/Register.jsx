@@ -83,9 +83,9 @@ const Register = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <div className="login-box">
+    <div className="register-page">
+      <div className="register-container">
+        <div className="register-box">
           <h2>Sign Up</h2>
           <form onSubmit={validateForm}>
             <div className="input-group">
@@ -139,7 +139,7 @@ const Register = () => {
               </div>
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <button className="login-btn">Register</button>
+            <button className="register-btn">Register</button>
             <a href="/login" className="register-link">
               Already have an account? Log in
             </a>

@@ -1,4 +1,4 @@
-.login-page {
+.register-page {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -10,7 +10,7 @@
     position: relative;
 }
 
-.login-container {
+.register-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,17 +23,17 @@
     z-index: 1;
 }
 
-.login-box {
+.register-box {
     background: rgba(0, 0, 0, 0.5);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 350px;
+    width: 450px;
     text-align: center;
     z-index: 2;
 }
 
-.login-box h2 {
+.register-box h2 {
     margin-bottom: 40px;
     color: #ffffff;
 }
@@ -55,7 +55,7 @@
 }
 
 .input-group input {
-    width: 80%;
+    width: 280px;
     padding: 10px;
     margin-top: 5px;
     color: rgb(0, 0, 0);
@@ -110,7 +110,7 @@
     color: #35b977;
   }
 
-.login-btn {
+.register-btn {
     width: 50%;
     padding: 10px;
     margin-top: 60px;
