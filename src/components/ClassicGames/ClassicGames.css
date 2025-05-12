@@ -1,147 +1,32 @@
 .classic-title {
-    font-size: 55px;
-    text-align: center;
-    margin-top: 160px;
-    margin-bottom: 20px;
-    color: #42C98F;
-    animation: glitch 1s infinite alternate;
+  font-size: 55px;
+  text-align: center;
+  margin-top: 160px;
+  margin-bottom: 20px;
+  color: #42c98f;
+  animation: glitch 1s infinite alternate;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: -2px -2px 0px #ff00ff;
   }
-  
-  @keyframes glitch {
-    0% { text-shadow: -2px -2px 0px #ff00ff; }
-    50% { text-shadow: 2px 2px 0px #00ffff; }
-    100% { text-shadow: -2px -2px 0px #ff00ff; }
+  50% {
+    text-shadow: 2px 2px 0px #00ffff;
   }
-  
-  .glitch-text {
-    animation: glitch 0.5s infinite alternate;
+  100% {
+    text-shadow: -2px -2px 0px #ff00ff;
   }
-  
-  .separator {
-    border: none; 
-    height: 2px;
-    background-color: #2b2b2b;
-    margin-bottom: 20px;
-    margin: 20px 0;
-  }
-  
-  .carousel-container {
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      overflow: hidden;
-      position: relative;
-      min-height: 500px;
-    }
-    
-    .slick-slider {
-      position: relative;
-      width: 100%;
-      margin: 0;
-    }
-    
-    .slick-track {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .slick-slide {
-      display: flex;
-      justify-content: center;
-      transition: transform 0.5s ease;
-    }
-    
-    .game-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px;
-      box-sizing: border-box;
-      width: 100%;
-      max-width: 300px;
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-      position: relative;
-      background-color: #2c2c2c;
-      border-radius: 10px;
-    }
-    
-    .game-info {
-      text-align: center;
-    }
-    
-    .game-info h3 {
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-    }
-    
-    .genre, .description, .platforms {
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-      color: #666;
-    }
-    
-    .rating-year {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      width: 100%;
-    }
-    
-    .stars {
-      color: #ffd700;
-    }
-    
-    .year {
-      color: #42C98F;
-    }
-    
-    .slick-center .game-card {
-      transform: scale(0.95);
-      box-shadow: 0 0 20px rgba(66, 201, 143, 0.6);
-      z-index: 2;
-    }
-    
-    .slick-slide:not(.slick-center) .game-card {
-      transform: scale(0.75);
-      opacity: 0.7;
-      z-index: 1;
-    }
-    
-    .game-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      transition: transform 0.5s ease;
-    }
-    
-    .slick-center .game-card img {
-      transform: scale(1); 
-    }
-    
-    .slick-dots {
-      bottom: -30px;
-      z-index: 1;
-    }
-    
-    .custom-arrow {
-      font-size: 30px;
-      padding: 100px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-  }
-  
-  .description {
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-      color: #666;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+}
+
+.glitch-text {
+  animation: glitch 0.5s infinite alternate;
+}
+
+.separator {
+  border: none;
+  height: 2px;
+  background-color: #2b2b2b;
+  margin-bottom: 20px;
+  margin: 20px 0;
+}

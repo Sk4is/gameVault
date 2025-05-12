@@ -7,13 +7,16 @@
   animation: glitch 1s infinite alternate;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -89,6 +92,25 @@ html, body {
   padding: 0 5px;
   display: flex;
   justify-content: center;
+}
+
+.slick-center .game-card img {
+  transform: scale(1);
+}
+
+.slick-dots {
+  bottom: -30px;
+  z-index: 1;
+}
+
+.custom-arrow {
+  font-size: 30px;
+  padding: 10px;
+  margin-right: -2%;
+  margin-left: -1%;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .game-card {
@@ -240,11 +262,11 @@ html, body {
   }
 
   .slick-center .game-card {
-    transform: scale(0.90);
+    transform: scale(0.9);
   }
 
   .slick-slide:not(.slick-center) .game-card {
-    transform: scale(0.70);
+    transform: scale(0.7);
   }
 }
 
