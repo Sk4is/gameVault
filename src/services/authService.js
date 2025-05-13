@@ -1,10 +1,7 @@
-// authService.js
-
 import axios from "axios";
 
 const API_URL = "http://localhost:5000";
 
-// Usamos export para exportar la función
 export const registerUser = async (nombre, email, password) => {
   return axios.post(`${API_URL}/register`, { nombre, email, password });
 };
