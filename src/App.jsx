@@ -1,5 +1,3 @@
-// src/App.jsx
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Start from './pages/StartPage';
 import Landing from './pages/LandingPage';

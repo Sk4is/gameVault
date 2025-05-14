@@ -37,6 +37,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 10%;
     flex: 1;
 }
 
