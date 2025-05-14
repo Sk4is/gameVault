@@ -18,8 +18,6 @@ const LibraryGameCard = ({ game }) => {
     const durationHours = durationMs / (1000 * 60 * 60);
   
     const totalMinutes = Math.floor(durationMs / (1000 * 60));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
   
     setIsPlaying(false);
     setStartTime(null);

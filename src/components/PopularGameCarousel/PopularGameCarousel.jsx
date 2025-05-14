@@ -107,15 +107,16 @@ const GameCarousel = () => {
       <h1 className="popular-title">Featured Games</h1>
       <hr className="separator"></hr>
       <div className="carousel-container">
-        <Slider {...settings}>
-          {games.length === 0 ? (
-            <p>Loading games...</p>
-          ) : (
-            games.map((game, index) => (
+        {games.length === 0 ? (
+          <p>Loading games...</p>
+        ) : (
+          <Slider {...settings}>
+            {games.map((game, index) => (
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
                 <div
-                  key={game.id}
-                  className={`game-card ${index === activeIndex ? "active" : ""}`}
+                  className={`game-card ${
+                    index === activeIndex ? "active" : ""
+                  }`}
                 >
                   <img
                     src={game.cover?.url.replace("t_thumb", "t_cover_big")}
@@ -136,7 +137,9 @@ const GameCarousel = () => {
                     <p className="platforms">
                       Platforms:{" "}
                       {game.platforms?.length
-                        ? game.platforms.map((platform) => platform.abbreviation).join(", ")
+                        ? game.platforms
+                            .map((platform) => platform.abbreviation)
+                            .join(", ")
                         : "Not available"}
                     </p>
                     <div className="rating-year">
@@ -145,16 +148,18 @@ const GameCarousel = () => {
                       </div>
                       <div className="year">
                         {game.first_release_date
-                          ? new Date(game.first_release_date * 1000).getFullYear()
+                          ? new Date(
+                              game.first_release_date * 1000
+                            ).getFullYear()
                           : "Unknown"}
                       </div>
                     </div>
                   </div>
                 </div>
               </Link>
-            ))
-          )}
-        </Slider>
+            ))}
+          </Slider>
+        )}
       </div>
     </>
   );

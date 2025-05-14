@@ -1,13 +1,13 @@
 import React from "react";
-import "./AchievementIcon.css"; // Importamos el CSS externo
+import "./AchievementIcon.css";
 
 const iconMap = {
-  1: "📝", // First Comment - Reseña
-  2: "💡", // Brilliant Critic
-  3: "🎁", // Collector
-  4: "🧭", // Active Explorer
-  5: "🌱", // Personal Renewal
-  6: "🧠", // Expert Critic
+  1: "📝",
+  2: "💡",
+  3: "🎁",
+  4: "🧭",
+  5: "🌱",
+  6: "🧠",
 };
 
 const AchievementIcon = ({ id, alt = "Achievement Icon", className = "" }) => {

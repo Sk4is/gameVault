@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LibraryGameCard from "../GameLibraryCard/GameLibraryCard";
-import Swal from "sweetalert2"; // 🔔
+import Swal from "sweetalert2";
 import "./Library.css";
 
 const Library = () => {

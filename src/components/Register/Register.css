@@ -128,7 +128,10 @@
 }
 
 @media (max-width: 768px) {
-    .login-box {
+    .register-box {
         margin-top: 8%;
     }
   }
+
+  @media (max-width: 480px) {
+}

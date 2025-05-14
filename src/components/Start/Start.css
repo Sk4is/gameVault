@@ -113,6 +113,10 @@ body {
       align-items: center;
       gap: 40px;
     }
+
+    .logoStart img {
+      margin-right: 12%;
+    }
   
     .title h1 {
       font-size: 36px;
@@ -135,6 +139,10 @@ body {
   @media (max-width: 480px) {
     .title h1 {
       font-size: 28px;
+    }
+
+    .logoStart img {
+      margin-right: 10%;
     }
   
     .options p {

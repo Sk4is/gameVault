@@ -222,54 +222,6 @@ body {
   }
 }
 
-@media (max-width: 768px) {
-  .popular-title {
-    font-size: 36px;
-    margin-top: 100px;
-  }
-
-  .carousel-container {
-    max-width: 90%;
-    min-height: 450px;
-  }
-
-  .game-card {
-    max-width: 220px;
-    padding: 8px;
-  }
-
-  .game-info h3 {
-    font-size: 1rem;
-  }
-
-  .genres,
-  .description,
-  .platforms {
-    font-size: 0.8rem;
-  }
-
-  .rating-year {
-    font-size: 0.8rem;
-  }
-
-  .custom-arrow {
-    font-size: 24px;
-    padding: 8px;
-  }
-
-  .lettering img {
-    width: 160px;
-  }
-
-  .slick-center .game-card {
-    transform: scale(0.9);
-  }
-
-  .slick-slide:not(.slick-center) .game-card {
-    transform: scale(0.7);
-  }
-}
-
 @media (max-width: 480px) {
   .popular-title {
     font-size: 28px;

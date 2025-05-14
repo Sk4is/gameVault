@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "./Reviews.css";
 
 const Review = () => {
-  const { id } = useParams(); // ID del juego desde la URL
+  const { id } = useParams(); 
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({ content: "", rating: 1 });
   const [gameName, setGameName] = useState("");
