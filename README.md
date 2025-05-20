@@ -48,7 +48,7 @@ Whether you're a veteran gamer or just getting started, GameVault is your person
 3. **Start Server & Application 🚀**:
 
     ```bash
-    npm start
+    node src/index.js
     ```
     
     ```bash
