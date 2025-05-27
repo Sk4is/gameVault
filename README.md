@@ -27,6 +27,7 @@ Whether you're a veteran gamer or just getting started, GameVault is your person
 - [📸 Screenshots](#-screenshots)
 - [⚙️ Stacks](#️-stacks)
 - [📚 Libraries](#-libraries)
+- [🧪 Testing](#-testing)
 - [📈 Methodology](#-methodology)
 - [👟 Next Steps](#-next-steps)
 
@@ -200,7 +201,37 @@ Whether you're a veteran gamer or just getting started, GameVault is your person
 - jsonwebtoken – Creates and verifies JSON Web Tokens.
 - cors – Middleware to enable CORS (Cross-Origin Resource Sharing).
 - dotenv – Loads environment variables from a `.env` file.
+
+## 🧪 Testing
+
+Running an especific test:
+
+    npm test login.test.js
     
+<table align="center">
+  <tr>
+    <th colspan="3" style="text-align:center; font-size:20px;">Login, Register and User Profile Tests</th>
+  </tr>
+  <tr>
+    <td><img src="https://res.cloudinary.com/dimlqpphf/image/upload/v1748332417/Screenshot_28_rnccj0.jpg" alt="Login Test" width="350"></td>
+    <td><img src="https://res.cloudinary.com/dimlqpphf/image/upload/v1748332668/Screenshot_26_ghiuev.jpg" alt="Register Test" width="350"></td>
+    <td><img src="https://res.cloudinary.com/dimlqpphf/image/upload/v1748332668/Screenshot_27_mclbwh.jpg" alt="User Profile Test" width="350"></td>
+  </tr>
+</table>
+
+Running all tests:
+
+    npm test
+
+<table align="center">
+  <tr>
+    <th colspan="1" style="text-align:center; font-size:20px;">All Tests</th>
+  </tr>
+  <tr>
+    <td><img src="https://res.cloudinary.com/dimlqpphf/image/upload/v1748332381/Screenshot_27_xlndm7.jpg" alt="Running All Tests" width="350"></td>
+  </tr>
+</table>
+
 ## 📈 Methodology
 
 This project was developed using Agile-inspired practices, primarily based on **Kanban**, with task management handled through **Trello**.
