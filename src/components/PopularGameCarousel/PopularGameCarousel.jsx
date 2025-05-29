@@ -48,15 +48,8 @@ const GameCarousel = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 500;`,
-          {
-            headers: {
-              "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-              Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-            },
-          }
+        const response = await axios.get(
+          "http://localhost:5000/api/popular-games"
         );
 
         const random20Games = shuffleArray(response.data).slice(0, 20);

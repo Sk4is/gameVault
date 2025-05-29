@@ -57,25 +57,16 @@ const GameCarousel = () => {
         twoYearsAgo.setDate(1);
         const twoYearsAgoTimestamp = Math.floor(twoYearsAgo.getTime() / 1000);
 
-        const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation;
-           where first_release_date >= ${twoYearsAgoTimestamp} & first_release_date <= ${now}; 
-           sort first_release_date desc;
-           limit 500;`,
-          {
-            headers: {
-              "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-              Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:5000/api/new-games");
 
         const shuffleArray = (array) => {
           let shuffledArray = [...array];
           for (let i = shuffledArray.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            [shuffledArray[i], shuffledArray[j]] = [
+              shuffledArray[j],
+              shuffledArray[i],
+            ];
           }
           return shuffledArray;
         };
@@ -123,7 +114,9 @@ const GameCarousel = () => {
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
                 <div
                   key={game.id}
-                  className={`game-card ${index === activeIndex ? "active" : ""}`}
+                  className={`game-card ${
+                    index === activeIndex ? "active" : ""
+                  }`}
                 >
                   <img
                     src={game.cover?.url.replace("t_thumb", "t_cover_big")}
@@ -134,16 +127,21 @@ const GameCarousel = () => {
                     <h3>{game.name}</h3>
                     <p className="genre">
                       <strong>Genre:</strong>{" "}
-                      {game.genres?.map((genre) => genre.name).join(", ") || "Unknown"}
+                      {game.genres?.map((genre) => genre.name).join(", ") ||
+                        "Unknown"}
                     </p>
                     <p className="description">
                       <strong>Summary:</strong>{" "}
-                      {game.summary ? game.summary.substring(0, 150) + "..." : "Not available"}
+                      {game.summary
+                        ? game.summary.substring(0, 150) + "..."
+                        : "Not available"}
                     </p>
                     <p className="platforms">
                       <strong>Platforms:</strong>{" "}
                       {game.platforms?.length
-                        ? game.platforms.map((platform) => platform.abbreviation).join(", ")
+                        ? game.platforms
+                            .map((platform) => platform.abbreviation)
+                            .join(", ")
                         : "Not available"}
                     </p>
                     <div className="rating-year">
@@ -152,7 +150,9 @@ const GameCarousel = () => {
                       </div>
                       <div className="year">
                         {game.first_release_date
-                          ? new Date(game.first_release_date * 1000).getFullYear()
+                          ? new Date(
+                              game.first_release_date * 1000
+                            ).getFullYear()
                           : "Unknown"}
                       </div>
                     </div>

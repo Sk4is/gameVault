@@ -40,16 +40,7 @@ const Review = () => {
   useEffect(() => {
     const fetchGameName = async () => {
       try {
-        const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name; where id = ${id};`,
-          {
-            headers: {
-              "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-              Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/api/game-name/${id}`);
         if (response.data.length > 0) setGameName(response.data[0].name);
       } catch (error) {
         console.error("Error fetching game name:", error);

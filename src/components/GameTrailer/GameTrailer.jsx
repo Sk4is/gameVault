@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "./GameTrailer.css";
 
 const getRandomGameWithTrailer = (games) => {
-  const gamesWithTrailer = games.filter(game => game.videos?.length > 0);
+  const gamesWithTrailer = games.filter((game) => game.videos?.length > 0);
   const shuffled = gamesWithTrailer.sort(() => 0.5 - Math.random());
   return shuffled[0];
 };
@@ -17,20 +17,9 @@ const RandomGameCard = () => {
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation, videos.video_id;
-           where first_release_date >= 315532800 & first_release_date < 1325376000 & rating >= 85;  
-           sort rating desc;
-           limit 500;`,
-          {
-            headers: {
-              "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-              Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-            },
-          }
+        const response = await axios.get(
+          "http://localhost:5000/api/game-trailer"
         );
-
         const randomGameWithTrailer = getRandomGameWithTrailer(response.data);
         setGame(randomGameWithTrailer);
       } catch (error) {
@@ -69,11 +58,14 @@ const RandomGameCard = () => {
           gameId: game.id,
           name: game.name,
           description: game.summary || null,
-          genre: game.genres?.map(g => g.name).join(", ") || null,
-          platform: game.platforms?.map(p => p.abbreviation).join(", ") || null,
+          genre: game.genres?.map((g) => g.name).join(", ") || null,
+          platform:
+            game.platforms?.map((p) => p.abbreviation).join(", ") || null,
           image: game.cover?.url?.replace("t_thumb", "t_cover_big") || null,
           releaseDate: game.first_release_date
-            ? new Date(game.first_release_date * 1000).toISOString().split("T")[0]
+            ? new Date(game.first_release_date * 1000)
+                .toISOString()
+                .split("T")[0]
             : null,
         },
         {
@@ -84,14 +76,20 @@ const RandomGameCard = () => {
       Swal.fire("Added!", "Game saved to your library", "success");
     } catch (error) {
       console.error("❌ Error adding to library:", error);
-      Swal.fire("Error", error.response?.data?.message || "Something went wrong", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.message || "Something went wrong",
+        "error"
+      );
     }
   };
 
   if (!game) return <div>Loading...</div>;
 
   const trailerId = game.videos?.length > 0 ? game.videos[0].video_id : null;
-  const trailerUrl = trailerId ? `https://www.youtube.com/embed/${trailerId}` : null;
+  const trailerUrl = trailerId
+    ? `https://www.youtube.com/embed/${trailerId}`
+    : null;
 
   return (
     <>
@@ -113,16 +111,16 @@ const RandomGameCard = () => {
         />
       </div>
 
-      <motion.div 
+      <motion.div
         className="random-game-card"
-        initial={{ opacity: 0, scale: 0.8 }} 
-        animate={{ opacity: 1, scale: 1 }} 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <h2>{game.name}</h2>
         <div className="game-body">
           {trailerUrl ? (
-            <motion.div 
+            <motion.div
               className="iframe-container"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -141,19 +139,38 @@ const RandomGameCard = () => {
             <p>Trailer not available</p>
           )}
           <hr className="separator-popular" />
-          <p><strong>Genre:</strong> {game.genres?.map(genre => genre.name).join(", ") || "Not available"}</p>
-          <p><strong>Summary:</strong> {game.summary || "No description available"}</p>
-          <p><strong>Rating:</strong> <span className="stars">{renderStars(getStars(game.rating))}</span></p>
-          <p><strong>Release Year:</strong> {game.first_release_date ? new Date(game.first_release_date * 1000).getFullYear() : "Unknown"}</p>
+          <p>
+            <strong>Genre:</strong>{" "}
+            {game.genres?.map((genre) => genre.name).join(", ") ||
+              "Not available"}
+          </p>
+          <p>
+            <strong>Summary:</strong>{" "}
+            {game.summary || "No description available"}
+          </p>
+          <p>
+            <strong>Rating:</strong>{" "}
+            <span className="stars">{renderStars(getStars(game.rating))}</span>
+          </p>
+          <p>
+            <strong>Release Year:</strong>{" "}
+            {game.first_release_date
+              ? new Date(game.first_release_date * 1000).getFullYear()
+              : "Unknown"}
+          </p>
         </div>
-        <motion.div 
+        <motion.div
           className="game-actions"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <Link to={`/gameinfo/${game.id}`} className="btn">More Info</Link>
-          <button className="btn" onClick={handleAddToLibrary}>Add to Library</button>
+          <Link to={`/gameinfo/${game.id}`} className="btn">
+            More Info
+          </Link>
+          <button className="btn" onClick={handleAddToLibrary}>
+            Add to Library
+          </button>
         </motion.div>
       </motion.div>
     </>

@@ -3,7 +3,9 @@ const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const axios = require("axios");
 require("dotenv").config();
+
 
 const app = express();
 
@@ -31,6 +33,112 @@ db.connect((err) => {
     process.exit(1);
   }
   console.log("✅ Successfully connected to the database");
+});
+
+app.get("/api/popular-games", async (req, res) => {
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 20;`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+  console.error("❌ IGDB fetch error:");
+  if (error.response) {
+    console.error("Status:", error.response.status);
+    console.error("Data:", error.response.data);
+    console.error("Headers:", error.response.headers);
+  } else if (error.request) {
+    console.error("No response received:", error.request);
+  } else {
+    console.error("Error message:", error.message);
+  }
+
+  res.status(500).json({ message: "Failed to fetch IGDB games" });
+}
+});
+
+app.get("/api/classic-games", async (req, res) => {
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation;
+       where first_release_date >= 315532800 & first_release_date < 1325376000 & rating >= 85;  
+       sort rating desc;
+       limit 500;`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("❌ IGDB classic error:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch classic games" });
+  }
+});
+
+app.get("/api/new-games", async (req, res) => {
+  try {
+    const now = Math.floor(Date.now() / 1000);
+    const twoYearsAgo = new Date();
+    twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+    twoYearsAgo.setMonth(0);
+    twoYearsAgo.setDate(1);
+    const twoYearsAgoTimestamp = Math.floor(twoYearsAgo.getTime() / 1000);
+
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation;
+       where first_release_date >= ${twoYearsAgoTimestamp} & first_release_date <= ${now}; 
+       sort first_release_date desc;
+       limit 500;`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("❌ IGDB new error:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch new games" });
+  }
+});
+
+app.get("/api/game-trailer", async (req, res) => {
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation, videos.video_id;
+       where first_release_date >= 315532800 & first_release_date < 1325376000 & rating >= 85;  
+       sort rating desc;
+       limit 500;`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("❌ IGDB trailer fetch error:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch trailer games" });
+  }
 });
 
 app.post("/api/register", async (req, res) => {
@@ -475,6 +583,58 @@ app.delete("/api/reviews/:gameId/:userId", (req, res) => {
   });
 });
 
+app.get("/api/game-details/:id", async (req, res) => {
+  const gameId = req.params.id;
+
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation, screenshots.url; where id = ${gameId};`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    if (response.data.length === 0) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+
+    res.json(response.data[0]);
+  } catch (error) {
+    console.error("❌ Error fetching game details:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch game details" });
+  }
+});
+
+app.get("/api/game-name/:id", async (req, res) => {
+  const gameId = req.params.id;
+
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `fields name; where id = ${gameId};`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    if (response.data.length === 0) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+
+    res.json(response.data[0]);
+  } catch (error) {
+    console.error("❌ Error fetching game name:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch game name" });
+  }
+});
+
 app.get("/api/reviews/:gameId", (req, res) => {
   const gameId = req.params.gameId;
 
@@ -574,4 +734,4 @@ const insertQuery = `
   });
 });
 
-module.exports = { app, db };
+module.exports = app;

@@ -44,20 +44,9 @@ const GameCarousel = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-          `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation;
-           where first_release_date >= 315532800 & first_release_date < 1325376000 & rating >= 85;  
-           sort rating desc;
-           limit 500;`,
-          {
-            headers: {
-              "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-              Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-            },
-          }
+        const response = await axios.get(
+          "http://localhost:5000/api/classic-games"
         );
-
         setGames(getRandomGames(response.data, 20));
       } catch (error) {
         console.error("Error fetching games:", error);
@@ -104,7 +93,9 @@ const GameCarousel = () => {
               <Link to={`/gameinfo/${game.id}`} key={game.id}>
                 <div
                   key={game.id}
-                  className={`game-card ${index === activeIndex ? "active" : ""}`}
+                  className={`game-card ${
+                    index === activeIndex ? "active" : ""
+                  }`}
                 >
                   <img
                     src={game.cover?.url.replace("t_thumb", "t_cover_big")}
@@ -119,7 +110,9 @@ const GameCarousel = () => {
                     <p className="platforms">
                       Platforms:{" "}
                       {game.platforms?.length
-                        ? game.platforms.map((platform) => platform.abbreviation).join(", ")
+                        ? game.platforms
+                            .map((platform) => platform.abbreviation)
+                            .join(", ")
                         : "Platforms not available"}
                     </p>
                     <div className="rating-year">
@@ -128,7 +121,9 @@ const GameCarousel = () => {
                       </div>
                       <div className="year">
                         {game.first_release_date
-                          ? new Date(game.first_release_date * 1000).getFullYear()
+                          ? new Date(
+                              game.first_release_date * 1000
+                            ).getFullYear()
                           : "Unknown"}
                       </div>
                     </div>
