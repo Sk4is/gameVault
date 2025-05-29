@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "./Reviews.css";
 
 const Review = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({ content: "", rating: 1 });
   const [gameName, setGameName] = useState("");
@@ -41,7 +41,9 @@ const Review = () => {
     const fetchGameName = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/game-name/${id}`);
-        if (response.data.length > 0) setGameName(response.data[0].name);
+        if (response.data && response.data.name) {
+  setGameName(response.data.name);
+}
       } catch (error) {
         console.error("Error fetching game name:", error);
       }
@@ -58,6 +60,15 @@ const Review = () => {
     const token = localStorage.getItem("token");
 
     console.log("🆔 Game ID:", id);
+
+    if (!gameName) {
+      Swal.fire(
+        "Error",
+        "Game name not loaded. Please try again shortly.",
+        "error"
+      );
+      return;
+    }
 
     try {
       await axios.post(
@@ -250,7 +261,9 @@ const Review = () => {
               </option>
             ))}
           </select>
-          <button type="submit">Submit review</button>
+          <button type="submit">
+            Submit review
+          </button>
         </form>
       </div>
     </div>

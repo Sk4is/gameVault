@@ -9,8 +9,8 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use(
   cors({
@@ -35,11 +35,36 @@ db.connect((err) => {
   console.log("✅ Successfully connected to the database");
 });
 
+function authenticateUser(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Token required" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+    req.user = decoded;
+    next();
+  });
+}
+
+app.get("/api/user-reviews", authenticateUser, (req, res) => {
+  const userId = req.user.id;
+
+  const query = "SELECT * FROM reviews WHERE user_id = ?";
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error("❌ Error getting user reviews:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    res.json(results);
+  });
+});
+
 app.get("/api/popular-games", async (req, res) => {
   try {
     const response = await axios.post(
       "https://api.igdb.com/v4/games",
-      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 20;`,
+      `fields name, first_release_date, cover.url, rating, genres.name, summary, platforms.abbreviation; sort rating desc; limit 100;`,
       {
         headers: {
           "Client-ID": process.env.CLIENT_ID,
@@ -546,6 +571,7 @@ app.post("/api/reviews", (req, res) => {
   });
 });
 
+
 app.delete("/api/reviews/:gameId/:userId", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const { gameId, userId: targetUserId } = req.params;
@@ -703,29 +729,28 @@ app.post("/api/unlock-achievement", (req, res) => {
 
     const userId = decoded.id;
 
-    const checkQuery =
-      "SELECT * FROM user_achievements WHERE user_id = ? AND achievement_id = ?";
+    const checkQuery = `
+      SELECT * FROM user_achievements
+      WHERE user_id = ? AND achievement_id = ?
+    `;
     db.query(checkQuery, [userId, achievement_id], (err, result) => {
       if (err) {
         console.error("❌ DB error:", err);
         return res.status(500).json({ message: "DB error" });
       }
 
-      if (result.length > 0)
+      if (result.length > 0) {
         return res.status(200).json({ message: "Already unlocked" });
+      }
 
-      const type = req.body.type || null;
-
-const insertQuery = `
-  INSERT INTO user_achievements (user_id, achievement_id, type, unlocked_date)
-  VALUES (?, ?, ?, NOW())
-`;
-      db.query(insertQuery, [userId, achievement_id], (err) => {
+      const insertQuery = `
+        INSERT INTO user_achievements (user_id, achievement_id, type, unlocked_date)
+        VALUES (?, ?, (SELECT type FROM achievements WHERE id = ?), NOW())
+      `;
+      db.query(insertQuery, [userId, achievement_id, achievement_id], (err) => {
         if (err) {
           console.error("❌ Error inserting achievement:", err);
-          return res
-            .status(500)
-            .json({ message: "Error inserting achievement" });
+          return res.status(500).json({ message: "Error inserting achievement" });
         }
 
         res.status(201).json({ message: "Achievement unlocked" });
