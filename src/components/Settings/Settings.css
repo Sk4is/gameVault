@@ -210,6 +210,12 @@
   }
 }
 
+.profile-pic img {
+  cursor: zoom-in;
+  transition: transform 0.2s ease;
+}
+
+
 @media (max-width: 768px) {
   .settings-content {
     flex-direction: column;

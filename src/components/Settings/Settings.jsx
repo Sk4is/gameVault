@@ -128,6 +128,19 @@ const Settings = () => {
     }
   };
 
+  const handleAvatarClick = () => {
+  Swal.fire({
+    imageUrl: avatar,
+    imageAlt: "Profile picture",
+    imageWidth: 400,
+    imageHeight: 400,
+    background: darkMode ? "#2e2e2e" : "#fff",
+    color: darkMode ? "#f1f1f1" : "#222",
+    showCloseButton: true,
+    showConfirmButton: false,
+  });
+};
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -143,7 +156,7 @@ const Settings = () => {
           <label className="profile-label">PROFILE PICTURE</label>
           <div className="profile-pic-container">
             <div className="profile-pic">
-              <img src={avatar} alt="User avatar" />
+              <img src={avatar} onClick={handleAvatarClick} alt="User avatar" />
             </div>
             <button
               className="change-photo-button"
