@@ -52,16 +52,9 @@ const Header = () => {
 
     try {
       const response = await axios.post(
-        "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
-        `search "${value}"; fields id, name; limit 10;`,
-        {
-          headers: {
-            "Client-ID": "yytjvifii8si3zmeshx8znlox2nuc5",
-            Authorization: "Bearer vb8e7cupalh6uc0pafce3eikvd9pfs",
-          },
-        }
+        "http://localhost:5000/api/search-games",
+        { search: value }
       );
-
       setSearchResults(response.data);
     } catch (error) {
       console.error("❌ Error searching games:", error);
@@ -77,9 +70,9 @@ const Header = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const trimmedSearch = search.trim();
-  
+
     if (trimmedSearch.length === 0) return;
-  
+
     if (searchResults.length > 0) {
       const firstMatch = searchResults[0];
       setSearch("");
@@ -88,7 +81,7 @@ const Header = () => {
     } else {
       console.log("🔍 No results found — no navigation triggered.");
     }
-  };  
+  };
 
   return (
     <header className="header">

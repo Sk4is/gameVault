@@ -1,7 +1,7 @@
 import React from "react";
 import "./AchievementIcon.css";
 
-const iconMap = {
+export const iconMap = {
   1: "📝",
   2: "💡",
   3: "🎁",

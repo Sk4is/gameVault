@@ -236,6 +236,28 @@ app.post("/api/login", (req, res) => {
   );
 });
 
+app.post("/api/search-games", (req, res) => {
+  const search = req.body.search;
+
+  axios
+    .post(
+      "https://api.igdb.com/v4/games",
+      `search "${search}"; fields id, name; limit 10;`,
+      {
+        headers: {
+          "Client-ID": process.env.CLIENT_ID,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+          "Content-Type": "text/plain",
+        },
+      }
+    )
+    .then((response) => res.json(response.data))
+    .catch((error) => {
+      console.error("IGDB search error:", error.response?.data || error.message);
+      res.status(500).json({ error: "Search failed" });
+    });
+});
+
 app.get("/api/user-profile", (req, res) => {
   const authHeader = req.headers.authorization;
 
@@ -749,6 +771,10 @@ app.post("/api/unlock-achievement", (req, res) => {
       `;
       db.query(insertQuery, [userId, achievement_id, achievement_id], (err) => {
         if (err) {
+          if (err.code === 'ER_DUP_ENTRY') {
+            console.warn("⚠️ Duplicate achievement prevented by DB constraint.");
+            return res.status(200).json({ message: "Already unlocked (DB constraint)" });
+          }
           console.error("❌ Error inserting achievement:", err);
           return res.status(500).json({ message: "Error inserting achievement" });
         }
