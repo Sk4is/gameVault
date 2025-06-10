@@ -136,6 +136,7 @@ const Profile = () => {
       color: darkMode ? "#f1f1f1" : "#222",
       customClass: {
         popup: "achievement-modal-popup",
+        confirmButton: "swal-achievements-btn"
       },
       confirmButtonText: "Close",
       showCloseButton: true,

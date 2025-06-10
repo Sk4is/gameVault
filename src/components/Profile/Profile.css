@@ -101,17 +101,33 @@ body.light-mode .profile-info h1 {
 .view-all-btn {
   margin-top: 20px;
   margin-bottom: 100px;
-  background-color: #007bff;
+  background-color: #42c98f;
   color: white;
   padding: 10px 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .view-all-btn:hover {
-  background-color: #0056b3;
+  background-color: #1cb874;
+}
+
+.swal-achievements-btn {
+  background-color: #42c98f;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.swal-achievements-btn:hover {
+  background-color: #1cb874;
 }
 
 @media (max-width: 1024px) {
