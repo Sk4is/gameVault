@@ -41,7 +41,7 @@ const Header = () => {
       <div className="logo">
         <a href="/landing">
           <img
-            src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741288545/GameVault_ltzotm.png"
+            src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741897097/Screenshot_4-removebg-preview_miskhy.png"
             alt="Logo"
             className="logo-img"
           />
