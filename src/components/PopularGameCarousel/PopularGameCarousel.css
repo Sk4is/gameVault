@@ -121,7 +121,7 @@ body {
   padding: 10px;
   box-sizing: border-box;
   width: 100%;
-  max-width: 300px;
+  max-width: 500px;
   transition: transform 0.5s ease, box-shadow 0.5s ease;
   position: relative;
   background-color: #2c2c2c;
@@ -216,6 +216,21 @@ body {
     font-size: 42px;
     margin-top: 120px;
   }
+
+  .carousel-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.custom-arrow {
+  font-size: 30px;
+  padding: 10px;
+  margin-right: -3%;
+  margin-left: 3%;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
   .game-card {
     max-width: 260px;

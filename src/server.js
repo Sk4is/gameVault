@@ -6,7 +6,6 @@ const cors = require("cors");
 const axios = require("axios");
 require("dotenv").config();
 
-
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
@@ -503,9 +502,6 @@ app.post("/api/reviews", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const { game_id, game_name, content, rating } = req.body;
 
-  
-  console.log("📥 Received data:", { game_id, game_name, content, rating });
-
   if (!token) return res.status(401).json({ message: "Token required" });
   if (!game_id || !game_name || !content || rating == null)
     return res.status(400).json({ message: "Incomplete review data" });
@@ -592,7 +588,6 @@ app.post("/api/reviews", (req, res) => {
     });
   });
 });
-
 
 app.delete("/api/reviews/:gameId/:userId", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
