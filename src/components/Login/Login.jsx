@@ -46,7 +46,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/login", { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/login`, { email, password });
       const { token } = response.data;
 
       localStorage.setItem("token", token);
