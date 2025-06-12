@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
+import "./Login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
