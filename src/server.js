@@ -26,7 +26,9 @@ const db = mysql.createConnection({
   password: dbUrl.password,
   database: dbUrl.pathname.replace("/", ""),
   port: dbUrl.port,
-  ssl: { rejectUnauthorized: true },
+  ssl: {
+    rejectUnauthorized: false
+  },
   charset: "utf8mb4"
 });
 
