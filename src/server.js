@@ -19,18 +19,16 @@ app.use(
 );
 
 const dbUrl = new URL(process.env.DATABASE_URL);
-
 const db = mysql.createConnection({
   host: dbUrl.hostname,
   user: dbUrl.username,
   password: dbUrl.password,
   database: dbUrl.pathname.replace("/", ""),
   port: dbUrl.port,
-  ssl: {
-    rejectUnauthorized: false
-  },
+  ssl: { rejectUnauthorized: false },
   charset: "utf8mb4"
 });
+
 
 db.connect((err) => {
   if (err) {
