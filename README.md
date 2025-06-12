@@ -177,7 +177,7 @@ Whether you're a veteran gamer or just getting started, GameVault is your person
 ## ⚙️ Stacks
 
 - **Backend**: Node.js, Express.js, MySQL
-- **Frontend**: React.js, Javascript, HTML5, CSS3
+- **Frontend**: React.js, Vite, Javascript, HTML5, CSS3
 
 ## 📚 Libraries
 
