@@ -52,7 +52,7 @@ const Header = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/search-games",
+        `${import.meta.env.VITE_API_URL}/api/search-games`,
         { search: value }
       );
       setSearchResults(response.data);

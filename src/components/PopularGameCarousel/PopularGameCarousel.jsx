@@ -49,7 +49,7 @@ const GameCarousel = () => {
     const fetchGames = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/popular-games"
+          `${import.meta.env.VITE_API_URL}/api/popular-games`
         );
 
         const random20Games = shuffleArray(response.data).slice(0, 20);

@@ -17,7 +17,7 @@ const GameInfoPage = () => {
 
     const fetchGameDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/game-details/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/game-details/${id}`);
 
         setGame(response.data);
       } catch (error) {
@@ -66,7 +66,7 @@ const GameInfoPage = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/add-to-library",
+        `${import.meta.env.VITE_API_URL}/api/add-to-library`,
         {
           gameId: game.id,
           name: game.name,

@@ -20,7 +20,7 @@ const Profile = () => {
     if (!token) return;
 
     axios
-      .get("http://localhost:5000/api/user-profile", {
+      .get(`${import.meta.env.VITE_API_URL}/api/user-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -33,7 +33,7 @@ const Profile = () => {
       );
 
     axios
-      .get("http://localhost:5000/api/user-library", {
+      .get(`${import.meta.env.VITE_API_URL}/api/user-library`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -47,7 +47,7 @@ const Profile = () => {
       });
 
     axios
-      .get("http://localhost:5000/api/user-achievements", {
+      .get(`${import.meta.env.VITE_API_URL}/api/user-achievements`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(async (res) => {
@@ -63,7 +63,7 @@ const Profile = () => {
         if (!alreadyUnlocked) {
           try {
             await axios.post(
-              "http://localhost:5000/api/unlock-achievement",
+              `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
               {
                 achievement_id: 5,
                 type: "profile",
@@ -82,7 +82,7 @@ const Profile = () => {
             });
 
             const updated = await axios.get(
-              "http://localhost:5000/api/user-achievements",
+              `${import.meta.env.VITE_API_URL}/api/user-achievements`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
 

@@ -55,7 +55,7 @@ const Login = () => {
       console.log("🔐 Decoded token:", decoded);
       console.log("📦 Token sent to /user-profile:", token);
 
-      const profile = await axios.get("http://localhost:5000/api/user-profile", {
+      const profile = await axios.get(`${import.meta.env.VITE_API_URL}/api/user-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

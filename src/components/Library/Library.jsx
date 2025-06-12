@@ -16,7 +16,7 @@ const Library = () => {
       const token = localStorage.getItem("token");
 
       try {
-        const res = await axios.get("http://localhost:5000/api/user-library", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user-library`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -24,7 +24,7 @@ const Library = () => {
 
         if (res.data.length >= 10) {
           const achievementsRes = await axios.get(
-            "http://localhost:5000/api/user-achievements",
+            `${import.meta.env.VITE_API_URL}/api/user-achievements`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
 
@@ -34,7 +34,7 @@ const Library = () => {
 
           if (!alreadyUnlocked) {
             await axios.post(
-              "http://localhost:5000/api/unlock-achievement",
+              `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
               {
                 achievement_id: 3,
                 type: "library",
@@ -57,7 +57,7 @@ const Library = () => {
     };
 
     fetchLibrary();
-  }, []); // ✅ ejecuta solo una vez
+  }, []);
 
   return (
     <div className="library-container">

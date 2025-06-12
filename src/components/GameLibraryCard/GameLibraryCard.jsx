@@ -26,7 +26,7 @@ const LibraryGameCard = ({ game }) => {
       const token = localStorage.getItem("token");
   
       await axios.post(
-        "http://localhost:5000/api/update-playtime",
+        `${import.meta.env.VITE_API_URL}/api/update-playtime`,
         {
           gameId: game.id,
           duration: durationHours,
@@ -37,7 +37,7 @@ const LibraryGameCard = ({ game }) => {
       );
   
       const response = await axios.post(
-        "http://localhost:5000/api/check-played-games",
+        `${import.meta.env.VITE_API_URL}/api/check-played-games`,
         { gameId: game.id },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -73,7 +73,7 @@ const LibraryGameCard = ({ game }) => {
 
       if (confirm.isConfirmed) {
         await axios.delete(
-          `http://localhost:5000/api/remove-from-library/${game.id}`,
+          `${import.meta.env.VITE_API_URL}/api/remove-from-library/${game.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

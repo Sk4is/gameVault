@@ -25,7 +25,7 @@ const Settings = () => {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("http://localhost:5000/api/user-profile", {
+        .get(`${import.meta.env.VITE_API_URL}/api/user-profile`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -71,7 +71,7 @@ const Settings = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/update-profile",
+        `${import.meta.env.VITE_API_URL}/api/update-profile`,
         {
           name: username,
           email,
@@ -94,7 +94,7 @@ const Settings = () => {
       localStorage.setItem("userAvatar", avatar || DEFAULT_AVATAR);
 
       const { data: unlocked } = await axios.get(
-        "http://localhost:5000/api/user-achievements",
+        `${import.meta.env.VITE_API_URL}/api/user-achievements`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -103,7 +103,7 @@ const Settings = () => {
       const alreadyUnlocked = unlocked.some((ach) => ach.id === 4);
       if (!alreadyUnlocked) {
         await axios.post(
-          "http://localhost:5000/api/unlock-achievement",
+          `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
           { achievement_id: 4 },
           { headers: { Authorization: `Bearer ${token}` } }
         );

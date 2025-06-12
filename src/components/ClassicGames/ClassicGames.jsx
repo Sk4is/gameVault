@@ -45,7 +45,7 @@ const GameCarousel = () => {
     const fetchGames = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/classic-games"
+          `${import.meta.env.VITE_API_URL}/api/classic-games`
         );
         setGames(getRandomGames(response.data, 20));
       } catch (error) {

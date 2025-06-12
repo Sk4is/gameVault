@@ -18,7 +18,7 @@ const RandomGameCard = () => {
     const fetchGame = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/game-trailer"
+          `${import.meta.env.VITE_API_URL}/api/game-trailer`
         );
         const randomGameWithTrailer = getRandomGameWithTrailer(response.data);
         setGame(randomGameWithTrailer);
@@ -53,7 +53,7 @@ const RandomGameCard = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/add-to-library",
+        `${import.meta.env.VITE_API_URL}/api/add-to-library`,
         {
           gameId: game.id,
           name: game.name,

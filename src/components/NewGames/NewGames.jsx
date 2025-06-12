@@ -57,7 +57,7 @@ const GameCarousel = () => {
         twoYearsAgo.setDate(1);
         const twoYearsAgoTimestamp = Math.floor(twoYearsAgo.getTime() / 1000);
 
-        const response = await axios.get("http://localhost:5000/api/new-games");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/new-games`);
 
         const shuffleArray = (array) => {
           let shuffledArray = [...array];

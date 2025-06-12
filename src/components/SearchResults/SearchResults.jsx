@@ -15,7 +15,7 @@ const SearchResults = () => {
 
       try {
         const response = await axios.post(
-          "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games",
+          `${import.meta.env.VITE_IGDB_PROXY_URL}/https://api.igdb.com/v4/games`,
           `search "${query}"; fields id, name, cover.url, genres.name, summary; limit 20;`,
           {
             headers: {

@@ -17,7 +17,7 @@ const Review = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/reviews/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/${id}`);
       setReviews(response.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -40,7 +40,7 @@ const Review = () => {
   useEffect(() => {
     const fetchGameName = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/game-name/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/game-name/${id}`);
         if (response.data && response.data.name) {
   setGameName(response.data.name);
 }
@@ -90,10 +90,10 @@ const Review = () => {
       Swal.fire("Thank you!", "Your review has been posted", "success");
 
       const { data: allReviews } = await axios.get(
-        `${API_URL}/api/reviews/${id}`
+        `${import.meta.env.VITE_API_URL}/api/reviews/${id}`
       );
       const { data: allUserReviews } = await axios.get(
-        `${API_URL}/api/user-reviews`,
+        `${import.meta.env.VITE_API_URL}/api/user-reviews`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -101,7 +101,7 @@ const Review = () => {
       const userReviews = allReviews.filter((r) => r.user_id === userId);
 
       const { data: unlocked } = await axios.get(
-        `${API_URL}/api/user-achievements`,
+        `${import.meta.env.VITE_API_URL}/api/user-achievements`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -110,7 +110,7 @@ const Review = () => {
 
       if (userReviews.length === 1 && !unlockedIds.includes(1)) {
         await axios.post(
-          `${API_URL}/api/unlock-achievement`,
+          `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
           {
             achievement_id: 1,
           },
@@ -129,7 +129,7 @@ const Review = () => {
       const hasFiveStar = userReviews.some((r) => r.rating === 5);
       if (hasFiveStar && !unlockedIds.includes(2)) {
         await axios.post(
-          `${API_URL}/api/unlock-achievement`,
+          `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
           {
             achievement_id: 2,
           },
@@ -148,7 +148,7 @@ const Review = () => {
       const highRated = allUserReviews.filter((r) => r.rating >= 4).length;
       if (highRated >= 5 && !unlockedIds.includes(6)) {
         await axios.post(
-          `${API_URL}/api/unlock-achievement`,
+          `${import.meta.env.VITE_API_URL}/api/unlock-achievement`,
           {
             achievement_id: 6,
           },
@@ -172,7 +172,7 @@ const Review = () => {
   const handleDeleteReview = async (reviewUserId) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`${API_URL}/api/reviews/${id}/${reviewUserId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/reviews/${id}/${reviewUserId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       Swal.fire("Deleted", "Your review has been deleted", "success");
