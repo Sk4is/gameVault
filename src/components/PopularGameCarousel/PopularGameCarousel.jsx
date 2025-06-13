@@ -46,6 +46,26 @@ const GameCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+  const fetchGames = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/popular-games`
+      );
+      const random20Games = shuffleArray(response.data).slice(0, 20);
+      setGames(random20Games);
+
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 100);
+    } catch (error) {
+      console.error("Error fetching games:", error);
+    }
+  };
+
+  fetchGames();
+}, []);
+
+  useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await axios.get(
@@ -85,18 +105,29 @@ const GameCarousel = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1 } },
-      { breakpoint: 600, settings: { slidesToShow: 1, slidesToScroll: 1 } },
-    ],
+  {
+    breakpoint: 1024,
+    settings: {
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      centerMode: false,
+    },
+  },
+  {
+    breakpoint: 600,
+    settings: {
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      centerMode: false,
+    },
+  },
+],
   };
 
   return (
     <>
-      <img
-        className="ciberpunk"
-        src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743107638/Proyecto_nuevo_1_qjdcih.jpg"
-        alt="Cyberpunk City"
-      />
+      <div className="ciberpunk-background" role="img" aria-label="Cyberpunk City" />
+
       <h1 className="popular-title">Featured Games</h1>
       <hr className="separator"></hr>
       <div className="carousel-container">

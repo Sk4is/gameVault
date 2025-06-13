@@ -30,3 +30,15 @@
   margin-bottom: 20px;
   margin: 20px 0;
 }
+
+@media (max-width: 1024px) {
+  .classic-title {
+    margin-top: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .classic-title {
+    margin-top: 80px;
+  }
+}
