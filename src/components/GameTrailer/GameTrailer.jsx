@@ -93,7 +93,7 @@ const RandomGameCard = () => {
 
   return (
     <>
-      <h1 className="popular-title">Popular Game Trailers</h1>
+      <h1 className="trailer-title">Popular Game Trailers</h1>
       <div className="arrow-container">
         <motion.img
           src="https://res.cloudinary.com/dimlqpphf/image/upload/v1743342428/image_4_1_eutjge.png"

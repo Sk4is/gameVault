@@ -54,3 +54,25 @@
   background-color: #2b2b2b;
   margin: 0 20px;
 }
+
+@media (max-width: 480px) {
+  .profile-card {
+    max-width: 90%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-card-img {
+    margin: 0 0 10px 0;
+  }
+
+  .separator-vertical {
+    display: none;
+  }
+
+  .profile-card-info {
+    align-items: center;
+  }
+}
+

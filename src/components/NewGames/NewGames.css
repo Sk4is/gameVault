@@ -39,6 +39,7 @@
 
 @media (max-width: 480px) {
   .newgame-title {
+    font-size: 35px;
     margin-top: 80px;
   }
 }

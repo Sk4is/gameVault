@@ -243,11 +243,13 @@ body {
 
 @media (max-width: 480px) {
   .popular-title {
+    font-size: 35px;
     margin-top: 80px;
   }
 
   .game-card {
-    max-width: 280px;
+    margin-top: -50px;
+    max-width: 380px;
     padding: 6px;
   }
 
@@ -263,8 +265,23 @@ body {
   }
 
   .carousel-container {
-    max-width: 95%;
-    min-height: 300px;
+    display: block !important;
+    min-height: 300px !important;
+    overflow: visible !important;
+  }
+
+  .slick-slider,
+  .slick-track {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .slick-slide {
+    flex-shrink: 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
   }
 
   .custom-arrow {
@@ -283,30 +300,6 @@ body {
 
   .slick-slide:not(.slick-center) .game-card {
     transform: scale(0.68);
-  }
-}
-
-@media (max-width: 360px) {
-  .custom-arrow.prev {
-    left: -10px;
-  }
-
-  .custom-arrow.next {
-    right: -10px;
-  }
-
-  .custom-arrow {
-    font-size: 22px;
-    padding: 6px;
-  }
-
-  .game-card {
-    max-width: 180px;
-  }
-
-  .carousel-container {
-    padding: 0 10px;
-    min-height: 400px;
   }
 }
 
