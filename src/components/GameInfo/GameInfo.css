@@ -1,3 +1,19 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 .game-info-page {
   position: relative;
   padding: 20px;
@@ -6,6 +22,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 12%;
+  width: 100%;
 }
 
 .game-details {
@@ -16,6 +33,7 @@
   flex-grow: 1;
   flex-shrink: 0;
   padding-bottom: 50px;
+  width: 100%;
 }
 
 .game-details h1 {
@@ -206,28 +224,125 @@
 }
 
 .add-game {
-    font-size: 20px;
-    font-weight: 700;
-    margin-top: 10%;
-    margin-bottom: 10%;
-    color: black;
-    width: 25%;
-    height: 50px;
-    background-color: #42c98f;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  color: black;
+  width: 25%;
+  height: 50px;
+  background-color: #42c98f;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .add-game:hover {
-    background-color: #268a5f;
+  background-color: #268a5f;
 }
 
 .separator-info {
-    border: none; 
-    height: 2px;
-    background-color: #2b2b2b;
-    margin-bottom: 20px;
-    margin-bottom: -20%;
+  border: none;
+  height: 2px;
+  background-color: #2b2b2b;
+  margin-bottom: 20px;
+  margin-bottom: -20%;
+}
+
+@media (max-width: 768px) {
+  .game-details {
+    padding-left: 150px;
+    padding-right: 160px;
+  }
+
+  .game-details h1 {
+    font-size: 40px;
+  }
+
+  .game-details h3 {
+    font-size: 25px;
+  }
+
+  .game-details p {
+    font-size: 16px;
+  }
+
+  .screenshots-container {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .screenshots-container img {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+  }
+
+  .add-game {
+    width: 40%;
+    max-width: 300px;
+    margin: 30px auto;
+  }
+
+  .close-zoom {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+  }
+
+  .image-navigation {
+  left: 2%;
+  right: 2%;
+}
+}
+
+@media (max-width: 480px) {
+  .game-details {
+    margin-top: -50px;
+    padding-left: 250px;
+    padding-right: 260px;
+  }
+
+  .game-details h1 {
+    font-size: 35px;
+  }
+
+  .game-details h3 {
+    font-size: 20px;
+  }
+
+  .game-details p {
+    font-size: 12px;
+  }
+
+  .screenshots-container img {
+    width: 100%;
+    max-width: 140px;
+    height: auto;
+  }
+
+  .add-game {
+    width: 35%;
+    max-width: 280px;
+    font-size: 15px;
+    height: 45px;
+    margin: 20px auto;
+  }
+
+  .zoomed-image {
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .image-navigation {
+    left: 4%;
+    right: 4%;
+  }
+
+  .close-zoom {
+    top: 15px;
+    right: 15px;
+  }
 }

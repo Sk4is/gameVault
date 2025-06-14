@@ -1,6 +1,10 @@
-.game-info-page h1 {
+.game-review-page h1 {
   margin-bottom: 5%;
 }
+
+.game-review-page h1 {
+    margin-top: 150px;
+  }
 
 .review-form {
   background: #2e2e2e;
@@ -145,3 +149,133 @@
     cursor: pointer;
   }
   
+  @media (max-width: 768px) {
+  .review-form {
+    width: 55%;
+    padding: 40px;
+    margin-bottom: 20%;
+  }
+
+  .review-form h2 {
+    font-size: 24px;
+    margin-top: 0;
+  }
+
+  .game-review-page h1 {
+    margin-top: 80px;
+    margin-left: 170px;
+  }
+
+  .game-review-page p {
+    margin-left: 170px;
+  }
+
+  .review-form input,
+  .review-form textarea,
+  .review-form select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .review-form button {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 0;
+  }
+
+  .reviews-container {
+    max-width: 90%;
+    margin-bottom: 40px;
+  }
+
+  .review-card {
+    padding: 12px;
+  }
+
+  .review-username {
+    font-size: 16px;
+    margin-right: 50px;
+  }
+
+  .review-rating span {
+    font-size: 16px;
+  }
+
+  .review-content {
+    font-size: 13px;
+  }
+
+  .review-date {
+    font-size: 11px;
+  }
+
+  .arrow {
+    margin-bottom: -5%;
+    width: 20%;
+    position: relative;
+    left: 70%;
+    transform: translateX(-50%) rotate(15deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .review-form {
+    width: 40%;
+    padding: 20px;
+  }
+
+  .review-form h2 {
+    font-size: 20px;
+  }
+
+  .game-review-page h1 {
+    margin-top: 40px;
+    margin-left: 270px;
+  }
+
+  .game-review-page p {
+    margin-left: 270px;
+  }
+
+  .review-form input,
+  .review-form textarea,
+  .review-form select {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .review-form button {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .review-username {
+    font-size: 15px;
+    margin-right: 20px;
+  }
+
+  .review-rating span {
+    font-size: 15px;
+  }
+
+  .review-content {
+    font-size: 12px;
+  }
+
+  .review-date {
+    font-size: 10px;
+  }
+
+  .arrow {
+    margin-bottom: -5%;
+    width: 12%;
+    position: relative;
+    left: 60%;
+    transform: translateX(-50%) rotate(15deg);
+  }
+
+  .delete-button {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+}

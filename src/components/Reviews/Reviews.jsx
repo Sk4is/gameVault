@@ -195,7 +195,7 @@ const Review = () => {
   };
 
   return (
-    <div className="game-info-page">
+    <div className="game-review-page">
       <h1>User Reviews</h1>
 
       {reviews.length > 0 ? (

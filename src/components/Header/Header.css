@@ -218,6 +218,10 @@
   }
   
   @media (max-width: 480px) {
+    .header {
+    height: 10%;
+    }
+
     .logo-img {
       width: 60px;
     }
