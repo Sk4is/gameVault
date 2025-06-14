@@ -131,9 +131,12 @@
 
 @media (max-width: 768px) {
     .register-box {
-        margin-top: 8%;
+        margin-bottom: 10%;
     }
   }
 
   @media (max-width: 480px) {
+    .register-box {
+        margin-bottom: 30%;
+    }
 }
