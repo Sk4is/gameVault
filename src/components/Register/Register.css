@@ -1,142 +1,179 @@
 .register-page {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: url(https://res.cloudinary.com/dimlqpphf/image/upload/v1741303245/descarga_1_qynuqx.gif) no-repeat center center/cover;
-    position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(https://res.cloudinary.com/dimlqpphf/image/upload/v1741303245/descarga_1_qynuqx.gif)
+    no-repeat center center/cover;
+  position: relative;
 }
 
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 .register-box {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 450px;
-    text-align: center;
-    z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  text-align: center;
+  z-index: 2;
 }
 
 .register-box h2 {
-    font-size: 40px;
-    margin-top: -6px;
-    margin-bottom: 40px;
-    color: #ffffff;
+  font-size: 40px;
+  margin-top: -6px;
+  margin-bottom: 40px;
+  color: #ffffff;
 }
 
 .input-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .input-group label {
-    font-size: 14px;
-    color: #fff;
-    display: block;
-    align-self: flex-start;
-    margin-left: 10%;
+  font-size: 14px;
+  color: #fff;
+  display: block;
+  align-self: flex-start;
+  margin-left: 10%;
 }
 
 .input-group input {
-    width: 280px;
-    padding: 10px;
-    margin-top: 5px;
-    color: rgb(0, 0, 0);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #f9f9f9;
+  width: 280px;
+  padding: 10px;
+  margin-top: 5px;
+  color: rgb(0, 0, 0);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f9f9f9;
 }
 
 .password-group {
-    position: relative;
+  position: relative;
 }
 
 .password-wrapper {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .password-wrapper input {
-    width: 280px;
-    padding: 10px;
-    margin-top: 5px;
-    color: rgb(0, 0, 0);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #f9f9f9;
+  width: 280px;
+  padding: 10px;
+  margin-top: 5px;
+  color: rgb(0, 0, 0);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f9f9f9;
 }
 
 .password-toggle {
-    margin-left: -30px;
-    cursor: pointer;
-    font-size: 20px;
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .repeat-password-toggle {
-    margin-left: -30px;
-    cursor: pointer;
-    font-size: 20px;
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .register-link {
-    display: block;
-    margin-top: 10px;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-  }
-  
-  .register-link:hover {
-    color: #35b977;
-  }
+  display: block;
+  margin-top: 10px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.register-link:hover {
+  color: #35b977;
+}
 
 .register-btn {
-    width: 50%;
-    padding: 10px;
-    margin-top: 60px;
-    background-color: #35b977;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  width: 50%;
+  padding: 10px;
+  margin-top: 60px;
+  background-color: #35b977;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .login-btn:hover {
-    background-color: #2a9e62;
+  background-color: #2a9e62;
 }
 
 @media (max-width: 768px) {
-    .register-box {
-        margin-bottom: 10%;
-    }
+  .register-box {
+    width: 90%;
+    padding: 30px;
   }
 
-  @media (max-width: 480px) {
-    .register-box {
-        margin-bottom: 30%;
-    }
+  .register-box h2 {
+    font-size: 32px;
+  }
+
+  .register-btn {
+    width: 70%;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-box {
+    padding: 20px;
+  }
+
+  .register-box h2 {
+    font-size: 26px;
+  }
+
+  .input-group input,
+  .password-wrapper input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .password-wrapper input {
+    margin-right: 1%;
+    margin-left: -1%;
+  }
+
+  .password-toggle,
+  .repeat-password-toggle {
+    font-size: 18px;
+  }
+
+  .register-btn {
+    width: 80%;
+    font-size: 14px;
+    padding: 10px;
+  }
 }

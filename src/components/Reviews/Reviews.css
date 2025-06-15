@@ -220,7 +220,7 @@
 
 @media (max-width: 480px) {
   .review-form {
-    width: 40%;
+    width: 35%;
     padding: 20px;
   }
 
@@ -230,11 +230,11 @@
 
   .game-review-page h1 {
     margin-top: 40px;
-    margin-left: 270px;
+    margin-left: 305px;
   }
 
   .game-review-page p {
-    margin-left: 270px;
+    margin-left: 305px;
   }
 
   .review-form input,
@@ -270,7 +270,7 @@
     margin-bottom: -5%;
     width: 12%;
     position: relative;
-    left: 60%;
+    left: 58%;
     transform: translateX(-50%) rotate(15deg);
   }
 

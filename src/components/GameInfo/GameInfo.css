@@ -300,8 +300,8 @@ body {
 @media (max-width: 480px) {
   .game-details {
     margin-top: -50px;
-    padding-left: 250px;
-    padding-right: 260px;
+    padding-left: 290px;
+    padding-right: 290px;
   }
 
   .game-details h1 {

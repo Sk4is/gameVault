@@ -254,14 +254,14 @@ body {
   }
 
   .game-info h3 {
-    font-size: 0.95rem;
+    font-size: 1.25rem;
   }
 
   .genres,
   .description,
   .platforms,
   .rating-year {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 
   .carousel-container {
