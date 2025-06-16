@@ -151,23 +151,26 @@
   
   @media (max-width: 768px) {
   .review-form {
-    width: 55%;
-    padding: 40px;
+    width: 85%;
+    padding: 30px;
     margin-bottom: 20%;
   }
 
   .review-form h2 {
     font-size: 24px;
     margin-top: 0;
+    text-align: center;
   }
 
   .game-review-page h1 {
     margin-top: 80px;
-    margin-left: 170px;
+    text-align: center;
+    margin-left: 0;
   }
 
   .game-review-page p {
-    margin-left: 170px;
+    text-align: center;
+    margin-left: 0;
   }
 
   .review-form input,
@@ -184,17 +187,32 @@
   }
 
   .reviews-container {
-    max-width: 90%;
-    margin-bottom: 40px;
+    max-width: 95%;
+    margin: 0 auto 40px;
   }
 
   .review-card {
-    padding: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .review-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .review-username {
     font-size: 16px;
-    margin-right: 50px;
+    margin-right: 0;
   }
 
   .review-rating span {
@@ -203,24 +221,33 @@
 
   .review-content {
     font-size: 13px;
+    text-align: left;
+    word-wrap: break-word;
   }
 
   .review-date {
     font-size: 11px;
+    text-align: left;
   }
 
   .arrow {
-    margin-bottom: -5%;
     width: 20%;
     position: relative;
-    left: 70%;
+    left: 50%;
     transform: translateX(-50%) rotate(15deg);
+    margin-bottom: -5%;
+  }
+
+  .delete-button {
+    font-size: 14px;
+    padding: 6px 10px;
   }
 }
 
+
 @media (max-width: 480px) {
   .review-form {
-    width: 35%;
+    width: 90%;
     padding: 20px;
   }
 
@@ -228,13 +255,10 @@
     font-size: 20px;
   }
 
-  .game-review-page h1 {
-    margin-top: 40px;
-    margin-left: 305px;
-  }
-
+  .game-review-page h1,
   .game-review-page p {
-    margin-left: 305px;
+    margin-left: 0;
+    text-align: center;
   }
 
   .review-form input,
@@ -249,9 +273,14 @@
     padding: 8px;
   }
 
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
   .review-username {
     font-size: 15px;
-    margin-right: 20px;
   }
 
   .review-rating span {
@@ -259,23 +288,36 @@
   }
 
   .review-content {
-    font-size: 12px;
+    font-size: 13px;
+    text-align: left;
+    word-wrap: break-word;
   }
 
   .review-date {
     font-size: 10px;
+    text-align: left;
   }
 
   .arrow {
-    margin-bottom: -5%;
     width: 12%;
-    position: relative;
-    left: 58%;
+    left: 50%;
     transform: translateX(-50%) rotate(15deg);
   }
 
   .delete-button {
     font-size: 13px;
     padding: 5px 10px;
+  }
+
+  .review-card {
+    width: 90%;
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
