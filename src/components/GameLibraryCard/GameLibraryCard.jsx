@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import "./GameLibraryCard.css";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 🔸 Importar useNavigate
 
 const LibraryGameCard = ({ game }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [startTime, setStartTime] = useState(null);
+  const navigate = useNavigate(); // 🔸 Inicializar
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -16,15 +18,14 @@ const LibraryGameCard = ({ game }) => {
     const endTime = Date.now();
     const durationMs = endTime - startTime;
     const durationHours = durationMs / (1000 * 60 * 60);
-  
     const totalMinutes = Math.floor(durationMs / (1000 * 60));
-  
+
     setIsPlaying(false);
     setStartTime(null);
-  
+
     try {
       const token = localStorage.getItem("token");
-  
+
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/update-playtime`,
         {
@@ -35,7 +36,7 @@ const LibraryGameCard = ({ game }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/check-played-games`,
         { gameId: game.id },
@@ -43,7 +44,7 @@ const LibraryGameCard = ({ game }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       if (response.data.unlocked) {
         Swal.fire({
           icon: "success",
@@ -53,11 +54,11 @@ const LibraryGameCard = ({ game }) => {
           showConfirmButton: false,
         });
       }
-      
+
     } catch (err) {
       console.error("Error saving playtime or unlocking achievement:", err);
     }
-  };  
+  };
 
   const handleRemove = async () => {
     const token = localStorage.getItem("token");
@@ -104,7 +105,7 @@ const LibraryGameCard = ({ game }) => {
         </div>
         <button
           className="library-info-btn"
-          onClick={() => (window.location.href = `/gameinfo/${game.id}`)}
+          onClick={() => navigate(`/gameinfo/${game.id}`)}
         >
           Game Info
         </button>
