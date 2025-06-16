@@ -15,6 +15,10 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  const handleLoginRedirect = () => {
+    navigate("/login");
+  };
+
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
 
@@ -140,7 +144,7 @@ const Register = () => {
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <button className="register-btn">Register</button>
-            <a href="/login" className="register-link">
+            <a onClick={handleLoginRedirect} className="register-link">
               Already have an account? Log in
             </a>
           </form>

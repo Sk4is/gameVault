@@ -39,7 +39,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <a href="/landing">
+        <a onClick={handleLandingRedirect}>
           <img
             src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741897097/Screenshot_4-removebg-preview_miskhy.png"
             alt="Logo"

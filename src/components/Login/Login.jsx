@@ -14,6 +14,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const handleRegisterRedirect = () => {
+    navigate("/register");
+  };
+
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]).{8,}$/;
@@ -117,7 +121,7 @@ const Login = () => {
             <button className="login-btn" disabled={loading}>
               {loading ? "Loading..." : "Login"}
             </button>
-            <a href="/register" className="register-link">
+            <a onClick={handleRegisterRedirect} className="register-link">
               Don't have an account? Sign up
             </a>
           </form>

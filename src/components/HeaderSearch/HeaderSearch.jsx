@@ -86,7 +86,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <a href="/landing">
+        <a onClick={handleLandingRedirect}>
           <img
             src="https://res.cloudinary.com/dimlqpphf/image/upload/v1741288545/GameVault_ltzotm.png"
             alt="Logo"

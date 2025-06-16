@@ -41,6 +41,7 @@
     height: auto;
     will-change: filter;
     transition: filter 300ms;
+    cursor: pointer;
   }
 
   .lettering img {
