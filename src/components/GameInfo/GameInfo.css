@@ -29,10 +29,12 @@ body {
   position: relative;
   z-index: 1;
   max-width: 900px;
+  min-width: 900px;
   margin: auto;
   flex-grow: 1;
   flex-shrink: 0;
   padding-bottom: 50px;
+  padding: 0 24px 50px;
   width: 100%;
 }
 
@@ -48,11 +50,6 @@ body {
   margin-top: 30px;
   padding-bottom: 50px;
   overflow: hidden;
-}
-
-.game-trailer iframe {
-  width: 100%;
-  height: 400px;
 }
 
 .game-summary,

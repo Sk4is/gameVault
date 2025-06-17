@@ -51,18 +51,11 @@
   
   .menu-btn {
     background-color: transparent;
-    color: white;
-    font-size: 16px;
-    border: 1px solid rgb(92, 92, 92);
+    margin-top: 1%;
+    border: none;
     cursor: pointer;
     padding: 10px;
-    font-weight: bold;
     margin-right: 2%;
-  }
-  
-  .menu-btn:focus {
-    outline: none;
-    border: 1px solid;
   }
   
   @keyframes slideUp {
@@ -102,11 +95,6 @@
   
   .menu.hidden {
     animation: slideUp 0.3s ease-out forwards;
-  }
-  
-  .menu-btn:hover {
-    
-    border: 1px solid #35b977;
   }
   
   .menu-list {

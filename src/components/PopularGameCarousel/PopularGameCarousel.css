@@ -217,6 +217,11 @@ body {
 }
 
 @media (max-width: 1024px) {
+  .ciberpunk-background {
+    height: 450px;
+    background-position: center center;
+  }
+
   .popular-title {
     margin-top: 100px;
   }
@@ -241,7 +246,20 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  .ciberpunk-background {
+    height: 330px;
+    background-position: top center;
+  }
+}
+
 @media (max-width: 480px) {
+  .ciberpunk-background {
+    height: 250px;
+    background-position: top;
+    background-size: cover;
+  }
+
   .popular-title {
     font-size: 35px;
     margin-top: 80px;

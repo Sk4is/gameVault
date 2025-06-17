@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./HeaderSearch.css";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import axios from "axios";
 
 const Header = () => {
@@ -121,8 +121,8 @@ const Header = () => {
         )}
       </form>
 
-      <button onClick={toggleMenu} className="menu-btn">
-        Menu
+      <button onClick={toggleMenu} className="menu-btn" aria-label="Open menu">
+        <Menu size={28} />
       </button>
 
       {isMenuOpen && (

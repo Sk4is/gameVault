@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,8 +56,8 @@ const Header = () => {
         />
       </div>
 
-      <button onClick={toggleMenu} className="menu-btn">
-        Menu
+      <button onClick={toggleMenu} className="menu-btn" aria-label="Open menu">
+        <Menu size={28} />
       </button>
 
       {isMenuOpen && (
