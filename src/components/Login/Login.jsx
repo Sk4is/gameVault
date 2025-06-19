@@ -91,8 +91,9 @@ const Login = () => {
           <h2>Login</h2>
           <form onSubmit={validateForm} autoComplete="off">
             <div className="input-group">
-              <label>Email</label>
+              <label htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
                 placeholder="Enter your email"
                 autoComplete="off"
@@ -102,9 +103,10 @@ const Login = () => {
               />
             </div>
             <div className="input-group password-group">
-              <label>Password</label>
+              <label htmlFor="password">Password</label>
               <div className="password-wrapper">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   autoComplete="off"

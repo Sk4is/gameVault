@@ -93,8 +93,9 @@ const Register = () => {
           <h2>Sign Up</h2>
           <form onSubmit={validateForm}>
             <div className="input-group">
-              <label>Username</label>
+              <label htmlFor="username">Username</label>
               <input
+                id="username"
                 type="text"
                 placeholder="Enter your username"
                 value={name}
@@ -103,8 +104,9 @@ const Register = () => {
               />
             </div>
             <div className="input-group">
-              <label>Email</label>
+              <label htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -113,9 +115,10 @@ const Register = () => {
               />
             </div>
             <div className="input-group password-group">
-              <label>Password</label>
+              <label htmlFor="password">Password</label>
               <div className="password-wrapper">
                 <input
+                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
@@ -128,9 +131,10 @@ const Register = () => {
               </div>
             </div>
             <div className="input-group password-group">
-              <label>Confirm Password</label>
+              <label htmlFor="confirmPassword">Confirm Password</label>
               <div className="password-wrapper">
                 <input
+                  id="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Repeat your password"
                   value={confirmPassword}
