@@ -18,16 +18,31 @@ app.use(
   })
 );
 
-const dbUrl = new URL(process.env.DATABASE_URL);
-const db = mysql.createConnection({
-  host: dbUrl.hostname,
-  user: dbUrl.username,
-  password: dbUrl.password,
-  database: dbUrl.pathname.replace("/", ""),
-  port: dbUrl.port,
-  ssl: { rejectUnauthorized: false },
-  charset: "utf8mb4"
-});
+let dbConfig;
+
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "") {
+  const dbUrl = new URL(process.env.DATABASE_URL);
+  dbConfig = {
+    host: dbUrl.hostname,
+    user: dbUrl.username,
+    password: dbUrl.password,
+    database: dbUrl.pathname.replace("/", ""),
+    port: dbUrl.port || 3306,
+    ssl: { rejectUnauthorized: false },
+    charset: "utf8mb4"
+  };
+} else {
+  dbConfig = {
+    host: process.env.DB_HOST || "127.0.0.1",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "game_vault",
+    port: process.env.DB_PORT || 3306,
+    charset: "utf8mb4"
+  };
+}
+
+const db = mysql.createConnection(dbConfig);
 
 
 db.connect((err) => {
