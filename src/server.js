@@ -29,7 +29,7 @@ if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "") {
     database: dbUrl.pathname.replace("/", ""),
     port: dbUrl.port || 3306,
     ssl: { rejectUnauthorized: false },
-    charset: "utf8mb4"
+    charset: "utf8mb4",
   };
 } else {
   dbConfig = {
@@ -38,12 +38,11 @@ if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "") {
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_NAME || "game_vault",
     port: process.env.DB_PORT || 3306,
-    charset: "utf8mb4"
+    charset: "utf8mb4",
   };
 }
 
 const db = mysql.createConnection(dbConfig);
-
 
 db.connect((err) => {
   if (err) {
@@ -93,19 +92,19 @@ app.get("/api/popular-games", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-  console.error("❌ IGDB fetch error:");
-  if (error.response) {
-    console.error("Status:", error.response.status);
-    console.error("Data:", error.response.data);
-    console.error("Headers:", error.response.headers);
-  } else if (error.request) {
-    console.error("No response received:", error.request);
-  } else {
-    console.error("Error message:", error.message);
-  }
+    console.error("❌ IGDB fetch error:");
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Data:", error.response.data);
+      console.error("Headers:", error.response.headers);
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+    } else {
+      console.error("Error message:", error.message);
+    }
 
-  res.status(500).json({ message: "Failed to fetch IGDB games" });
-}
+    res.status(500).json({ message: "Failed to fetch IGDB games" });
+  }
 });
 
 app.get("/api/classic-games", async (req, res) => {
@@ -126,7 +125,10 @@ app.get("/api/classic-games", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("❌ IGDB classic error:", error.response?.data || error.message);
+    console.error(
+      "❌ IGDB classic error:",
+      error.response?.data || error.message
+    );
     res.status(500).json({ message: "Failed to fetch classic games" });
   }
 });
@@ -179,7 +181,10 @@ app.get("/api/game-trailer", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("❌ IGDB trailer fetch error:", error.response?.data || error.message);
+    console.error(
+      "❌ IGDB trailer fetch error:",
+      error.response?.data || error.message
+    );
     res.status(500).json({ message: "Failed to fetch trailer games" });
   }
 });
@@ -235,12 +240,22 @@ app.post("/api/login", (req, res) => {
 
       const user = result[0];
       const isMatch = await bcrypt.compare(password, user.password);
-
       if (!isMatch)
         return res.status(400).json({ message: "Incorrect password" });
 
+      const userId = user.id ?? user.user_id ?? user.ID ?? user.Id;
+      const userRole = user.role ?? "user";
+
+      if (!userId) {
+        console.error(
+          "❌ No encuentro el ID en la fila de users:",
+          Object.keys(user)
+        );
+        return res.status(500).json({ message: "User id not found in DB row" });
+      }
+
       const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
+        { id: userId, email: user.email, role: userRole },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -271,7 +286,10 @@ app.post("/api/search-games", (req, res) => {
     )
     .then((response) => res.json(response.data))
     .catch((error) => {
-      console.error("IGDB search error:", error.response?.data || error.message);
+      console.error(
+        "IGDB search error:",
+        error.response?.data || error.message
+      );
       res.status(500).json({ error: "Search failed" });
     });
 });
@@ -666,7 +684,10 @@ app.get("/api/game-details/:id", async (req, res) => {
 
     res.json(response.data[0]);
   } catch (error) {
-    console.error("❌ Error fetching game details:", error.response?.data || error.message);
+    console.error(
+      "❌ Error fetching game details:",
+      error.response?.data || error.message
+    );
     res.status(500).json({ message: "Failed to fetch game details" });
   }
 });
@@ -692,7 +713,10 @@ app.get("/api/game-name/:id", async (req, res) => {
 
     res.json(response.data[0]);
   } catch (error) {
-    console.error("❌ Error fetching game name:", error.response?.data || error.message);
+    console.error(
+      "❌ Error fetching game name:",
+      error.response?.data || error.message
+    );
     res.status(500).json({ message: "Failed to fetch game name" });
   }
 });
@@ -785,12 +809,18 @@ app.post("/api/unlock-achievement", (req, res) => {
       `;
       db.query(insertQuery, [userId, achievement_id, achievement_id], (err) => {
         if (err) {
-          if (err.code === 'ER_DUP_ENTRY') {
-            console.warn("⚠️ Duplicate achievement prevented by DB constraint.");
-            return res.status(200).json({ message: "Already unlocked (DB constraint)" });
+          if (err.code === "ER_DUP_ENTRY") {
+            console.warn(
+              "⚠️ Duplicate achievement prevented by DB constraint."
+            );
+            return res
+              .status(200)
+              .json({ message: "Already unlocked (DB constraint)" });
           }
           console.error("❌ Error inserting achievement:", err);
-          return res.status(500).json({ message: "Error inserting achievement" });
+          return res
+            .status(500)
+            .json({ message: "Error inserting achievement" });
         }
 
         res.status(201).json({ message: "Achievement unlocked" });
